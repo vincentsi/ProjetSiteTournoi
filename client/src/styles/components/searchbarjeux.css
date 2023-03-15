@@ -1,0 +1,25 @@
+.rechercheIcon{
+    position: absolute;
+    margin-top: 7px;
+    margin-left: 15px;
+   
+}
+
+.inputRechercheJeu{
+    border-radius: 30px;
+    background-color: gray;
+    height: 30px;
+    font-weight: 100;
+    font-size: 20px;
+    width: 100%;
+    border-color: transparent;
+    padding: 18px 18px 18px 50px;
+    color: white;
+}
+.inputRechercheJeu::placeholder{
+    color: rgb(184, 184, 184);
+}
+.rechercheIcon:focus{
+    outline-width: 0px;
+    border: solid 1px white;
+}
