@@ -11,7 +11,7 @@ import Profil from'../../pages/profil';
 import Listejeux from'../../pages/homeListeJeux';
 import Navbar from "../Navbar";
 import ListeTournois from'../../pages/homeListeTournois';
-
+import JeuCreate from'../../pages/jeuCreate';
 const index = () => {
   return (
     <Router>
@@ -20,6 +20,7 @@ const index = () => {
             <Route path="/" element={<Home />}></Route>
             <Route path="/profil" element = {<Profil />}></Route>
             <Route path="/homeListeJeux" element = {<Listejeux />}></Route>
+            <Route path="/jeu/new" element = {<JeuCreate />}></Route>
             <Route path="/homeListetournois" element = {<ListeTournois />}></Route>
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -4,11 +4,16 @@ import {UidContext} from "./components/appContext";
 import {useDispatch} from "react-redux";
 import axios from "axios";
 import { getUser } from "./actions/user.actions";
+import { getAllJeu } from "./actions/pjeu.actions";
 
 const App = () => {
   const [uid, setUid] = useState(null);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getAllJeu());
+  },[])
+  
   useEffect(() => {
     const fetchToken = async () => {
       await axios({

@@ -1,110 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { JeuAPI } from "./recuperationJeux";
-import {AfficheAllJeux} from "./afficheJeux";
-import {AfficheJeux} from "./afficheJeux";
-import {SearchBar} from "./searchBar";
-import { Navigate } from "react-router-dom";
-import HomeTournois from "../listetournois/hometournois";
-// import LeftNav from "../LeftNav";
-// import { useDispatch, useSelector } from "react-redux";
-// import { ErrorResponse } from "@remix-run/router";
-// import UploadImg from "./UploadImg";
+import { useState } from "react";
+import { Trash as TrashIcon } from "react-bootstrap-icons";
 
+export function HomeJeux({ title, subtitle, content, onClickTrash, onClick }) {
+  const [isCardHovered, setIsCardHovered] = useState(false);
+  const [isTrashHovered, setIsTrashHovered] = useState(false);
 
-const HomeJeux = () => {
-  // const jeuData = useSelector((state) => state.jeuReducer);
-  const [showImg, setShowImg] = useState();
-  const [showImgList, setShowImgList] = useState();
-  async function jeuRecuperation(){
-    const reqjeu = await JeuAPI.jeuRecuperation();
-    if(reqjeu.length > 0){
-      setShowImg(reqjeu[""]);
-    } 
-  }
-  async function jeuRecuperationList(){
-    const reqjeuList = await JeuAPI.jeuRecuperation();
-    if(reqjeuList.length > 0){
-      setShowImgList(reqjeuList);
-    } 
-  }
-  useEffect(()=>{
-      jeuRecuperation()
-  },[])
-  useEffect(()=>{
-    jeuRecuperationList()
-},[])
-  console.log('***',showImg)
-  // console.log(showImgList)
-  async function searchJeu(jeuName) {
- 
+  function onClickTrash_(e) {
+    onClickTrash();
+    e.stopPropagation();
   }
   return (
-    // {showImg !== undefined ? }
-    
-  <div className="jeux-container" 
-  // style={{
-      
-  //     background: showImg
-  //       ? "green"
-  //       : "red",
-  //   }} 
-     >
-    
- 
-      
-        <div className="midjeu">
-        {!showImg ?(
-            <>
-          <div className="headerJeux">
-          <div className="row">
-            <div className="col-4"> 
-              <div>subtitle</div>
-            </div>
-            <div className="col-sm-12 col-md-4">
-              <SearchBar onSubmit={searchJeu}/>
-            </div>
-          </div>
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setIsCardHovered(true)}
+      onMouseLeave={() => setIsCardHovered(false)}
+      className="card jeux-container"
+      style={{ borderColor: isCardHovered ? "#0d6efd" : "transparent" }}
+    >
+      <div className="card-body">
+        <div className="title_row">
+          <h5 className="card-title">{title}</h5>
+          <TrashIcon
+            size={20}
+            onMouseEnter={() => setIsTrashHovered(true)}
+            onMouseLeave={() => setIsTrashHovered(false)}
+            style={{ color: isTrashHovered ? "#FF7373" : "#b8b8b8" }}
+            onClick={onClickTrash_}
+          />
         </div>
-          <div className="AffJeu">
-              {showImg && <AfficheJeux affJeu={showImg}/>}
-          </div>
-          <div className="AffAllJeu">
-            {showImgList && <AfficheAllJeux onClickItem={setShowImg}  affAllJeux={showImgList}/>}
-            {/* {showImg !== undefined ? 
-               <Navigate to="/homeListetournois" replace /> :console.log("imgPasClique")
-                } */}
-
-          </div>
-          </>
-        
-        ): (  
-        <div className="jeuSelec-container" >
-          <div className="headerJeuSelec" >
-            <div className="row">
-              <div className="col-4"> 
-                <div>{showImg.title}</div>
-              </div>
-              <div className="col-sm-12 col-md-4">
-              <div className="descriptionAff">{showImg.description}</div>
-            </div>
-            <div className="col-4"> 
-                <div>{showImg.title}</div>
-              </div>
-          </div>
-        </div>
-      <div className="midJeuSelec" >
-      
-    
+        <h6 className="card-subtitle mb-2 text-muted">{subtitle}</h6>
+        <p className="card-text text_content">{content}</p>
       </div>
-    </div>  
-        
-        )}
-        </div>
-        
-        <div className="basjeu"> bas</div>
-        
-  </div>
+    </div>
   );
-};
-
+}
 export default HomeJeux;
