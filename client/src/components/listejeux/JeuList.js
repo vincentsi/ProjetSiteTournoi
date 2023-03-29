@@ -1,10 +1,13 @@
 
-import { useSelector } from "react-redux";
-import {useNavigate} from "react-router-dom"
+import { useDispatch,useSelector } from "react-redux";
+import { useNavigate} from "react-router-dom"
+
 import HomeJeux from "./HomeJeux";
 export function JeuList(props) {
-  const JeuList = useSelector((store) => store.jeuReducer);
+  const dispatch = useDispatch();
+  const JeuList =  useSelector((state) =>  state.jeuReducer);
     const navigate = useNavigate()
+    console.log(JeuList)
   return (
     <div className="row justify-content-center">
       {JeuList.map((jeu) => {
@@ -13,7 +16,7 @@ export function JeuList(props) {
             <HomeJeux
               title={jeu.title}
               subtitle={jeu.createdAt}
-              content={jeu.description}
+              description={jeu.description}
               onClick={()=> navigate("/jeu/"+ jeu.id)}
               onClickTrash={()=> alert("click trash")}
             />

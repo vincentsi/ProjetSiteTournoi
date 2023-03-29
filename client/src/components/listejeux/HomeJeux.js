@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Trash as TrashIcon } from "react-bootstrap-icons";
 
-export function HomeJeux({ title, subtitle, content, onClickTrash, onClick }) {
+export function HomeJeux({ title, subtitle, description, onClickTrash, onClick }) {
   const [isCardHovered, setIsCardHovered] = useState(false);
   const [isTrashHovered, setIsTrashHovered] = useState(false);
 
@@ -29,7 +29,7 @@ export function HomeJeux({ title, subtitle, content, onClickTrash, onClick }) {
           />
         </div>
         <h6 className="card-subtitle mb-2 text-muted">{subtitle}</h6>
-        <p className="card-text text_content">{content}</p>
+        <p className="card-text text_description">{description}</p>
       </div>
     </div>
   );

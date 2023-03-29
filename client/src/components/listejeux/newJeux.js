@@ -1,43 +1,89 @@
 import { useState } from "react";
 import { PencilFill, Trash, TrashFill } from "react-bootstrap-icons";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
-export function JeuFrom({ name, onClickEdit, onClickTrash, onSubmit}) {
-  
-  const [formValues, setFormValues] = useState({name:"", description:""})
+import { ValidatorService } from "../../services/form-validators";
+import { FieldError } from "../FieldError/FieldError";
+const VALIDATORS = {
+  name: (value) => {
+    return ValidatorService.min(value, 3) || ValidatorService.max(value, 20);
+  },
+  description: (value) => {
+    return ValidatorService.min(value, 3);
+  },
+};
+export function JeuFrom({ name, onClickEdit, onClickTrash, onSubmit }) {
+  const [formValues, setFormValues] = useState({ name: "", description: "" });
+  const [formErrors, setFormErrors] = useState({
+    name: "",
+    description: "",
+  });
 
-  function updateFormValues(e){
-    setFormValues({...formValues, [e.target.name]: e.target.value})
+  function hasError() {
+    return Object.values(formErrors).some((error) => error !== undefined);
   }
 
-  console.log(formValues)
+  function updateFormValues(e) {
+    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+    validate(e.target.name, e.target.value);
+  }
+  console.log(formErrors);
+  function validate(fieldName, fieldValue) {
+    setFormErrors({
+      ...formErrors,
+      [fieldName]: VALIDATORS[fieldName](fieldValue),
+    });
+  }
+  // console.log(formValues)
   const actionIcons = (
     <>
       <div className="col-1">
-        {onClickEdit &&<PencilFill onClick={onClickEdit} className="nj_icon"/>}
+        {onClickEdit && (
+          <PencilFill onClick={onClickEdit} className="nj_icon" />
+        )}
       </div>
       <div className="col-1">
-      {onClickTrash && <TrashFill onClick={onClickTrash} className="nj_icon" />}
+        {onClickTrash && (
+          <TrashFill onClick={onClickTrash} className="nj_icon" />
+        )}
       </div>
     </>
   );
 
   const nameInput = (
-    <>
+    <div className="mb-5">
       <label className="form-label">name</label>
-      <input onChange={updateFormValues} type="text" name="name" className="form-control" />
-    </>
+      <input
+        onChange={updateFormValues}
+        type="text"
+        name="name"
+        className="form-control"
+      />
+      <FieldError msg={formErrors.name} />
+    </div>
   );
 
   const descriptionInput = (
-    <>
+    <div className="mb-5">
       <label className="form-label">description</label>
-      <textarea onChange={updateFormValues} type="text" name="description" className="form-control" row="5" />
-    </>
+      <textarea
+        onChange={updateFormValues}
+        type="text"
+        name="description"
+        className="form-control"
+        row="5"
+      />
+      <FieldError msg={formErrors.description} />
+    </div>
   );
 
   const submitButton = (
     <div className="nj_submit_btn">
-      <ButtonPrimary onClick={() => onSubmit(formValues)}>Submit</ButtonPrimary>
+      <ButtonPrimary
+        isDisabled={hasError()}
+        onClick={() => onSubmit(formValues)}
+      >
+        Submit
+      </ButtonPrimary>
     </div>
   );
 

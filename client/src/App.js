@@ -9,7 +9,7 @@ import { getAllJeu } from "./actions/pjeu.actions";
 const App = () => {
   const [uid, setUid] = useState(null);
   const dispatch = useDispatch();
-
+ 
   useEffect(() => {
     dispatch(getAllJeu());
   },[])

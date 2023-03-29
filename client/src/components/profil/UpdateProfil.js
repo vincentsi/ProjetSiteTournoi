@@ -11,7 +11,7 @@ const UpdateProfil = () => {
   const [updateForm, setUpdateForm] = useState(false);
   const userData = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
-
+  console.log(userData)
   const handleUpdate = () => {
     dispatch(updateBio(userData.id, bio));
     setUpdateForm(false);
