@@ -5,7 +5,7 @@ import { useNavigate} from "react-router-dom"
 import HomeJeux from "./HomeJeux";
 export function JeuList(props) {
   const dispatch = useDispatch();
-  const JeuList =  useSelector((state) =>  state.jeuReducer);
+  const JeuList =  useSelector((store) =>  store.JEU.jeuList);
     const navigate = useNavigate()
     console.log(JeuList)
   return (
