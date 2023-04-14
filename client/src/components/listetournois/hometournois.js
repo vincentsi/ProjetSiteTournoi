@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-const HomeTournois = () => {
-
+const  HomeTournois = ({ leJeu }) => {
+  console.log(leJeu)
   return (
-    <div className="jeux-container" >
-      haut 
+    
+    <div className="tournois-container" >
+      mid-bas
+     
      
     </div>
+    
   );
  
 };

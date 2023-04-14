@@ -3,6 +3,7 @@ import { PencilFill, Trash, TrashFill } from "react-bootstrap-icons";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { ValidatorService } from "../../services/form-validators";
 import { FieldError } from "../FieldError/FieldError";
+
 const VALIDATORS = {
   name: (value) => {
     return ValidatorService.min(value, 3) || ValidatorService.max(value, 20);
@@ -11,11 +12,21 @@ const VALIDATORS = {
     return ValidatorService.min(value, 3);
   },
 };
-export function JeuFrom({ name, onClickEdit, onClickTrash, onSubmit }) {
-  const [formValues, setFormValues] = useState({ name: "", description: "" });
+export function JeuForm({
+  jeu,
+  isEditable = true,
+  name,
+  onClickEdit,
+  onClickTrash,
+  onSubmit,
+}) {
+  const [formValues, setFormValues] = useState({
+    name: jeu?.name || "",
+    description: jeu?.description || "",
+  });
   const [formErrors, setFormErrors] = useState({
-    name: "",
-    description: "",
+    name: jeu?.name ? undefined : "",
+    description: jeu?.description ? undefined : "",
   });
 
   function hasError() {
@@ -57,6 +68,7 @@ export function JeuFrom({ name, onClickEdit, onClickTrash, onSubmit }) {
         type="text"
         name="name"
         className="form-control"
+        value={formValues.name}
       />
       <FieldError msg={formErrors.name} />
     </div>
@@ -71,6 +83,7 @@ export function JeuFrom({ name, onClickEdit, onClickTrash, onSubmit }) {
         name="description"
         className="form-control"
         row="5"
+        value={formValues.description}
       />
       <FieldError msg={formErrors.description} />
     </div>
@@ -95,8 +108,12 @@ export function JeuFrom({ name, onClickEdit, onClickTrash, onSubmit }) {
         </div>
         {actionIcons}
       </div>
-      <div className={"mb-3 nj_name_input_container"}>{nameInput}</div>
-      <div className="mb-3">{descriptionInput}</div>
+      <div className={"mb-3 nj_name_input_container"}>
+        {isEditable && nameInput}
+      </div>
+      <div className="mb-3">
+        {isEditable ? descriptionInput : <pre>{jeu.description}</pre>}
+      </div>
       {onSubmit && submitButton}
     </div>
   );

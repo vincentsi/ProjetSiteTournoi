@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Trash as TrashIcon } from "react-bootstrap-icons";
 
-export function HomeJeux({ title, subtitle, description, onClickTrash, onClick }) {
+export function HomeJeux({ name, subtitle, description, onClickTrash, onClick }) {
   const [isCardHovered, setIsCardHovered] = useState(false);
   const [isTrashHovered, setIsTrashHovered] = useState(false);
 
@@ -18,8 +18,8 @@ export function HomeJeux({ title, subtitle, description, onClickTrash, onClick }
       style={{ borderColor: isCardHovered ? "#0d6efd" : "transparent" }}
     >
       <div className="card-body">
-        <div className="title_row">
-          <h5 className="card-title">{title}</h5>
+        <div className="name_row">
+          <h5 className="card-name">{name}</h5>
           <TrashIcon
             size={20}
             onMouseEnter={() => setIsTrashHovered(true)}

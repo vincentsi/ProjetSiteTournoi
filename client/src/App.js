@@ -11,17 +11,19 @@ import { setUser } from "./store/user/user.reducer";
 const App = () => {
   const [uid, setUid] = useState(null);
   const dispatch = useDispatch();
-  // async function getUser(uid) {
-  //   const user = await UserAPI.getUser(uid);
-  //   dispatch(setUser(user));
-  // }
+  async function getUser(uid) {
+    const user = await UserAPI.getUser(uid);
+    dispatch(setUser(user));
+  }
   async function fetchAllJeux() {
     const jeuList = await JeuAPI.fetchAll();
     dispatch(setJeuList(jeuList));
   }
+
   useEffect(() => {
     fetchAllJeux();
   }, []);
+
   useEffect(() => {
     const fetchToken = async () => {
       await axios({
@@ -32,17 +34,21 @@ const App = () => {
         .then((res) => {
           setUid(res.data);
           console.log(res.data);
-          console.log(uid);
+          // console.log(uid);
         })
         .catch((err) => console.log("No token"));
     };
     fetchToken();
 
-    if (uid) {dispatch(setUser( UserAPI.getUser(uid)));
-    console.log( uid)}
+    if (uid) {getUser(uid);
+      console.log( uid)}
   }, [uid]);
-
-console.log(uid);
+  
+  // useEffect(() => {
+  //   if (uid) {getUser();
+  //     console.log( uid)}
+  // // console.log(uid);
+  // }, [uid]);
 
   return (
     <UidContext.Provider value={uid}>

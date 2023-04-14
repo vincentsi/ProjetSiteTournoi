@@ -6,7 +6,7 @@ import Logout from "./log/logout";
 
 const Navbar = () => {
   const  uid  = React.useContext(UidContext);
-  const userData = useSelector((state) => state.userReducer);
+  const userData = useSelector((state) => state.USER.user);
 
 
   return (

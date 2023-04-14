@@ -1,25 +1,32 @@
-// import React from "react";
-// import { JeuFrom } from "../components/listejeux/newJeux";
-// import { postCreateJeu, CREATE_JEU } from "../actions/pjeu.actions";
-// import {useDispatch} from "react-redux"
+import React from "react";
+import { JeuForm } from "../components/listejeux/newJeux";
+import { JeuAPI } from "../actions/pjeu.actions";
+import {useDispatch} from "react-redux"
+import { addJeu } from "../store/jeu/jeu.reducer";
+import { useNavigate } from "react-router-dom";
 
-// const JeuCreate = () => {
-//   // const dispatch = useDispatch();
-//     function addJeu(formValues){
-//        const creeJeu =  postCreateJeu({
-//             ...formValues
-//         });
-//         // dispatch(CREATE_JEU(creeJeu));
-//         console.log(creeJeu)
-//     }
-//   return (
-//     <div>
-//       <JeuFrom title="Create a note" onSubmit={addJeu} />
+const JeuCreate = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  async function createJeu(formValues){
+    const createJeu = await JeuAPI.create({
+        ...formValues,
+        // created_at: new Date().toLocaleDateString(),
+     
+    });
+    console.log(createJeu)
+    dispatch(addJeu(formValues));
+    navigate("/homeListeJeux");
+  }
+   
+  return (
+    <div>
+      <JeuForm name="new game" onSubmit={createJeu} />
       
-//     </div>
+    </div>
     
-//   );
+  );
   
-// };
+};
 
-// export default JeuCreate;
+export default JeuCreate;

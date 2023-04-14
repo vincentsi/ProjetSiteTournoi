@@ -2,11 +2,11 @@ import axios from "axios";
 
 export class JeuAPI {
   static async create(jeu) {
-    return this.formatId((await axios.post(`${process.env.REACT_APP_API_URL}`, jeu)).data);
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/jeuuptest`, jeu)).data;
    
   }
   static async fetchAll() {
-    return (await axios.get(`${process.env.REACT_APP_API_URL}app/jeux/all`)).data
+    return (await axios.get(`${process.env.REACT_APP_API_URL}app/jeux/all`)).data.map(this.formatId);
    
     // .data.map(this.formatId);
   }
@@ -15,20 +15,18 @@ export class JeuAPI {
     return this.formatId((await axios.get(`${process.env.REACT_APP_API_URL}/${jeuId}`)).data);
   }
   static async deleteById(jeuId) {
-    return (await axios.delete(`${process.env.REACT_APP_API_URL}/${jeuId}`)).data;
+    return (await axios.delete(`${process.env.REACT_APP_API_URL}app/jeu/${jeuId}`)).data;
   }
   static async update(jeu) {
-    return this.formatId(
-      (await axios.patch(`${process.env.REACT_APP_API_URL}/${jeu.id}`, jeu)).data
-    );
+    return (await axios.put(`${process.env.REACT_APP_API_URL}app/jeu/${jeu.id}`, jeu)).data;
   }
 
-  // static formatId(jeu) {
-  //   return {
-  //     ...jeu,
-  //     id: jeu.id.toString(),
-  //   };
-  // }
+  static formatId(jeu) {
+    return {
+      ...jeu,
+      id: jeu.id.toString(),
+    };
+  }
 }
 
 // import axios from 'axios';

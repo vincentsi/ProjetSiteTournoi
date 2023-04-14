@@ -9,7 +9,7 @@ import { updateBio } from "../../actions/user.actions";
 const UpdateProfil = () => {
   const [bio, setBio] = useState("");
   const [updateForm, setUpdateForm] = useState(false);
-  const userData = useSelector((state) => state.userReducer);
+  const userData = useSelector((state) => state.USER.user);
   const dispatch = useDispatch();
   console.log(userData)
   const handleUpdate = () => {
