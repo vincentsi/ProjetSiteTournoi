@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-const  HomeTournois = ({ leJeu }) => {
-  console.log(leJeu)
+const  HomeTournois = ({  name , description, subtitle , onClick }) => {
+  // console.log(leJeu)
+  // console.log(name)
   return (
-    
-    <div className="tournois-container" >
-      mid-bas
-     
-     
+    <div onClick={onClick} >
+      <div className="tournois-container" >
+        <p className="card-text text_description">{name}</p>
+        <h6 className="card-subtitle mb-2 text-muted">{subtitle}</h6>
+        <p className="card-text text_description">{description}</p>
+        <br></br>
+      </div>
     </div>
-    
   );
  
 };

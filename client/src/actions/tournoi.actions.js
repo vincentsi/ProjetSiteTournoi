@@ -7,10 +7,10 @@ export class TournoiAPI {
     ).data.map(this.formatId);
   }
 
-  static formatId(jeu) {
+  static formatId(tournoi) {
     return {
-      ...jeu,
-      id: jeu.id.toString(),
+      ...tournoi,
+      id: tournoi.id.toString(),
     };
   }
 }

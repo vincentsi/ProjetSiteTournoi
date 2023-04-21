@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Trash as TrashIcon } from "react-bootstrap-icons";
 
 export function HomeJeux({ name, subtitle, description, onClickTrash, onClick }) {
+  
   const [isCardHovered, setIsCardHovered] = useState(false);
   const [isTrashHovered, setIsTrashHovered] = useState(false);
-
+  
   function onClickTrash_(e) {
     onClickTrash();
     e.stopPropagation();

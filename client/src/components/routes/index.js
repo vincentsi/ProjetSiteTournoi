@@ -23,7 +23,8 @@ const index = () => {
             <Route path="/homeListeJeux" element = {<Listejeux />}></Route>
             <Route path="/jeu/new" element = {<JeuCreate />}></Route>
             <Route path="/jeu/:jeuId" element = {<Jeu />}></Route>
-            <Route path="/homeListetournois" element = {<ListeTournois />}></Route>
+            {/* <Route path="/homeListetournois" element = {<ListeTournois />}></Route> */}
+            <Route path="/tournoi/:tournoiId" element = {<ListeTournois />}></Route>
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         

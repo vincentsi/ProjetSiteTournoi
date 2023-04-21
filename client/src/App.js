@@ -5,8 +5,10 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { UserAPI } from "./actions/user.actions";
 import { JeuAPI } from "./actions/pjeu.actions";
+import { TournoiAPI } from "./actions/tournoi.actions";
 import { setJeuList } from "./store/jeu/jeu.reducer";
 import { setUser } from "./store/user/user.reducer";
+import { setTournoiList } from "./store/tournoi/tournois.reducer";
 
 const App = () => {
   const [uid, setUid] = useState(null);
@@ -19,9 +21,15 @@ const App = () => {
     const jeuList = await JeuAPI.fetchAll();
     dispatch(setJeuList(jeuList));
   }
+  async function fetchAllTounois() {
+    const tournoiList = await TournoiAPI.fetchAll();
+    // console.log(tournoiList);
+    dispatch(setTournoiList(tournoiList));
+  }
 
   useEffect(() => {
     fetchAllJeux();
+    fetchAllTounois();
   }, []);
 
   useEffect(() => {

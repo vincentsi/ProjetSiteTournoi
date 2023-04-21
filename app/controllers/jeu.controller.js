@@ -43,4 +43,42 @@ module.exports.jeuInfo = (req, res) => {
     } else {res.send({ message: "error" });}
 
   };
+
+  module.exports.updateJeu = async (req, res) => {
+
+    try{
+      await JeuModel.findByPk(req.params.id)
+      
+          if (JeuModel != null) {
+            JeuModel.update(
+              { name: req.body.name , 
+               title: req.body.title, 
+              description: req.body.description }, 
+              { where: { id: req.params.id } }
+              );   
+              res.status(200).send("updated successfully");
+              }    
+          } catch (err) {
+            console.log(err)
+            res.status(500).send({ message: err });
+      }
+    }
+
+    module.exports.deleteJeu = async (req, res) => {
+      JeuModel.destroy({
+        where: {
+          id: req.params.id
+        },
+      })
+      .then((email) => {    
+        if (!email) {
+        return res.status(200).send({ errorsid: "jeu Not found." });
+      }
+        res.status(200).send({ jeu: "jeu delete." });
+       })
+        
+      .catch((err) => {
+        res.status(500).send({ message: err.message });
+      });
+    };
 //   INSERT INTO listejeus (name, title, picture, description)VALUES ('league of legend', 'league of legend','./uploads/img/imagejeux.jpg','jeu de strategie')

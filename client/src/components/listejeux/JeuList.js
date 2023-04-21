@@ -16,7 +16,7 @@ export function JeuList({ jeuList }) {
     dispatch(deleteJeu(jeu))
    }
   }
-
+  
   return (
     <div className="row justify-content-center">
       {jeuList.map((jeu) => {

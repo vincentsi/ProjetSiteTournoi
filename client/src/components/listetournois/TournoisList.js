@@ -1,13 +1,10 @@
 
-import { useDispatch,useSelector } from "react-redux";
+// import { useDispatch,useSelector } from "react-redux";
 import { useNavigate} from "react-router-dom"
-import { JeuAPI } from "../../actions/ptournoi.actions";
-import { deletetournoi } from "../../store/tournoi/tournoi.reducer";
 import Hometournois from "./hometournois";
 
-export function tournoiList({ tournoiList }) {
-  // const tournoiList =  useSelector((store) =>  store.tournoi.tournoiList);
-  const dispatch = useDispatch();
+export function TournoiList({ tournoiList }) {
+  // const dispatch = useDispatch();
   const navigate = useNavigate()
     
   return (
@@ -15,11 +12,12 @@ export function tournoiList({ tournoiList }) {
       {tournoiList.map((tournoi) => {
         return (
           <div key={tournoi.id} className="tournoi_container">
-            <Hometournois
+           <Hometournois 
               name={tournoi.name}
               subtitle={tournoi.createdAt}
               description={tournoi.description}
-            //   onClick={()=> navigate("/tournoi/"+ tournoi.id)}
+              
+              onClick={()=> navigate("/tournoi/"+ tournoi.id)}
      
             />
           </div>

@@ -6,17 +6,20 @@ import { useState } from "react";
 import { JeuAPI } from "../actions/pjeu.actions";
 import { updateJeu } from "../store/jeu/jeu.reducer";
 import { deleteJeu } from "../store/jeu/jeu.reducer";
-import  HomeTournois  from "../components/listetournois/hometournois"
+// import  HomeTournois  from "../components/listetournois/hometournois"
+import  { TournoiList } from "../components/listetournois/TournoisList";
 export function Jeu(props) {
   const [isEditable, setIsEditable] = useState(false);
   const dispatch = useDispatch();
   const { jeuId } = useParams();
   const navigate = useNavigate()
   // const [searchParams] = useSearchParams();
+  
   const jeu = useSelector((store) =>
     store.JEU.jeuList.find((jeu) => jeu.id === jeuId)
   );
-  console.log(jeu)
+  
+  
   async function submit(formValues) {
     const updatedJeu = await JeuAPI.update({...formValues,id: jeu.id})
     dispatch(updateJeu(updatedJeu));
@@ -30,6 +33,11 @@ export function Jeu(props) {
     navigate("/homeListeJeux")
    }
   }
+  const tournoiList =  useSelector((store) =>  store.TOURNOI.tournoiList);
+
+ 
+  const filteredList = tournoiList.filter((tournoi) =>  tournoi.listejeuId == jeuId);
+ 
   return (
     <>
     <div className="mb-1">
@@ -44,9 +52,11 @@ export function Jeu(props) {
         />)}
         </div>
         <div className="mb-5">
-        {jeu && (<HomeTournois leJeu={jeu}/> )}
+        {jeu && (<TournoiList tournoiList={filteredList} />)}
         </div>
+        
     </>
   );
+  
 }
 export default Jeu;

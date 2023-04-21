@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const HomeListeJeux = (props) => {
   const [searchText, setSearchText] = useState("");
   const jeuList = useSelector((store) => store.JEU.jeuList);
-  console.log(searchText);
+  // console.log(searchText);
   const filteredList = jeuList.filter((jeu) => {
     const containsName = jeu.name
       .toUpperCase()

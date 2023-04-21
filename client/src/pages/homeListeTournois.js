@@ -1,13 +1,19 @@
 import React from "react";
-import HomeTournois from "../components/listetournois/hometournois";
-const homeListeTournois = () => {
+import TournoiSelec from "../components/listetournois/tournoiSelected";
+import {  useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+const HomeListeTournois = () => {
+  const { tournoiId } = useParams();
+  const tournoi = useSelector((store) =>
+  store.TOURNOI.tournoiList.find((tournoi) => tournoi.id === tournoiId)
+);
   return (
     <div>
-      <HomeTournois />
+     {tournoi &&<TournoiSelec tournoi={tournoi}/>}
       
     </div>
     
   );
 };
 
-export default homeListeTournois;
+export default HomeListeTournois;
