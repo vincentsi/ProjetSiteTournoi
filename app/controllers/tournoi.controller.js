@@ -32,8 +32,12 @@ module.exports.tournoiInfo = (req, res) => {
   exports.tournoiUpTest = (req, res) => {
     // Save User to Database
     TournoiModel.create({
-      name: req.body.name,
-      description: req.body.description,
+      title: req.body.title,
+      information: req.body.information,
+      horaire: req.body.horaire,
+      prix: req.body.prix,
+      contact: req.body.contact,
+      regle: req.body.regle,
       listejeuId: req.body.listejeuId,
     })
     if (TournoiModel){res.send({ message: "game registered successfully!" });

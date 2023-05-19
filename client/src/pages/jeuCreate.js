@@ -4,7 +4,7 @@ import { JeuAPI } from "../actions/pjeu.actions";
 import {useDispatch} from "react-redux"
 import { addJeu } from "../store/jeu/jeu.reducer";
 import { useNavigate } from "react-router-dom";
-
+// http://localhost:3000/tournoi/13
 const JeuCreate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ const JeuCreate = () => {
      
     });
     console.log(createJeu)
+    console.log(formValues)
     dispatch(addJeu(formValues));
     navigate("/homeListeJeux");
   }

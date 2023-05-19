@@ -13,9 +13,9 @@ export function TournoiList({ tournoiList }) {
         return (
           <div key={tournoi.id} className="tournoi_container">
            <Hometournois 
-              name={tournoi.name}
+              title={tournoi.title}
               subtitle={tournoi.createdAt}
-              description={tournoi.description}
+              // description={tournoi.description}
               
               onClick={()=> navigate("/tournoi/"+ tournoi.id)}
      

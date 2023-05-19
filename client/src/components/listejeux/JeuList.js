@@ -26,6 +26,7 @@ export function JeuList({ jeuList }) {
               name={jeu.name}
               subtitle={jeu.createdAt}
               description={jeu.description}
+              picture={jeu.picture}
               onClick={()=> navigate("/jeu/"+ jeu.id)}
               onClickTrash={()=> deleteJeu_(jeu)}
             />
