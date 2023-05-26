@@ -31,9 +31,9 @@ module.exports.jeuInfo = (req, res) => {
     res.status(200).json(jeux);
   };
 
-  exports.jeuuptest = (req, res) => {
+  exports.jeuuptest = async (req, res) => {
     // Save User to Database
-    JeuModel.create({
+    await JeuModel.create({
       name: req.body.name,
       title: req.body.title,
       description: req.body.description,

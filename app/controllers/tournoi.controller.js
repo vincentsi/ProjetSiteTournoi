@@ -29,9 +29,9 @@ module.exports.tournoiInfo = (req, res) => {
     res.status(200).json(tournois);
   };
 
-  exports.tournoiUpTest = (req, res) => {
-    // Save User to Database
-    TournoiModel.create({
+  exports.tournoiUpTest = async (req, res) => {
+    try{
+     const TournoiCreate= await TournoiModel.create({
       title: req.body.title,
       information: req.body.information,
       horaire: req.body.horaire,
@@ -39,9 +39,23 @@ module.exports.tournoiInfo = (req, res) => {
       contact: req.body.contact,
       regle: req.body.regle,
       listejeuId: req.body.listejeuId,
-    })
-    if (TournoiModel){res.send({ message: "game registered successfully!" });
-    } else {res.send({ message: "erroor" });}
+    })  ;
+    res.send({ 
+      id:TournoiCreate.id,
+      title: req.body.title,
+      information: req.body.information,
+      horaire: req.body.horaire,
+      prix: req.body.prix,
+      contact: req.body.contact,
+      regle: req.body.regle,
+      listejeuId: req.body.listejeuId,
+     });
+          } catch (err) {
+            console.log(err)
+            res.status(500).send({ message: err });
+      }
+    }
 
-  };
-//   INSERT INTO listejeus (name, title, picture, description)VALUES ('league of legend', 'league of legend','./uploads/img/imagejeux.jpg','jeu de strategie')
+  
+
+

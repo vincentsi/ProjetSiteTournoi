@@ -7,6 +7,7 @@ import { TournoiAPI } from "../actions/tournoi.actions";
 import { jeuReducer, updateJeu } from "../store/jeu/jeu.reducer";
 import { addTournoi } from "../store/tournoi/tournois.reducer";
 import { deleteJeu } from "../store/jeu/jeu.reducer";
+import { BracketAPI } from "../actions/bracket.action";
 // import  HomeTournois  from "../components/listetournois/hometournois"
 import { TournoiList } from "../components/listetournois/TournoisList";
 import { TournoiNew } from "../components/listetournois/newTournoi";
@@ -25,8 +26,15 @@ export function Jeu(props) {
   async function submit(formValues) {
     const updatedJeu = await JeuAPI.update({ ...formValues, id: jeu.id });
     dispatch(updateJeu(updatedJeu));
+   
     setIsEditable(false);
   }
+  // async function createBracket(formValuesTournois) {
+  //   const createdBracket = await BracketAPI.create({
+  //     listetournoiId: createdTournoi.id,
+  //   });
+  //   console.log(createdTournoi.id)  
+  // }
 
   async function createTournoi(formValuesTournois) {
     const createdTournoi = await TournoiAPI.create({
@@ -34,9 +42,14 @@ export function Jeu(props) {
       listejeuId: jeuId,
     });
     dispatch(addTournoi(createdTournoi));
+    const createdBracket = await BracketAPI.create({
+      listetournoiId: createdTournoi.id,
+      
+    });
+    console.log(createdTournoi.id)
     setAffTournois(!affTournois)
-    console.log(createdTournoi);
-    console.log(formValuesTournois);
+    // console.log(createdTournoi);
+    // console.log(formValuesTournois);
   }
 
   const ChangeAffButton = (
@@ -58,7 +71,7 @@ export function Jeu(props) {
   const filteredList = tournoiList.filter(
     (tournoi) => tournoi.listejeuId == jeuId
   );
-  console.log(affTournois);
+  // console.log(affTournois);
   return (
     <>
       <div className="row justify-content-center">{ChangeAffButton}</div>

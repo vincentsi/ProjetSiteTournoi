@@ -16,6 +16,7 @@ const JeuCreate = () => {
     });
     console.log(createJeu)
     console.log(formValues)
+    // dispatch(addJeu(createJeu));
     dispatch(addJeu(formValues));
     navigate("/homeListeJeux");
   }

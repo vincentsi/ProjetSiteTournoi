@@ -33,6 +33,7 @@ require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/jeu.routes')(app)
 require('./app/routes/tournoi.routes')(app)
+require('./app/routes/bracket.routes')(app)
 
 const PORT = process.env.PORT ;
 app.listen(PORT, () => {
