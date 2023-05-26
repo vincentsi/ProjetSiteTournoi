@@ -79,8 +79,6 @@ function shuffle(array) {
   return array;
 }
 
-
-
 exports.bracketRandomiser = async (req, res) => {
   try {
     userBracketfind = await UserBracketModel.findAll({
@@ -88,68 +86,91 @@ exports.bracketRandomiser = async (req, res) => {
         bracketId: req.body.bracketId,
       },
     });
-    console.log(userBracketfind.length)
+    console.log(userBracketfind.length);
     userBracketfind = shuffle(userBracketfind);
     bracketid = userBracketfind[0].bracketId;
-    let j = 0
-  
-    for (let i = 0; i < userBracketfind.length - 1; i += 2) {
-      const createMatch = await MatchesModel.create({
-        // nextMatchid:createMatch[i].id,
-        user1: userBracketfind[i].userId,
-        user2: userBracketfind[i + 1].userId,
-        bracketId: bracketid,
-        state: req.body.state,
-      });
+    let j = 0;
+    let createMatch = []
+    // const bracketLength = userBracketfind.length
+    // if (bracketLength == 17 || bracketLength == 8 || bracketLength == 4) {
       
-      j += 1
-      // console.log(createMatch.id-1);
-      if (j % 2 == 0) {
-        const createNextMatch = await MatchesModel.create({
+      for (let i = 0; i < userBracketfind.length ; i += 2) {
+        // console.log(userBracketfind[i + 1].userId)
+        if (userBracketfind[i + 1].userId != undefined){
+           createMatch = await MatchesModel.create({
           // nextMatchid:createMatch[i].id,
-          // user1: userBracketfind[i].userId,
-          // user2: userBracketfind[i + 1].userId,
+          user1: userBracketfind[i].userId,
+          user2: userBracketfind[i + 1].userId ,
           bracketId: bracketid,
-          state: req.body.state,
         });
-        const updateMatchBracket = await MatchesModel.update(
-        { nextMatchId: createNextMatch.id  },
-        { where: {[Op.or]: [{id: createMatch.id-1}, {id: createMatch.id}] } }
-        );
+        }else{
+           createMatch = await MatchesModel.create({
+            // nextMatchid:createMatch[i].id,
+            user1: userBracketfind[i].userId,
+            bracketId: bracketid, 
+          });
+        }
+        j += 1;
+        // let createNextMatch = []
+        // console.log(createMatch.id-1);
+        if (j % 2 == 0) {
+           const createNextMatch = await MatchesModel.create({
+            bracketId: bracketid,
+          });
+          const updateMatchBracket = await MatchesModel.update(
+            { nextMatchId: createNextMatch.id },
+            {
+              where: {
+                [Op.or]: [{ id: createMatch.id - 1 }, { id: createMatch.id }],
+              },
+            }
+          );
+        }
         
-      }
-      if (j % 4 == 0) {
-        const createNextMatchWinner = await MatchesModel.create({
-          // nextMatchid:createMatch[i].id,
-          // user1: userBracketfind[i].userId,
-          // user2: userBracketfind[i + 1].userId,
-          bracketId: bracketid,
-          state: req.body.state,
-        });
-        const updateNextMatchBracket = await MatchesModel.update(
-        { nextMatchId: createNextMatchWinner.id  },
-        { where: {[Op.or]: [{id: createMatch.id+1}, {id: createMatch.id-2}] } }
-        );
-      }
-     
-      if (j % 8 == 0) {
-        // if(){}
-        const createNextMatchWinner = await MatchesModel.create({
-          // nextMatchid:createMatch[i].id,
-          // user1: userBracketfind[i].userId,
-          // user2: userBracketfind[i + 1].userId,
-          bracketId: bracketid,
-          state: req.body.state,
-        });
-        const updateNextMatchBracket = await MatchesModel.update(
-        { nextMatchId: createNextMatchWinner.id  },
-        { where: {[Op.or]: [{id: createMatch.id+2}, {id: createMatch.id-5}] } }
-        );
-      }
+        if (j % 4 == 0) {
+          const createNextMatchWinner = await MatchesModel.create({
+            bracketId: bracketid,
+          });
+          const updateNextMatchBracket = await MatchesModel.update(
+            { nextMatchId: createNextMatchWinner.id },
+            {
+              where: {
+                [Op.or]: [
+                  { id: createMatch.id + 1 },
+                  { id: createMatch.id - 2 },
+                ],
+              },
+            }
+          );
+        }
 
-    }
+        if (j % 8 == 0) {
+          // if(){}
+          const createNextMatchWinner = await MatchesModel.create({
+            // nextMatchid:createMatch[i].id,
+            // user1: userBracketfind[i].userId,
+            // user2: userBracketfind[i + 1].userId,
+            bracketId: bracketid,
+            state: req.body.state,
+          });
+          const updateNextMatchBracket = await MatchesModel.update(
+            { nextMatchId: createNextMatchWinner.id },
+            {
+              where: {
+                [Op.or]: [
+                  { id: createMatch.id + 2 },
+                  { id: createMatch.id - 5 },
+                ],
+              },
+            }
+          );
+        }
+      }
+    // } else {
+    //   console.log("salut");
+    // }
 
-    res.status(200).json(userBracketfind);
+    res.status(200).json(bracketLength);
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: err });
@@ -172,6 +193,3 @@ module.exports.updateMatch = async (req, res) => {
     res.status(500).send({ message: err });
   }
 };
-
-
-
