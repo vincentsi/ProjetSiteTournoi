@@ -28,6 +28,7 @@ module.exports.tournoiInfo = (req, res) => {
     });
     res.status(200).json(tournois);
   };
+  
 
   exports.tournoiUpTest = async (req, res) => {
     try{

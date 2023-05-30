@@ -10,7 +10,7 @@ const HomeListeTournois = () => {
   return (
     <div>
      {tournoi &&<TournoiSelec tournoi={tournoi}/>}
-      
+     
     </div>
     
   );

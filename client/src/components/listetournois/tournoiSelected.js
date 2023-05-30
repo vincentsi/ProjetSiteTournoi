@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { BracketAPI } from "../../actions/bracket.action";
 import { ParticipantInscrit } from "../brackets/participant";
+import  BracketGeneration from "../brackets/bracketGeneration";
 
 export function TournoiSelec({ tournoi }) {
   const [button, setButton] = useState("");
@@ -103,7 +104,10 @@ export function TournoiSelec({ tournoi }) {
         </div>
         <div className="regles-tournoi">{button === "régles" && <>text</>}</div>
         <div className="brackets-tournoi">
-          {button === "brackets" && <>text2</>}
+          {button === "brackets" && <> t
+          <BracketGeneration/>
+          
+          </>}
         </div>
       </div>
     </div>
