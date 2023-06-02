@@ -42,10 +42,9 @@ export function Jeu(props) {
       listejeuId: jeuId,
     });
     dispatch(addTournoi(createdTournoi));
-    const createdBracket = await BracketAPI.create({
-      listetournoiId: createdTournoi.id,
-      
-    });
+    // const createdBracket = await BracketAPI.create({
+    //   listetournoiId: createdTournoi.id,
+    // });
     console.log(createdTournoi.id)
     setAffTournois(!affTournois)
     // console.log(createdTournoi);

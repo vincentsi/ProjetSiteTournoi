@@ -3,6 +3,9 @@ module.exports = (sequelize, Sequelize) => {
       nextMatchId: {
         type: Sequelize.INTEGER
       },
+      round: {
+        type: Sequelize.INTEGER
+      },
       // user1: {
       //   type: Sequelize.STRING,
       // },
@@ -15,9 +18,9 @@ module.exports = (sequelize, Sequelize) => {
       // loser: {
       //   type: Sequelize.STRING
       // },
-      state: {
-        type: Sequelize.STRING
-      },
+      // state: {
+      //   type: Sequelize.STRING
+      // },
     });
   
     return matches;

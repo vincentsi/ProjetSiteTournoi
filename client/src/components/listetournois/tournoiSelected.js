@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { BracketAPI } from "../../actions/bracket.action";
-import { ParticipantInscrit } from "../brackets/participant";
-import  BracketGeneration from "../brackets/bracketGeneration";
+import { MatchList } from "../brackets/matchList";
+
+
+
 
 export function TournoiSelec({ tournoi }) {
   const [button, setButton] = useState("");
@@ -15,17 +17,17 @@ export function TournoiSelec({ tournoi }) {
  
   async function sincrireTournoi() {
     if (userData.id != null) {
-      const bracket = await BracketAPI.findOne({ listetournoiId: tournoi.id });
+      // const bracket = await BracketAPI.findOne({ id: tournoi.id });
       const userBracket = await BracketAPI.findOneUserBracket({
-        bracketId: bracket.id,
+        tournoiId: tournoi.id,
         userId: userData.id
       });
       console.log(userBracket.userId);
       if (userBracket) {
         alert("vous etez deja inscrit");
       } else {
-        const addUser = await BracketAPI.UBCreate({
-          bracketId: bracket.id,
+        const addUser = await BracketAPI.UTCreate({
+          tournoiId: tournoi.id,
           userId: userData.id,
         });
         console.log(addUser);
@@ -104,8 +106,8 @@ export function TournoiSelec({ tournoi }) {
         </div>
         <div className="regles-tournoi">{button === "régles" && <>text</>}</div>
         <div className="brackets-tournoi">
-          {button === "brackets" && <> t
-          <BracketGeneration/>
+          {button === "brackets" && <> 
+          <MatchList tournoi={tournoi}/>
           
           </>}
         </div>

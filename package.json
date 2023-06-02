@@ -19,6 +19,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
     "bcryptjs": "^2.4.3",
+    "brackets-manager": "^1.5.8",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -30,6 +31,7 @@
     "react-tournament-bracket": "^0.2.4",
     "sequelize": "^5.22.5",
     "sharp": "^0.31.3",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "tournament-bracket-tree": "^1.0.1"
   }
 }

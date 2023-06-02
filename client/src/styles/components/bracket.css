@@ -1,0 +1,10 @@
+#tree{
+    display:table;
+    width:60%;
+    vertical-align:middle;
+  }
+  .level{
+    display:table-cell;
+    width:33%;
+    vertical-align:middle;
+  }
