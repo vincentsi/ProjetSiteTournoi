@@ -1,10 +1,71 @@
-#tree{
+/* #tree{
     display:table;
     width:60%;
     vertical-align:middle;
+  } */
+  /* .affiche_match_containers{
+      display: absolute;
+    
+    /* flex-direction: row;  */
+    /* background-color: rgb(225, 130, 130)  */
+    
+    
+  /* }  */
+  .affiche_match{
+    display: flex;
+    flex-direction: row; 
+ 
+   
+ }
+  .affiche_round{
+    flex: 1;
+  
   }
-  .level{
-    display:table-cell;
+  .traitnextmatch{
+    position: absolute;
+    transform: rotate(7deg);
+    border-bottom: 2px solid black;
+    margin-top: 25px;
+    padding-left: 20px;
+    margin-left: 88px;
+    }
+  .trait{
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+  
+  }
+  .round1{
+    cursor: pointer;
+    position: relative;
     width:33%;
-    vertical-align:middle;
+    top : 50px;
+    margin-left: 30px;
+    /* padding-left: 10px; */
+    /* border-radius: 10px; */
+    background-color: rgb(250, 247, 247);
+  }
+  .round2{
+    cursor: pointer;
+    position: relative;
+    width:50%;
+    margin-bottom: 107px;
+    /* height: 50%; */
+    top: -250px;
+    left: -50px;
+    background-color: rgb(255, 255, 255);
+  }
+  .round3{
+    cursor: pointer;
+    position: relative;
+    width:50%;
+    top: -515px;
+    left: -70px;
+    background-color: rgb(254, 254, 254);
+  }
+  .round4{
+    cursor: pointer;
+    position: absolute;
+    width:50%;
+    top: 500px;
+    background-color: rgb(255, 255, 255);
   }

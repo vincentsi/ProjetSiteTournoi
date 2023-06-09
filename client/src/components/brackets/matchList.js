@@ -37,6 +37,8 @@ async function matchC() {
               user1={match.user1}
               user2={match.user2}
               winner={match.winner}
+              round={match.Round}
+              
             //   tournoiId={match.tournoiId}
             //   onClick={()=> navigate("/match/"+ match.id)}
               

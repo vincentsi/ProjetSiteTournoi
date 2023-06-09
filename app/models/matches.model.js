@@ -1,10 +1,13 @@
 module.exports = (sequelize, Sequelize) => {
     const matches = sequelize.define("matches", {
-      nextMatchId: {
+      Round: {
         type: Sequelize.INTEGER
       },
-      round: {
+      numMatch: {
         type: Sequelize.INTEGER
+      },
+      nextMatch: {
+        type: Sequelize.STRING
       },
       // user1: {
       //   type: Sequelize.STRING,

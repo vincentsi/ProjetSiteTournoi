@@ -1,5 +1,8 @@
 const db = require("../models");
 const { Op } = require("sequelize");
+const matchesModel = require("../models/matches.model");
+const { round } = require("lodash");
+const { match } = require("assert");
 const TournoisModel = db.listetournoi;
 const UserModel = db.user;
 // const TournoisModel = db.listetournoi;
@@ -53,91 +56,35 @@ function shuffle(array) {
   return array;
 }
 
-// exports.bracketRandomiser = async (req, res) => {
-//   try {
-//     userBracketfind = await UserTournoiModel.findAll({
-//       where: {
-//         tournoiId: req.body.tournoiId,
-//       },
-//     });
-//     console.log(userBracketfind.length);
-//     userBracketfind = shuffle(userBracketfind);
-//     tournoiid = userBracketfind[0].tournoiId;
-//     let j = 0;
-//     let createMatch = [];
-//     for (let i = 0; i < userBracketfind.length; i += 2) {
-//       // console.log(userBracketfind[i + 1].userId)
-//       if (userBracketfind[i + 1].userId != undefined) {
-//         createMatch = await MatchesModel.create({
-//           // nextMatchid:createMatch[i].id,
-//           user1: userBracketfind[i].userId,
-//           user2: userBracketfind[i + 1].userId,
-//           tournoiId: tournoiid,
-//         });
-//       } 
-//       j += 1;
-//       // let createNextMatch = []
-//       // console.log(createMatch.id-1);
-//       if (j % 2 == 0) {
-//         const createNextMatch = await MatchesModel.create({
-//           tournoiId: tournoiid,
-//         });
-//         const updateMatchBracket = await MatchesModel.update(
-//           { nextMatchId: createNextMatch.id },
-//           {
-//             where: {
-//               [Op.or]: [{ id: createMatch.id - 1 }, { id: createMatch.id }],
-//             },
-//           }
-//         );
-//       }
-//       if (j % 4 == 0) {
-//         const createNextMatchWinner = await MatchesModel.create({
-//           tournoiId: tournoiid,
-//         });
-//         const updateNextMatchBracket = await MatchesModel.update(
-//           { nextMatchId: createNextMatchWinner.id },
-//           {
-//             where: {
-//               [Op.or]: [{ id: createMatch.id + 1 }, { id: createMatch.id - 2 }],
-//             },
-//           }
-//         );
-//       }
-//       if (j % 8 == 0) {
-//         // if(){}
-//         const createNextMatchWinner = await MatchesModel.create({
-
-//           tournoiId: tournoiid,
-//           state: req.body.state,
-//         });
-//         const updateNextMatchBracket = await MatchesModel.update(
-//           { nextMatchId: createNextMatchWinner.id },
-//           {
-//             where: {
-//               [Op.or]: [{ id: createMatch.id + 2 }, { id: createMatch.id - 5 }],
-//             },
-//           }
-//         );
-//       }
-//     }
-//     res.status(200).json("test");
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).send({ message: err });
-//   }
-// };
 
 module.exports.updateMatch = async (req, res) => {
   try {
-    await MatchesModel.findByPk(req.body.id);
-
-    if (MatchesModel != null) {
-      MatchesModel.update(
+    const matchFini = await MatchesModel.findByPk(req.body.id);
+    // const numMatchMax = await MatchesModel.max('nMatch',{ where: { Round: matchFini.Round } });
+ 
+    if (matchFini != null) {
+      await matchFini.update(
         { winner: req.body.winner },
         { where: { id: req.body.id } }
       );
-      res.status(200).send("updated successfully");
+         const matchUpdateWinner = await MatchesModel.findOne(
+          // { user1: req.body.winner },
+          { where: { numMatch: matchFini.nextMatch  } }
+        );
+        if (matchUpdateWinner.user1 == null || matchUpdateWinner.user1 == matchFini.winner) 
+        {
+          matchUpdateWinner.update(  
+            { user1: req.body.winner },
+ 
+          )
+        }else{
+          matchUpdateWinner.update(
+            { user2: req.body.winner },
+
+            )
+        }
+     
+      res.status(200).send(matchUpdateWinner);
     }
   } catch (err) {
     console.log(err);
@@ -147,26 +94,54 @@ module.exports.updateMatch = async (req, res) => {
 
 exports.bracketRandomiser = async (req, res) => {
   try {
-        userBracketfind = await UserTournoiModel.findAll({
-              where: {
-                tournoiId: req.body.tournoiId,
-              },
-            });
+    userBracketfind = await UserTournoiModel.findAll({
+      where: {
+        tournoiId: req.body.tournoiId,
+      },
+    });
     const nbMaxPlayers = 8;
-    let x=0;
+    // x pour les numMatch
+    let x = 0;
+    // j  pour les rounds
+    let j = 1;
+    // y  pour les nextMatch
+    let y = nbMaxPlayers/2;
     userBracketfind = shuffle(userBracketfind);
     tournoiid = userBracketfind[0].tournoiId;
-    for (let i = 0; i < nbMaxPlayers-1 ; i += 1) {
-              // console.log(userBracketfind[i].userId)
-              // if (userBracketfind[i + 1].userId != undefined){
-                x += 1;
-                
-                createMatch = await MatchesModel.create({
-              
-                tournoiId: tournoiid,
-              });
-            
-          }
+    for (let i = 0; i < nbMaxPlayers - 1; i += 2) {
+        x += 1;
+        if(i%4==0) y += 1;
+        createMatch = await MatchesModel.create({
+          Round: 1,
+          numMatch: x,
+          nextMatch:y,
+          user1: userBracketfind[i].userId,
+          user2: userBracketfind[i + 1].userId,
+          tournoiId: tournoiid,
+        });
+    }
+    let nRound =[] ;
+    do{
+     nRound = await MatchesModel.count({
+              where: {
+                [Op.and]: [{ Round: j }, { tournoiId: tournoiid }],
+              },    
+    });
+    j++
+   
+    for (let i = 0; i < nRound ; i += 2) {
+      if(i%4==0) y += 1;
+      if(nRound <= 2) y = "Final";
+        x += 1;
+        createMatch = await MatchesModel.create({
+          Round: j,
+          numMatch: x,
+          nextMatch: y,
+          tournoiId: tournoiid,
+        });
+    }
+    console.log(nRound);
+  } while (nRound > 2);
 
     res.status(200).json(userBracketfind);
   } catch (err) {
