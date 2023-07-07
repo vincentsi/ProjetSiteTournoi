@@ -2,7 +2,7 @@ import axios from "axios";
 
 export class JeuAPI {
   static async create(jeu) {
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/jeuuptest`, jeu)).data;
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/jeucreation`, jeu)).data;
    
   }
   static async fetchAll() {

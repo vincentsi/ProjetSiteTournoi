@@ -10,8 +10,7 @@ const UserTournoiModel = db.user_tournoi;
 const MatchesModel = db.matches;
 
 exports.updateBracket = async (req, res) => {
-  // Save User  bracket to Database
-
+  //Ajoute un utilisateur dans le bracket
   try {
     addUser = await UserTournoiModel.create({
       tournoiId: req.body.tournoiId,
@@ -23,7 +22,22 @@ exports.updateBracket = async (req, res) => {
     res.status(500).send({ message: err });
   }
 };
+exports.updateBracketDel = async (req, res) => {
+  //Suprime un utilisateur dans le bracket
+  try {
+    delUser = await UserTournoiModel.destroy({
+        where: {
+          [Op.and]: [{  tournoiId: req.body.tournoiId}, { userId: req.body.userId}],
+        },     
+  })
+    res.send("user bien supprimer");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err });
+  }
+};
 exports.searchOneUserBracket = async (req, res) => {
+  //trouver l'utilisateur dans le bracket selon leur id
   try {
     const userBracketfind = await UserTournoiModel.findOne({
       where: {
@@ -38,15 +52,13 @@ exports.searchOneUserBracket = async (req, res) => {
     res.status(500).send({ message: err });
   }
 };
-
+//servira a randomiser les brackets
 function shuffle(array) {
   var i = array.length,
     j = 0,
     temp;
-
   while (i--) {
     j = Math.floor(Math.random() * (i + 1));
-
     // swap randomly chosen element with current element
     temp = array[i];
     array[i] = array[j];
@@ -58,19 +70,21 @@ function shuffle(array) {
 
 
 module.exports.updateMatch = async (req, res) => {
+  //update des matchs du bracket pour le winner 
   try {
+    //recuperation du winner 
     const matchFini = await MatchesModel.findByPk(req.body.id);
-    // const numMatchMax = await MatchesModel.max('nMatch',{ where: { Round: matchFini.Round } });
- 
+    //update du match
     if (matchFini != null) {
       await matchFini.update(
         { winner: req.body.winner },
         { where: { id: req.body.id } }
       );
+      //recuperation du prochain match pour le winner
          const matchUpdateWinner = await MatchesModel.findOne(
-          // { user1: req.body.winner },
           { where: { numMatch: matchFini.nextMatch  } }
         );
+        // envoie du winner dans son prochain match en verifiant que son adversaire  ne soit pas deja envoyé
         if (matchUpdateWinner.user1 == null || matchUpdateWinner.user1 == matchFini.winner) 
         {
           matchUpdateWinner.update(  
@@ -93,6 +107,7 @@ module.exports.updateMatch = async (req, res) => {
 };
 
 exports.bracketRandomiser = async (req, res) => {
+  //randomisation du bracket selon le nombre de joueur 
   try {
     userBracketfind = await UserTournoiModel.findAll({
       where: {
@@ -108,9 +123,12 @@ exports.bracketRandomiser = async (req, res) => {
     let y = nbMaxPlayers/2;
     userBracketfind = shuffle(userBracketfind);
     tournoiid = userBracketfind[0].tournoiId;
+    //creation des matchs avec utilisateur inscrit
     for (let i = 0; i < nbMaxPlayers - 1; i += 2) {
         x += 1;
+        //on change le prochain match attribue du match tout les 2 matchs
         if(i%4==0) y += 1;
+
         createMatch = await MatchesModel.create({
           Round: 1,
           numMatch: x,
@@ -121,6 +139,7 @@ exports.bracketRandomiser = async (req, res) => {
         });
     }
     let nRound =[] ;
+     //creation des matchs pour les winners selon le nombre de matchs 
     do{
      nRound = await MatchesModel.count({
               where: {
@@ -129,8 +148,9 @@ exports.bracketRandomiser = async (req, res) => {
     });
     j++
    
-    for (let i = 0; i < nRound ; i += 2) {
+    for (let i = 0; i < nRound ; i += 2) { 
       if(i%4==0) y += 1;
+      //on attribut final au denier match
       if(nRound <= 2) y = "Final";
         x += 1;
         createMatch = await MatchesModel.create({
@@ -149,6 +169,7 @@ exports.bracketRandomiser = async (req, res) => {
     res.status(500).send({ message: err });
   }
 };
+
 
 module.exports.getAllMatches = async (req, res) => {
   try {

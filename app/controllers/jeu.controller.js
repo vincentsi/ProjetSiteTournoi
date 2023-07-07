@@ -1,6 +1,7 @@
 const db = require("../models");
 const JeuModel = db.listejeu;
 
+//recherche les informations de un jeu
 module.exports.jeuInfo = (req, res) => {
     JeuModel.findOne({
       where: {
@@ -24,15 +25,16 @@ module.exports.jeuInfo = (req, res) => {
         res.status(500).send({ message: err.message });
       });
   };
-
+//recherche les informations de tout les jeux 
   module.exports.getAlljeux = async (req, res) => {
     const jeux = await JeuModel.findAll({
     });
     res.status(200).json(jeux);
   };
 
-  exports.jeuuptest = async (req, res) => {
-    // Save User to Database
+ // crée un jeu 
+  exports.jeuCrée = async (req, res) => {
+
     await JeuModel.create({
       name: req.body.name,
       title: req.body.title,

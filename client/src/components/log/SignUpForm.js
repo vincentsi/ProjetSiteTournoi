@@ -46,8 +46,14 @@ const SignUpForm = () => {
             usernameError.innerHTML = res.data.errors.username;
             emailError.innerHTML = res.data.errors.email;
             passwordError.innerHTML = res.data.errors.password;
+            } else if (res.data.message){
+            usernameError.innerHTML = res.data.message;
+            emailError.innerHTML = "";
+          } else if (res.data.emailError){
+            emailError.innerHTML = res.data.emailError;
+            usernameError.innerHTML = "";
           } else {
-            setFormSubmit(true);
+            // setFormSubmit(true);
           }
         })
         .catch((err) => console.log(err));

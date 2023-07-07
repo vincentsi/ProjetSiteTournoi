@@ -22,11 +22,13 @@ const SignInForm = () => {
       })
         .then((res)=> {
           console.log(res);
-          if (res.data.errorsusername || res.data.errorspassword){
+          if (res.data.errorsusername ){
             
             usernameError.innerHTML = res.data.errorsusername;
-          // }else if (res.data.errorspassword){
+            passwordError.innerHTML = "";
+          }else if (res.data.errorspassword){
             passwordError.innerHTML = res.data.errorspassword;
+            usernameError.innerHTML = "";
           }else{
             console.log(res)
             window.location = '/';

@@ -30,7 +30,7 @@ module.exports.tournoiInfo = (req, res) => {
   };
   
 
-  exports.tournoiUpTest = async (req, res) => {
+  exports.tournoiCrée = async (req, res) => {
     try{
      const TournoiCreate= await TournoiModel.create({
       title: req.body.title,
