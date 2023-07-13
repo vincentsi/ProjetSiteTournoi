@@ -15,9 +15,9 @@ export default function BracketGeneration({ user1, user2, winner, round }) {
             <div className="round1">
               {/* <div className="traitnextmatch">Next_Match</div> */}
                <div className="trait">
-              <p>player {user1} </p>
+              <p>p {user1} </p>
               </div>
-              <p>player {user2}</p>
+              <p> {user2}</p>
             </div>
           )}
         </div>

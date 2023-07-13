@@ -3,17 +3,28 @@ import Hometournois from "./hometournois";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { useState } from "react";
 
-export function TournoiNew({  affTournois = true, onSubmit }) {
+
+export function TournoiNew({ affTournois = true, onSubmit }) {
   const [button, setButton] = useState("");
 
-  const [formValuesTournois, setFormValuesTounois] = useState(
-    { title: "", information: "", prix: "", horaire: "", contact: ""  });
-  
-    function updateFormValuesTournois(e) {
-    setFormValuesTounois({ ...formValuesTournois, [e.target.name]: e.target.value });
+  const [formValuesTournois, setFormValuesTounois] = useState({
+    title: "",
+    information: "",
+    prix: "",
+    horaire: "",
+    contact: "",
+    regle: "",
+    nJoueur:"",
+  });
+
+  function updateFormValuesTournois(e) {
+    setFormValuesTounois({
+      ...formValuesTournois,
+      [e.target.name]: e.target.value,
+    });
     // validate(e.target.name, e.target.value);
   }
-  console.log(formValuesTournois)
+  console.log(formValuesTournois);
   // const [formErrors, setFormErrors] = useState({
   //   name: jeu?.name ? undefined : "",
   //   description: jeu?.description ? undefined : "",
@@ -45,6 +56,19 @@ export function TournoiNew({  affTournois = true, onSubmit }) {
       />
     </>
   );
+
+  const numberPlayerInput = (
+    <>
+      <label className="form-label">Nombre de joueur</label>
+      <select  onChange={updateFormValuesTournois} name="nJoueur" id="nJoueur">
+        <option value="4">4</option>
+        <option value="8">8</option>
+        <option value="16">16</option>
+        <option value="32">32</option>
+        
+      </select>
+    </>
+  );
   const contactInput = (
     <>
       <label className="form-label">Contact</label>
@@ -53,6 +77,7 @@ export function TournoiNew({  affTournois = true, onSubmit }) {
         type="text"
         name="contact"
         className="form-control"
+      
       />
     </>
   );
@@ -82,14 +107,19 @@ export function TournoiNew({  affTournois = true, onSubmit }) {
   const regleInput = (
     <>
       <label className="form-label">regle</label>
-      <input type="text" name="regle" className="form-control" />
+      <input
+        type="text"
+        name="regle"
+        className="form-control"
+        onChange={updateFormValuesTournois}
+      />
     </>
   );
   const submitButton = (
     <div className="nj_submit_btn">
       <ButtonPrimary
-      // isDisabled={hasError()}
-      onClick={() => onSubmit(formValuesTournois)}
+        // isDisabled={hasError()}
+        onClick={() => onSubmit(formValuesTournois)}
       >
         Submit
       </ButtonPrimary>
@@ -101,7 +131,7 @@ export function TournoiNew({  affTournois = true, onSubmit }) {
       <div className="tounois-selected-header">
         <div className="row">
           <div className="col-4">tournoi picture</div>
-          <div className="col-4">{titleInput}</div>
+          <div className="col-4">{titleInput} {numberPlayerInput}</div>
           <div className="col-4">tournoi inscription</div>
         </div>
       </div>

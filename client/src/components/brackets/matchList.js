@@ -25,7 +25,7 @@ async function matchC() {
   const matchList =  useSelector((store) =>  store.MATCH.matchList);
 // const match=matchList()
 // console.log(match)
-    
+
   return (
     <div className="row justify-content-center">
       {matchList.map((match) => {

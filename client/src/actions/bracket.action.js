@@ -13,6 +13,9 @@ export class BracketAPI {
   static async findOneUserBracket(bracket) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/searchOneUserBracket`,bracket)).data;
   }
+  static async DelOneUserBracket(bracket) {
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/deluser`,bracket)).data;
+  }
   static async genereBracket(bracket) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracketRandomiser`,bracket)).data;
   }

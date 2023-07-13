@@ -7,42 +7,81 @@ import { BracketAPI } from "../../actions/bracket.action";
 import { MatchList } from "../brackets/matchList";
 
 
-
-
 export function TournoiSelec({ tournoi }) {
-  const [button, setButton] = useState("");
-  console.log(tournoi);
-
   const userData = useSelector((state) => state.USER.user);
- 
-  async function sincrireTournoi() {
-    if (userData.id != null) {
-      // const bracket = await BracketAPI.findOne({ id: tournoi.id });
-      const userBracket = await BracketAPI.findOneUserBracket({
-        tournoiId: tournoi.id,
-        userId: userData.id
-      });
-      console.log(userBracket.userId);
-      if (userBracket) {
-        alert("vous etez deja inscrit");
-      } else {
-        const addUser = await BracketAPI.UTCreate({
+  const [userInscrit, setUserInscrit] = useState(checkRegistrationStatus());
+  const [button, setButton] = useState("");
+
+  async function checkRegistrationStatus() {
+    try {
+      if (userData.id != null) {
+        // const bracket = await BracketAPI.findOne({ id: tournoi.id });
+        const userBracket = await BracketAPI.findOneUserBracket({
           tournoiId: tournoi.id,
           userId: userData.id,
         });
-        console.log(addUser);
+        if (userBracket) {
+          console.log("test");
+          setUserInscrit(true);
+        } else {
+          setUserInscrit(false);
+        }
       }
-    } else {
-      alert("Connecter vous a votre compte utilisateur ou créer le");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async function sincrireTournoi() {
+    try {
+      if (userData.id != null) {
+        // const bracket = await BracketAPI.findOne({ id: tournoi.id });
+        const userBracket = await BracketAPI.findOneUserBracket({
+          tournoiId: tournoi.id,
+          userId: userData.id,
+        });
+        if (userBracket) {
+          await BracketAPI.DelOneUserBracket({
+            tournoiId: tournoi.id,
+            userId: userData.id,
+          });
+          setUserInscrit(false);
+          console.log("ff");
+        } else {
+          const addUser = await BracketAPI.UTCreate({
+            tournoiId: tournoi.id,
+            userId: userData.id,
+          });
+          setUserInscrit(true);
+          console.log(addUser);
+        }
+      } else {
+        alert("Connecter vous a votre compte utilisateur ou créer le");
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
   const sinscrireButton = (
     <div className="nj_submit_btn">
       <ButtonPrimary
         // isDisabled={hasError()}
-        onClick={() => sincrireTournoi()}
+        onClick={() => {
+          sincrireTournoi();
+        }}
       >
         S'inscrire
+      </ButtonPrimary>
+    </div>
+  );
+  const desinscriptionButton = (
+    <div className="nj_submit_btn">
+      <ButtonPrimary
+        // isDisabled={hasError()}
+        onClick={() => {
+          sincrireTournoi();
+        }}
+      >
+        Se désinscrire
       </ButtonPrimary>
     </div>
   );
@@ -52,7 +91,10 @@ export function TournoiSelec({ tournoi }) {
         <div className="row">
           <div className="col-4">tournoi picture</div>
           <div className="col-4">{tournoi.title}</div>
-          <div className="col-4">{sinscrireButton}</div>
+          <div className="col-4">
+            {userInscrit === true && <>{desinscriptionButton}</>}
+            {userInscrit !== true && <> {sinscrireButton}</>}
+          </div>
         </div>
       </div>
       {/* <div className="tounois-selected-bas"> */}
@@ -106,10 +148,11 @@ export function TournoiSelec({ tournoi }) {
         </div>
         <div className="regles-tournoi">{button === "régles" && <>text</>}</div>
         <div className="brackets-tournoi">
-          {button === "brackets" && <> 
-          <MatchList tournoi={tournoi}/>
-          
-          </>}
+          {button === "brackets" && (
+            <>
+              <MatchList tournoi={tournoi} />
+            </>
+          )}
         </div>
       </div>
     </div>
