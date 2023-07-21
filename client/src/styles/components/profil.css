@@ -1,9 +1,78 @@
-.profil-container .update-container{
-    /* background-color: rgb(55, 31, 31); */
-    /* position: absolute; */
-    padding: 30px;
-    display: flex;
-    align-items: center;
-    
-    
+.profil-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.update-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.left-part {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.right-part {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.bio-update {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bio-textarea {
+  width: 100%;
+  height: 100px;
+  resize: none;
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.update-profil-btn{
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  margin: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.update-profil-btn:hover {
+  background-color: #0056b3;
+}
+
+.bio-text {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.date-container {
+  text-align: center;
 }

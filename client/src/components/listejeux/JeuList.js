@@ -1,24 +1,28 @@
-
-import { useDispatch,useSelector } from "react-redux";
-import { useNavigate} from "react-router-dom"
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { JeuAPI } from "../../actions/pjeu.actions";
 import { deleteJeu } from "../../store/jeu/jeu.reducer";
 import HomeJeux from "./HomeJeux";
 
 export function JeuList({ jeuList }) {
-  // const JeuList =  useSelector((store) =>  store.JEU.jeuList);
+  // Utilisation du hook useDispatch pour obtenir le dispatch de Redux
   const dispatch = useDispatch();
-  const navigate = useNavigate()
-    
-  function deleteJeu_(jeu){
-    if (window.confirm("supprimer la note ?")){
-    JeuAPI.deleteById(jeu.id)
-    dispatch(deleteJeu(jeu))
-   }
+  // Utilisation du hook useNavigate pour la navigation
+  const navigate = useNavigate();
+
+  // Fonction pour supprimer le jeu
+  function deleteJeu_(jeu) {
+    if (window.confirm("Supprimer la note ?")) {
+      // Utilisation de l'API pour supprimer le jeu en fonction de son ID
+      JeuAPI.deleteById(jeu.id);
+      // Utilisation du dispatch pour supprimer le jeu de l'état global
+      dispatch(deleteJeu(jeu));
+    }
   }
-  
+
   return (
     <div className="row justify-content-center">
+      {/* Pour chaque jeu dans la liste, afficher un composant HomeJeux */}
       {jeuList.map((jeu) => {
         return (
           <div key={jeu.id} className="jeu_container">
@@ -27,8 +31,8 @@ export function JeuList({ jeuList }) {
               subtitle={jeu.createdAt}
               description={jeu.description}
               picture={jeu.picture}
-              onClick={()=> navigate("/jeu/"+ jeu.id)}
-              onClickTrash={()=> deleteJeu_(jeu)}
+              onClick={() => navigate("/jeu/" + jeu.id)} // Rediriger vers la page détaillée du jeu
+              onClickTrash={() => deleteJeu_(jeu)} // Supprimer le jeu
             />
           </div>
         );

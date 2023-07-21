@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
       information: {
         type: Sequelize.STRING
       },
+      nJoueur: {
+        type: Sequelize.INTEGER
+      },
       picture: {
         type: Sequelize.STRING,
         defaultValue: "./uploads/profil/random-user.png"

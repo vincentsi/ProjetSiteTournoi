@@ -5,7 +5,7 @@ export class BracketAPI {
   static async create(bracket) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/createbracket`, bracket)).data;
   }
-
+  
   static async UTCreate(bracket) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/adduser`, bracket)).data;
   }
@@ -21,6 +21,9 @@ export class BracketAPI {
   }
   static async affBracket(bracket) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/matches/all`,bracket)).data;
+  }
+  static async fetchBracket(bracket) {
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/username`,bracket)).data;
   }
   
   static formatId(bracket) {

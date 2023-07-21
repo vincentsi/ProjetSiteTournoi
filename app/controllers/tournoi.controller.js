@@ -36,6 +36,7 @@ module.exports.tournoiInfo = (req, res) => {
       title: req.body.title,
       information: req.body.information,
       horaire: req.body.horaire,
+      nJoueur: req.body.nJoueur,
       prix: req.body.prix,
       contact: req.body.contact,
       regle: req.body.regle,

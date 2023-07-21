@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import Hometournois from "./hometournois";
+// import { useNavigate } from "react-router-dom";
+// import Hometournois from "./hometournois";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { useState } from "react";
 
@@ -42,6 +42,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         type="text"
         name="title"
         className="form-control"
+        value={formValuesTournois.title} 
       />
     </>
   );
@@ -53,6 +54,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         type="text"
         name="prix"
         className="form-control"
+        value={formValuesTournois.prix}
       />
     </>
   );
@@ -74,6 +76,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
       <label className="form-label">Contact</label>
       <input
         onChange={updateFormValuesTournois}
+        value={formValuesTournois.contact}
         type="text"
         name="contact"
         className="form-control"
@@ -89,6 +92,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         type="text"
         name="horaire"
         className="form-control"
+        value={formValuesTournois.horaire}
       />
     </>
   );
@@ -97,10 +101,12 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
       <label className="form-label">information</label>
       <textarea
         onChange={updateFormValuesTournois}
+        value={formValuesTournois.information}
         type="text"
         name="information"
         className="form-control"
         row="5"
+        
       />
     </>
   );
@@ -111,6 +117,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         type="text"
         name="regle"
         className="form-control"
+        value={formValuesTournois.regle}
         onChange={updateFormValuesTournois}
       />
     </>

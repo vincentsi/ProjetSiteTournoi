@@ -1,5 +1,6 @@
+
 import React from "react";
-import { BracketAPI } from "../../actions/bracket.action";
+// import { BracketAPI } from "../../actions/bracket.action";
 
 export default function BracketGeneration({ user1, user2, winner, round }) {
   console.log(round);
@@ -56,3 +57,57 @@ export default function BracketGeneration({ user1, user2, winner, round }) {
     </>
   );
 }
+// import React from "react";
+
+
+// export default function BracketGeneration({ matches }) {
+//   // Fonction pour regrouper les matches par ronde
+//   const groupMatchesByRound = () => {
+//     const groupedMatches = {};
+//     matches.forEach((match) => {
+//       const { round } = match;
+//       if (!groupedMatches[round]) {
+//         groupedMatches[round] = [];
+//       }
+//       groupedMatches[round].push(match);
+//     });
+//     return groupedMatches;
+//   };
+
+//   const renderMatch = (match) => {
+//     const { user1, user2, winner } = match;
+
+//     const getUser1Name = () => {
+//       return user1 ? user1 : "Waiting winner";
+//     };
+
+//     const getUser2Name = () => {
+//       return user2 ? user2 : "Waiting winner";
+//     };
+
+//     return (
+//       <div key={match.id} className={`match ${winner ? "completed" : ""}`}>
+//         <div className={`team ${winner === user1 ? "winner" : ""}`}>
+//           {getUser1Name()}
+//         </div>
+//         <div className="vs">VS</div>
+//         <div className={`team ${winner === user2 ? "winner" : ""}`}>
+//           {getUser2Name()}
+//         </div>
+//         {winner && <div className="arrow">&darr;</div>}
+//       </div>
+//     );
+//   };
+
+//   const groupedMatches = groupMatchesByRound();
+
+//   return (
+//     <div className="bracket">
+//       {Object.keys(groupedMatches).map((round) => (
+//         <div key={round} className="round">
+//           {groupedMatches[round].map((match) => renderMatch(match))}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }

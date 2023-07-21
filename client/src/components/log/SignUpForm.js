@@ -3,12 +3,14 @@ import axios from "axios";
 import SignInForm from "./SignInForm";
 
 const SignUpForm = () => {
+  // Déclaration des états locaux avec le hook useState
   const [formSubmit, setFormSubmit] = useState(false);
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [controlPassword, setControlPassword] = useState("");
 
+  // Fonction de gestion de l'inscription (soumission du formulaire)
   const handleRegister = async (e) => {
     e.preventDefault();
     const terms = document.getElementById("terms");
@@ -20,9 +22,11 @@ const SignUpForm = () => {
     );
     const termsError = document.querySelector(".terms.error");
 
+    // Réinitialisation des messages d'erreur
     passwordConfirmError.innerHTML = "";
     termsError.innerHTML = "";
 
+    // Validation des champs (mots de passe et conditions générales)
     if (password !== controlPassword || !terms.checked) {
       if (password !== controlPassword)
         passwordConfirmError.innerHTML =
@@ -31,6 +35,7 @@ const SignUpForm = () => {
       if (!terms.checked)
         termsError.innerHTML = "Veuillez valider les conditions générales";
     } else {
+      // Requête POST pour créer un nouvel utilisateur
       await axios({
         method: "post",
         url: `${process.env.REACT_APP_API_URL}api/auth/signup`,
@@ -42,18 +47,20 @@ const SignUpForm = () => {
       })
         .then((res) => {
           console.log(res);
+          // Gestion des erreurs côté serveur
           if (res.data.errors) {
             usernameError.innerHTML = res.data.errors.username;
             emailError.innerHTML = res.data.errors.email;
             passwordError.innerHTML = res.data.errors.password;
-            } else if (res.data.message){
+          } else if (res.data.message) {
             usernameError.innerHTML = res.data.message;
             emailError.innerHTML = "";
-          } else if (res.data.emailError){
+          } else if (res.data.emailError) {
             emailError.innerHTML = res.data.emailError;
             usernameError.innerHTML = "";
           } else {
-            // setFormSubmit(true);
+            // Si l'inscription est réussie, mettez à jour l'état pour afficher un message de succès
+            setFormSubmit(true);
           }
         })
         .catch((err) => console.log(err));
@@ -63,6 +70,7 @@ const SignUpForm = () => {
   return (
     <>
       {formSubmit ? (
+        // Afficher le formulaire de connexion après une inscription réussie
         <>
           <SignInForm />
           <span></span>
@@ -71,6 +79,7 @@ const SignUpForm = () => {
           </h4>
         </>
       ) : (
+        // Afficher le formulaire d'inscription par défaut
         <form action="" onSubmit={handleRegister} id="sign-up-form">
           <label htmlFor="username">username</label>
           <br />
@@ -106,7 +115,7 @@ const SignUpForm = () => {
           <div className="password error"></div>
           <br />
           <label htmlFor="password-conf">Confirmer mot de passe</label>
-          <br/>
+          <br />
           <input
             type="password"
             name="password"

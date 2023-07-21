@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const GET_USER = "GET_USER";
 export const UPLOAD_PICTURE = "UPLOAD_PICTURE";
-export const UPDATE_BIO = "UPDATE_BIO";
+// export const UPDATE_BIO = "UPDATE_BIO";
 export class UserAPI {
   static async getUser (uid)  {
   
@@ -25,6 +25,7 @@ export const uploadPicture = (data, id) => {
   };
 };
 
+
 export const updateBio = (userId, bio) => {
   return (dispatch) => {
     return axios({
@@ -33,7 +34,8 @@ export const updateBio = (userId, bio) => {
       data: { bio },
     })
       .then((res) => {
-        dispatch({ type: UPDATE_BIO, payload: bio });
+        // Mettez à jour le reducer avec l'utilisateur complet après la mise à jour de la bio
+        dispatch({ type: "userSlice/setUser", payload: res.data });
       })
       .catch((err) => console.log(err));
   };
