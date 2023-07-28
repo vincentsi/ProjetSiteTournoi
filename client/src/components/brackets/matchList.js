@@ -28,7 +28,8 @@ async function matchC() {
       {matchList?.map((match) => {
         return (
           <div key={match.id} className="match_container">
-          
+           {/* <div key={match.id} onClick={() => onMatchClick(match.id)}>
+          <p>Nom du match: {match.name}</p> */}
             <BracketGeneration
               matches={match}
               user1={match.user1}

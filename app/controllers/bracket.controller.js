@@ -1,9 +1,7 @@
 const db = require("../models");
-const { Op } = require("sequelize");
-const matchesModel = require("../models/matches.model");
-const { round } = require("lodash");
-const { match } = require("assert");
-const TournoisModel = db.listetournoi;
+const { Op, where } = require("sequelize");
+// const { round } = require("lodash");
+// const { match } = require("assert");
 const UserModel = db.user;
 // const TournoisModel = db.listetournoi;
 const UserTournoiModel = db.user_tournoi;
@@ -19,13 +17,32 @@ exports.affParticipant = async (req, res) => {
     
     const users = await UserModel.findAll({
       where: { id: userIds }, 
-      attributes: ['id', 'username', 'email'] 
+      attributes: ['id', 'username'] 
     });
-    const userUsername = users.map((item) => item.username);
-    res.send(userUsername);
+    // const userUsername = users.map((item) => item.username);
+    res.send(users);
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: err });
+  }
+};
+exports.getUserMatches = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const userMatches = await MatchesModel.findAll({
+      where: {
+        [Op.or]: [
+          { user1: userId },
+          { user2: userId }
+        ],
+        tournoiId: req.body.tournoiId
+      }
+    });
+
+    res.json(userMatches);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors de la récupération des matchs de l'utilisateur." });
   }
 };
 

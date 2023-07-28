@@ -1,0 +1,63 @@
+.tounois-selected-container{
+  display:flex;
+  height: 100vh;
+  flex-direction: column;
+
+}
+.tounois-selected-header{
+  flex: 1;
+}
+.tounois-selected-bas{
+  flex: 3;
+
+}
+
+.All-button{
+  display: flex;
+/* background-color: #7b38d8; */
+/* background-color: rgb(252, 244, 244); */
+background-color: black;
+border: 4px double #9e9e9e;
+/* text-align: center; */
+font-size: 25px;
+cursor: pointer;
+/* margin: 5px; */
+}
+
+.space-all-button{
+  text-align: center;
+  width: 350px;
+}
+
+.information-tournoi {
+  display: flex;
+  /* flex-direction: column; */
+  text-align: center;
+
+  h3 {
+    margin-bottom: 10px;
+  }
+
+  .information-details {
+    display: flex;
+    flex-direction: column;
+
+    p {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.participants-tournoi {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  
+  .participant-username {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  

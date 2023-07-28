@@ -22,10 +22,12 @@ export class BracketAPI {
   static async affBracket(bracket) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/matches/all`,bracket)).data;
   }
-  static async fetchBracket(bracket) {
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/username`,bracket)).data;
+  static async affParticipant (bracket) {
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/affParticipant`,bracket)).data;
   }
-  
+  static async getUserMatches (bracket) {
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/matches`,bracket)).data;
+  }
   static formatId(bracket) {
     return {
       ...bracket,

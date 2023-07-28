@@ -8,4 +8,5 @@ module.exports = function (app) {
     app.post("/app/matches/all", controller.getAllMatches);
     app.put("/app/bracket/updateMatch", controller.updateMatch);
     app.post("/app/bracket/affParticipant", controller.affParticipant);
+    app.post("/app/bracket/matches", controller.getUserMatches);
   };

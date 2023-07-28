@@ -1,0 +1,39 @@
+/* CSS pour la carte de match */*
+
+.match-card {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s, box-shadow 0.2s;
+  }
+  
+  .match-card:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .match-card h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .match-card p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Afficher les détails du match lorsqu'ils sont visibles */
+  .match-card > div {
+    display: none;
+    margin-top: 8px;
+  }
+  
+  .match-card.show-details > div {
+    display: block;
+  }

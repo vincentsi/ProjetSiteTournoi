@@ -13,7 +13,7 @@ export function Jeu() {
   // Déclaration des états locaux avec le hook useState
   const [isEditable, setIsEditable] = useState(false);
   const [affTournois, setAffTournois] = useState(true);
-
+  const [showCreateTournoi, setShowCreateTournoi] = useState(true);
   // Utilisation du hook useDispatch pour obtenir le dispatch de Redux
   const dispatch = useDispatch();
 
@@ -65,14 +65,17 @@ export function Jeu() {
       <div className="row justify-content-center">
         {/* Bouton pour afficher/cacher la création de tournoi */}
         <div className="nj_submit_btn">
-          <button onClick={() => setAffTournois(!affTournois)}>
-            Créer son tournoi
+          <button onClick={() => setShowCreateTournoi(!showCreateTournoi)}>
+            {showCreateTournoi
+              ? `Créer son tournoi sur ${jeu?.title}`
+
+              : `Revenir a la page de ${jeu?.title}`}
           </button>
         </div>
       </div>
       <div className="mb-1">
         {/* Afficher le formulaire de modification du jeu */}
-        {jeu && affTournois && (
+        {jeu && showCreateTournoi && (
           <JeuForm
             isEditable={isEditable}
             name={isEditable ? "Edit jeu" : jeu.title}
@@ -85,13 +88,13 @@ export function Jeu() {
       </div>
       <div className="mb-5">
         {/* Afficher le formulaire pour créer un nouveau tournoi */}
-        {jeu && !isEditable && !affTournois && (
+        {jeu && !isEditable && !showCreateTournoi && (
           <TournoiNew onSubmit={createTournoi} />
         )}
       </div>
       <div className="mb-5">
         {/* Afficher la liste des tournois associés au jeu */}
-        {jeu && !isEditable && affTournois && (
+        {jeu && !isEditable && showCreateTournoi && (
           <TournoiList tournoiList={filteredList} />
         )}
       </div>
