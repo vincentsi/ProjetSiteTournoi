@@ -43,6 +43,8 @@ db.matches.belongsTo(db.user, {foreignKey: 'user2'});
 db.user.hasOne(db.matches, {foreignKey: 'winner'})
 db.matches.belongsTo(db.user, {foreignKey: 'winner'});
 
+db.user.hasOne(db.listetournoi);
+db.listetournoi.belongsTo(db.user);
 
 db.listejeu.hasOne(db.listetournoi);
 db.listetournoi.belongsTo(db.listejeu);

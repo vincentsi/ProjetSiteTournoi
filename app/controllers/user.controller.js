@@ -35,21 +35,20 @@ module.exports.userInfo = (req, res) => {
 };
 
 module.exports.updateUser = async (req, res) => {
+  try {
+    const user = await UserModel.findByPk(req.params.id);
 
-  try{
-    await UserModel.findByPk(req.params.id)
-    
-        if (UserModel != null) {
-          UserModel.update(
-            { bio: req.body.bio }, 
-            { where: { id: req.params.id } }
-            );   
-            res.status(200).send({ bio: req.body.bio});
-            }    
-        } catch (err) {
-          console.log(err)
-          res.status(500).send({ message: err });
+    if (user != null) {
+      await user.update({ bio: req.body.bio });
+
+      res.status(200).send({ message: "Bio updated successfully." });
+    } else {
+      res.status(404).send({ message: "User not found." });
     }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err });
+  }
 
   // try {
   //     UserModel.findOne({

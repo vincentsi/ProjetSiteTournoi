@@ -11,9 +11,11 @@ import { TournoiNew } from "../components/listetournois/newTournoi";
 
 export function Jeu() {
   // Déclaration des états locaux avec le hook useState
+  const userData = useSelector((state) => state.USER.user);
   const [isEditable, setIsEditable] = useState(false);
   const [affTournois, setAffTournois] = useState(true);
   const [showCreateTournoi, setShowCreateTournoi] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
   // Utilisation du hook useDispatch pour obtenir le dispatch de Redux
   const dispatch = useDispatch();
 
@@ -37,14 +39,21 @@ export function Jeu() {
 
   // Fonction pour créer un nouveau tournoi
   async function createTournoi(formValuesTournois) {
+
     const createdTournoi = await TournoiAPI.create({
       ...formValuesTournois,
       listejeuId: jeuId,
+      userId: userData.id,
     });
+    // if (createdTournoi.data.error === "User has already created a tournament.") {
+    //   setShowAlert(true); // Afficher le message d'alerte si l'utilisateur a déjà créé un tournoi
+    // } else {
     dispatch(addTournoi(createdTournoi)); // Ajouter le nouveau tournoi à l'état global
     setAffTournois(!affTournois); // Changer l'affichage des tournois
-  }
+  // }
 
+  }
+ 
   // Fonction pour supprimer le jeu
   function deleteJeu_(jeu) {
     if (window.confirm("Supprimer le jeu ?")) {

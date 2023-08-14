@@ -48,9 +48,12 @@ export function TournoiSelec({ tournoi }) {
   const [participants, setParticipants] = useState([]);
   const [userMatches, setUserMatches] = useState([]); // État local pour stocker les matchs de l'utilisateur connecté
   const [selectedMatch, setSelectedMatch] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
   // État local pour gérer les messages du chat
   const [chatMessages, setChatMessages] = useState([]);
-
+  const toggleEditMode = () => {
+    setIsEditMode(!isEditMode);
+  };
     // Fonction pour envoyer un message dans le chat
     const handleSendMessage = (message) => {
       const senderUsername = userData?.username;
@@ -315,7 +318,7 @@ export function TournoiSelec({ tournoi }) {
                   <h3>Détails du match {selectedMatch.Round}</h3>
                   <h4>user1: {selectedMatch.user1}</h4>
                   <h4>user2: {selectedMatch.user2}</h4>
-                  {/* Afficher d'autres informations sur le match ici */}
+       
                 </div>
                 <Chat messages={chatMessages} onSendMessage={handleSendMessage} />
               </>

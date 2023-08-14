@@ -24,7 +24,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       contact: {
         type: Sequelize.STRING
-      },
+      }
     });
   
     return listetournois;

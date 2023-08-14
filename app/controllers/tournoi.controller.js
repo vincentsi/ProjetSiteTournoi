@@ -31,32 +31,44 @@ module.exports.tournoiInfo = (req, res) => {
   
 
   exports.tournoiCrée = async (req, res) => {
-    try{
-     const TournoiCreate= await TournoiModel.create({
-      title: req.body.title,
-      information: req.body.information,
-      horaire: req.body.horaire,
-      nJoueur: req.body.nJoueur,
-      prix: req.body.prix,
-      contact: req.body.contact,
-      regle: req.body.regle,
-      listejeuId: req.body.listejeuId,
-    })  ;
-    res.send({ 
-      id:TournoiCreate.id,
-      title: req.body.title,
-      information: req.body.information,
-      horaire: req.body.horaire,
-      prix: req.body.prix,
-      contact: req.body.contact,
-      regle: req.body.regle,
-      listejeuId: req.body.listejeuId,
-     });
-          } catch (err) {
-            console.log(err)
-            res.status(500).send({ message: err });
+    try {
+      // Vérification si l'utilisateur a déjà créé un tournoi
+      const existingTournoi = await TournoiModel.findOne({
+        where: { userId: req.body.userId },
+      });
+  
+      if (existingTournoi) {
+        return res.status(400).json({ message: "User has already created a tournament." });
       }
+  
+      // Création du tournoi et attribution à l'utilisateur
+      const TournoiCreate = await TournoiModel.create({
+        title: req.body.title,
+        information: req.body.information,
+        horaire: req.body.horaire,
+        nJoueur: req.body.nJoueur,
+        prix: req.body.prix,
+        contact: req.body.contact,
+        regle: req.body.regle,
+        listejeuId: req.body.listejeuId,
+        userId: req.body.userId, // Attribution à l'utilisateur connecté
+      });
+  
+      res.send({
+        id: TournoiCreate.id,
+        title: req.body.title,
+        information: req.body.information,
+        horaire: req.body.horaire,
+        prix: req.body.prix,
+        contact: req.body.contact,
+        regle: req.body.regle,
+        listejeuId: req.body.listejeuId,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send({ message: err });
     }
+  };
 
   
 

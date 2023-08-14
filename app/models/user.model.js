@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     bio: {
       type: Sequelize.STRING
-    }
+    },
   });
 
   return User;
