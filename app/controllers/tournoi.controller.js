@@ -38,7 +38,7 @@ module.exports.tournoiInfo = (req, res) => {
       });
   
       if (existingTournoi) {
-        return res.status(400).json({ message: "User has already created a tournament." });
+        return res.status(200).json({ message: "User has already created a tournament." });
       }
   
       // Création du tournoi et attribution à l'utilisateur
@@ -71,5 +71,26 @@ module.exports.tournoiInfo = (req, res) => {
   };
 
   
+  module.exports.updateTournament = async (req, res) => {
 
-
+    try{
+      await TournoiModel.findByPk(req.params.id)
+      
+          if (TournoiModel != null) {
+            TournoiModel.update(
+              { title: req.body.title,
+                information: req.body.information,
+                horaire: req.body.horaire,
+                nJoueur: req.body.nJoueur,
+                prix: req.body.prix,
+                contact: req.body.contact,
+                regle: req.body.regle }, 
+              { where: { id: req.params.id } }
+              );   
+              res.status(200).send("updated successfully");
+              }    
+          } catch (err) {
+            console.log(err)
+            res.status(500).send({ message: err });
+      }
+    }

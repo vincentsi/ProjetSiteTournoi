@@ -15,7 +15,7 @@ export function Jeu() {
   const [isEditable, setIsEditable] = useState(false);
   const [affTournois, setAffTournois] = useState(true);
   const [showCreateTournoi, setShowCreateTournoi] = useState(true);
-  const [showAlert, setShowAlert] = useState(false);
+
   // Utilisation du hook useDispatch pour obtenir le dispatch de Redux
   const dispatch = useDispatch();
 
@@ -45,12 +45,12 @@ export function Jeu() {
       listejeuId: jeuId,
       userId: userData.id,
     });
-    // if (createdTournoi.data.error === "User has already created a tournament.") {
-    //   setShowAlert(true); // Afficher le message d'alerte si l'utilisateur a déjà créé un tournoi
-    // } else {
+    if (createdTournoi.message === "User has already created a tournament.") {
+      alert(createdTournoi.message);
+    } else {
     dispatch(addTournoi(createdTournoi)); // Ajouter le nouveau tournoi à l'état global
     setAffTournois(!affTournois); // Changer l'affichage des tournois
-  // }
+  }
 
   }
  
@@ -73,14 +73,15 @@ export function Jeu() {
     <>
       <div className="row justify-content-center">
         {/* Bouton pour afficher/cacher la création de tournoi */}
-        <div className="nj_submit_btn">
-          <button onClick={() => setShowCreateTournoi(!showCreateTournoi)}>
-            {showCreateTournoi
-              ? `Créer son tournoi sur ${jeu?.title}`
-
-              : `Revenir a la page de ${jeu?.title}`}
-          </button>
-        </div>
+        {userData.id && ( // Vérification de l'utilisateur connecté
+          <div className="nj_submit_btn">
+            <button onClick={() => setShowCreateTournoi(!showCreateTournoi)}>
+              {showCreateTournoi
+                ? `Créer son tournoi sur ${jeu?.title}`
+                : `Revenir à la page de ${jeu?.title}`}
+            </button>
+          </div>
+        )}
       </div>
       <div className="mb-1">
         {/* Afficher le formulaire de modification du jeu */}

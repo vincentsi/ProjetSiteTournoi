@@ -4,38 +4,6 @@ import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { BracketAPI } from "../../actions/bracket.action";
 import { MatchList } from "../brackets/matchList";
 
-function Chat({ messages, onSendMessage }) {
-  const [newMessage, setNewMessage] = useState("");
-
-  const handleSendMessage = () => {
-    if (newMessage.trim() !== "") {
-      onSendMessage(newMessage);
-      setNewMessage("");
-    }
-  };
-
-  return (
-    <div className="chat-container">
-      <div className="chat-messages">
-        {messages.map((message, index) => (
-          <div key={index} className="chat-message">
-            <span>{message.sender}: </span>
-            <span>{message.text}</span>
-          </div>
-        ))}
-      </div>
-      <div className="chat-input">
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <button onClick={handleSendMessage}>Envoyer</button>
-      </div>
-    </div>
-  );
-}
-
 // Composant TournoiSelec qui affiche les détails d'un tournoi et permet à l'utilisateur de s'inscrire ou de se désinscrire
 export function TournoiSelec({ tournoi }) {
   // Utilisation de useSelector pour récupérer les données de l'utilisateur depuis le state Redux
@@ -49,43 +17,32 @@ export function TournoiSelec({ tournoi }) {
   const [userMatches, setUserMatches] = useState([]); // État local pour stocker les matchs de l'utilisateur connecté
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  // État local pour gérer les messages du chat
-  const [chatMessages, setChatMessages] = useState([]);
+  const [editedTournoi, setEditedTournoi] = useState({ ...tournoi })
+
+  const handleInputChange = (e, field) => {
+    const newValue = e.target.value;
+    // Mettre à jour le tournoi édité en fonction du champ modifié
+    setEditedTournoi((prevTournoi) => ({
+      ...prevTournoi,
+      [field]: newValue,
+    }));
+  };
+
+  const saveChanges = async () => {
+    try {
+      // Enregistrer les modifications dans la base de données (utilisez votre API appropriée)
+      await BracketAPI.updateTournoi(tournoi.id, editedTournoi);
+      // Appeler la fonction fournie par le composant parent pour mettre à jour le tournoi
+      // onUpdateTournoi(editedTournoi);
+      setIsEditMode(false); // Sortir du mode éditable
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode);
   };
-    // Fonction pour envoyer un message dans le chat
-    const handleSendMessage = (message) => {
-      const senderUsername = userData?.username;
-      if (senderUsername) {
-        const newMessage = {
-          sender: senderUsername,
-          text: message,
-        };
-  
-        // Ajouter le nouveau message à l'état des messages du chat
-        setChatMessages((prevMessages) => [...prevMessages, newMessage]);
-  
-        // Envoyer le message à l'adversaire ici (vous pouvez utiliser une API de chat ou une autre méthode de communication)
-        // Exemple : api.sendMessageToOpponent(newMessage);
-  
-        // Simuler la réponse de l'adversaire
-        simulateOpponentResponse(message);
-      } else {
-        console.error("Impossible d'envoyer le message : données utilisateur non disponibles.");
-      }
-    };
-    const simulateOpponentResponse = (message) => {
-      setTimeout(() => {
-        const opponentMessage = {
-          sender: "Adversaire",
-          text: "Réponse de l'adversaire au message: " + message,
-        };
-  
-        // Ajouter la réponse de l'adversaire à l'état des messages du chat
-        setChatMessages((prevMessages) => [...prevMessages, opponentMessage]);
-      }, 1500); // Simulez une réponse après un délai de 1,5 seconde (1500 millisecondes)
-    };
+   
   
   // Utiliser useEffect pour charger les participants lorsque le bouton "participants" est sélectionné
   useEffect(() => {
@@ -201,6 +158,13 @@ export function TournoiSelec({ tournoi }) {
               <div className="nj_submit_btn">
                 <ButtonPrimary onClick={handleInscription}>
                   S'inscrire
+                </ButtonPrimary>
+              </div>
+            )}
+            { userData.id === tournoi.userId && (
+              <div className="nj_submit_btn">
+                <ButtonPrimary onClick={() => setIsEditMode(!isEditMode)}>
+                  {isEditMode ? "Terminer l'édition" : "Modifier le tournoi"}
                 </ButtonPrimary>
               </div>
             )}
@@ -320,7 +284,7 @@ export function TournoiSelec({ tournoi }) {
                   <h4>user2: {selectedMatch.user2}</h4>
        
                 </div>
-                <Chat messages={chatMessages} onSendMessage={handleSendMessage} />
+           
               </>
             )}
           </div>

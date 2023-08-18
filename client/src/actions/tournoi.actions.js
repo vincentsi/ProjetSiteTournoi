@@ -10,6 +10,10 @@ export class TournoiAPI {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/tournoicreation`, tournoi)).data;
    
   }
+  static async updateTournoi(tournoi) {
+    return (await axios.put(`${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`, tournoi)).data;
+   
+  }
   static formatId(tournoi) {
     return {
       ...tournoi,
