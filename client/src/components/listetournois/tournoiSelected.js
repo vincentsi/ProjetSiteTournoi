@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useDispatch } from 'react-redux';
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { BracketAPI } from "../../actions/bracket.action";
 import { MatchList } from "../brackets/matchList";
-
+import { TournoiAPI } from "../../actions/tournoi.actions";
+import { updateTournoi } from "../../store/tournoi/tournois.reducer";
 // Composant TournoiSelec qui affiche les détails d'un tournoi et permet à l'utilisateur de s'inscrire ou de se désinscrire
 export function TournoiSelec({ tournoi }) {
   // Utilisation de useSelector pour récupérer les données de l'utilisateur depuis le state Redux
@@ -17,8 +19,8 @@ export function TournoiSelec({ tournoi }) {
   const [userMatches, setUserMatches] = useState([]); // État local pour stocker les matchs de l'utilisateur connecté
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [editedTournoi, setEditedTournoi] = useState({ ...tournoi })
-
+  const [editedTournoi, setEditedTournoi] = useState({ ...tournoi });
+  const dispatch = useDispatch(); 
   const handleInputChange = (e, field) => {
     const newValue = e.target.value;
     // Mettre à jour le tournoi édité en fonction du champ modifié
@@ -31,9 +33,10 @@ export function TournoiSelec({ tournoi }) {
   const saveChanges = async () => {
     try {
       // Enregistrer les modifications dans la base de données (utilisez votre API appropriée)
-      await BracketAPI.updateTournoi(tournoi.id, editedTournoi);
+      const test = await TournoiAPI.updateTournoi(editedTournoi);
       // Appeler la fonction fournie par le composant parent pour mettre à jour le tournoi
-      // onUpdateTournoi(editedTournoi);
+      dispatch(updateTournoi(editedTournoi));
+      console.log(test);
       setIsEditMode(false); // Sortir du mode éditable
     } catch (error) {
       console.error(error);
@@ -42,8 +45,7 @@ export function TournoiSelec({ tournoi }) {
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode);
   };
-   
-  
+
   // Utiliser useEffect pour charger les participants lorsque le bouton "participants" est sélectionné
   useEffect(() => {
     if (button === "participants") {
@@ -145,7 +147,21 @@ export function TournoiSelec({ tournoi }) {
       <div className="tounois-selected-header">
         <div className="row">
           <div className="col-4">tournoi picture</div>
-          <div className="col-4">{tournoi.title}</div>
+          <div className="col-4">
+            {isEditMode ? (
+              <>
+                <label htmlFor="title">title:</label>
+                <input
+                  type="text"
+                  id="title"
+                  value={editedTournoi.title}
+                  onChange={(e) => handleInputChange(e, "title")}
+                />
+              </>
+            ) : (
+              <pre>{tournoi.title}</pre>
+            )}
+          </div>
           <div className="col-4">
             {/* Afficher le bouton d'inscription/désinscription en fonction du statut d'inscription de l'utilisateur */}
             {userInscrit === true ? (
@@ -161,12 +177,26 @@ export function TournoiSelec({ tournoi }) {
                 </ButtonPrimary>
               </div>
             )}
-            { userData.id === tournoi.userId && (
-              <div className="nj_submit_btn">
-                <ButtonPrimary onClick={() => setIsEditMode(!isEditMode)}>
-                  {isEditMode ? "Terminer l'édition" : "Modifier le tournoi"}
-                </ButtonPrimary>
-              </div>
+
+            {isEditMode ? (
+              <>
+                <div className="nj_submit_btn">
+                  <button onClick={saveChanges}>
+                    Enregistrer les modifications
+                  </button>
+                  <button onClick={() => setIsEditMode(false)}>Annuler</button>
+                </div>
+              </>
+            ) : (
+              <>
+                {userData.id === tournoi.userId && (
+                  <div className="nj_submit_btn">
+                    <ButtonPrimary onClick={() => setIsEditMode(!isEditMode)}>
+                      {"Modifier le tournoi"}
+                    </ButtonPrimary>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -203,9 +233,7 @@ export function TournoiSelec({ tournoi }) {
         </div>
         <div className="space-all-button">
           <select value={button} onChange={(e) => setButton(e.target.value)}>
-            <option value="tournament" >
-              brackets/match
-            </option>
+            <option value="tournament">brackets/match</option>
             <option value="brackets">Bracket</option>
             <option value="match">Match</option>
           </select>
@@ -217,12 +245,82 @@ export function TournoiSelec({ tournoi }) {
         <div className="information-tournoi">
           {button === "information" && (
             <>
-              <div className="information-details">
-                <p>information: {tournoi.information}</p>
-                <p>Prix: {tournoi.prix}</p>
-                <p>Horaire: {tournoi.horaire}</p>
-                <p>Contact: {tournoi.contact}</p>
-              </div>
+              {isEditMode ? (
+                <>
+                  <div className="col-8">
+                    <div className="info-label">
+                      <label htmlFor="information">Information:</label>
+                      <textarea
+                        rows={10}
+                        cols={70}
+                        id="information"
+                        value={editedTournoi.information}
+                        onChange={(e) => handleInputChange(e, "information")}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-4">
+                    <div className="info-label">
+                      <label htmlFor="horaire">horaire:</label>
+                      <input
+                        type="text"
+                        id="horaire"
+                        value={editedTournoi.horaire}
+                        onChange={(e) => handleInputChange(e, "horaire")}
+                      />
+                    </div>
+                    <div className="info-label">
+                      <label htmlFor="contact">contact:</label>
+                      <input
+                        type="text"
+                        id="contact"
+                        value={editedTournoi.contact}
+                        onChange={(e) => handleInputChange(e, "contact")}
+                      />
+                    </div>
+                    <div className="info-label">
+                      <label htmlFor="prix">Prix:</label>
+                      <input
+                        type="text"
+                        id="prix"
+                        value={editedTournoi.prix}
+                        onChange={(e) => handleInputChange(e, "prix")}
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="col-8">
+                    <div className="info-label">
+                      <p>information:</p>
+                      <p className="wrap-text">{tournoi.information}</p>
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <div className="info-label">
+                      <p>Horaire:</p>
+                      <span>{tournoi.horaire}</span>
+                    </div>
+                    <div className="info-label">
+                      <p>Contact:</p>
+                      <span>{tournoi.contact}</span>
+                    </div>
+                    <div className="info-label">
+                      <p>Prix:</p>
+                      <span>{tournoi.prix}</span>
+                    </div>
+                  </div>
+                  {userData.id === tournoi.userId && (
+                    <div className="nj_submit_btn">
+                      <button onClick={() => setIsEditMode(true)}>
+                        Modifier le tournoi
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </>
           )}
         </div>
@@ -243,54 +341,71 @@ export function TournoiSelec({ tournoi }) {
             </>
           )}
         </div>
-        <div className="regles-tournoi">{button === "régles" && <>text</>}</div>
+        <div className="regles-tournoi">{button === "régles" && <> 
+        {isEditMode ? (
+                <>
+                <label htmlFor="regle">regles:</label>
+                <textarea
+                  rows={10}
+                  cols={70}
+                  type="text"
+                  id="regle"
+                  value={editedTournoi.regle}
+                  onChange={(e) => handleInputChange(e, "regle")}
+                />
+                </>
+            ) : (
+              <>
+                  <p  style={{ width: '600px', textAlign: 'right' }}>regles:</p>
+               
+                  <p className="wrap-text-regles "  >{tournoi.regle}</p>
+                  
+              </>
+            )}</>}</div>
         <div className="brackets-tournoi">
           {button === "brackets" && (
             <>
               <MatchList tournoi={tournoi} />
             </>
           )}
-        {button === "match" && (
-          <div className="match-details">
-            {userData.id ? (
-              <div>
-                <h3>Mes matchs :</h3>
-                {userMatches.length === 0 ? (
-                  <p>Vous n'avez aucun match pour ce tournoi.</p>
-                ) : (
-                  userMatches.map((match) => (
-                    <div
-                      key={match.id}
-                      className="match-card"
-                      onClick={() => setSelectedMatch(match)}
-                    >
-                      <h4>Match round: {match.Round}</h4>
-                      <p>Statut: {match.winner}</p>
-                    </div>
-                  ))
-                )}
-              </div>
-            ) : (
-              <p>Connectez-vous pour voir vos matchs.</p>
-            )}
-
-            {/* Afficher les détails du match sélectionné */}
-            {selectedMatch && (
-              <>
-                <div className="selected-match-details">
-                  {/* Afficher les détails du match sélectionné */}
-                  <h3>Détails du match {selectedMatch.Round}</h3>
-                  <h4>user1: {selectedMatch.user1}</h4>
-                  <h4>user2: {selectedMatch.user2}</h4>
-       
+          {button === "match" && (
+            <div className="match-details">
+              {userData.id ? (
+                <div>
+                  <h3>Mes matchs :</h3>
+                  {userMatches.length === 0 ? (
+                    <p>Vous n'avez aucun match pour ce tournoi.</p>
+                  ) : (
+                    userMatches.map((match) => (
+                      <div
+                        key={match.id}
+                        className="match-card"
+                        onClick={() => setSelectedMatch(match)}
+                      >
+                        <h4>Match round: {match.Round}</h4>
+                        <p>Statut: {match.winner}</p>
+                      </div>
+                    ))
+                  )}
                 </div>
-           
-              </>
-            )}
-          </div>
-        )}
-      </div>
+              ) : (
+                <p>Connectez-vous pour voir vos matchs.</p>
+              )}
 
+              {/* Afficher les détails du match sélectionné */}
+              {selectedMatch && (
+                <>
+                  <div className="selected-match-details">
+                    {/* Afficher les détails du match sélectionné */}
+                    <h3>Détails du match {selectedMatch.Round}</h3>
+                    <h4>user1: {selectedMatch.user1}</h4>
+                    <h4>user2: {selectedMatch.user2}</h4>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

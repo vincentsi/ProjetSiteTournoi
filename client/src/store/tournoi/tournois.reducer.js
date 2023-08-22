@@ -8,6 +8,12 @@ export const tournoiSlice = createSlice({
   reducers: {
     setTournoiList: (currentSlice, action) => {
       currentSlice.tournoiList = action.payload;
+    }, 
+    updateTournoi: (currentSlice, action) => {
+      const indexToUpdate = currentSlice.tournoiList.findIndex(
+        (tournoi) => tournoi.id === action.payload.id
+      );
+      currentSlice.tournoiList[indexToUpdate] = action.payload;
     },
     addTournoi: (currentSlice, action) => {
       currentSlice.tournoiList.push(action.payload);
@@ -16,4 +22,4 @@ export const tournoiSlice = createSlice({
 });
 
 export const tournoiReducer = tournoiSlice.reducer;
-export const { setTournoiList, addTournoi } = tournoiSlice.actions;
+export const { setTournoiList, addTournoi, updateTournoi } = tournoiSlice.actions;

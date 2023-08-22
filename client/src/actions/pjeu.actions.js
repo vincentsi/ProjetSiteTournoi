@@ -20,7 +20,9 @@ export class JeuAPI {
   static async update(jeu) {
     return (await axios.put(`${process.env.REACT_APP_API_URL}app/jeu/${jeu.id}`, jeu)).data;
   }
-
+  static async updateImgJeu(jeu) {
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/upload`, jeu)).data;
+  }
   static formatId(jeu) {
     return {
       ...jeu,

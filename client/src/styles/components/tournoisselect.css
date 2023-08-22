@@ -37,17 +37,6 @@ cursor: pointer;
   h3 {
     margin-bottom: 10px;
   }
-
-  .information-details {
-    display: flex;
-    flex-direction: column;
-
-    p {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 5px;
-    }
-  }
 }
 
 .participants-tournoi {
@@ -60,4 +49,20 @@ cursor: pointer;
     font-size: 16px;
     font-weight: bold;
   }
-  
+
+  .info-label {
+    margin-top: 50px;
+    margin-left: -60px;
+    white-space: pre-line;
+  }
+  .wrap-text {
+    word-wrap: break-word;
+    max-width: 400px; /* ou la largeur souhaitée */
+    margin-left: 270px;
+  }
+  .wrap-text-regles {
+    word-wrap: break-word;
+    max-width: 230px; /* ou la largeur souhaitée */
+    margin-left: 270px;
+    text-align: right;
+  }

@@ -4,6 +4,7 @@ const fs = require("fs");
 const sharp = require("sharp");
 const { uploadErrors } = require("../utils/errors.utils");
 const JeuModel = db.listejeu;
+const TournoiModel = db.listetournoi;
 
 
 module.exports.uploadProfil = async (req, res) => {
@@ -54,7 +55,7 @@ module.exports.uploadProfil = async (req, res) => {
         // }
   
   
-        module.exports.uploadImg = async (req, res) => {
+        module.exports.uploadImgJeu = async (req, res) => {
           //console.log(req.file);
           //renome le fichier avec extension .jpg
           const fileName = req.body.name +".jpg"; 
@@ -87,6 +88,46 @@ module.exports.uploadProfil = async (req, res) => {
                   JeuModel.update(
                         {picture: "./img/imagejeux/" + fileName},
                         { where: { id: req.body.jeuId }}
+                        )
+                    }   
+                } catch (err) {
+                  console.log(err);
+            } 
+        };
+
+        module.exports.uploadImgTournoi = async (req, res) => {
+          //console.log(req.file);
+          //renome le fichier avec extension .jpg
+          const fileName = req.body.name +".jpg"; 
+          try {
+            if (
+              req.file.mimetype != "image/jpg" &&
+              req.file.mimetype != "image/png" &&
+              req.file.mimetype != "image/jpeg"
+            )
+            throw Error("invalid file");
+      
+          } catch (err) {
+            
+            const errors = uploadErrors(err);
+            return res.status(201).json({ errors });
+          }
+        
+          try {
+            await sharp(req.file.buffer)
+              // .resize({ width: 350, height: 350 }) 
+              .toFile(`${__dirname}/../../client/public/img/imagejeux/${fileName}`
+              );
+            res.status(200).send("Photo de profil chargé avec succés");
+          } catch (err) {
+            res.status(400).send(err);
+          } 
+          try{
+            await TournoiModel.findByPk(req.params.tournoiId)
+                if (TournoiModel != null) {
+                  TournoiModel.update(
+                        {picture: "./img/imagejeux/" + fileName},
+                        { where: { id: req.params.tournoiId }}
                         )
                     }   
                 } catch (err) {

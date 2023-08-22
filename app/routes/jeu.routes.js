@@ -9,6 +9,6 @@ module.exports = function (app) {
     app.post("/app/jeu/jeucreation",[authmiddleware.tokenAdmin], controller.jeuCrée);
     app.put("/app/jeu/:id", controller.updateJeu);
     app.delete("/app/jeu/:id", controller.deleteJeu);
-    app.post("/app/jeu/upload", upload.single("file"), uploadController.uploadImg);
+    app.post("/app/jeu/upload", upload.single("file"), uploadController.uploadImgJeu);
     
   };

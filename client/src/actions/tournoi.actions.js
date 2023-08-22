@@ -14,6 +14,9 @@ export class TournoiAPI {
     return (await axios.put(`${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`, tournoi)).data;
    
   }
+  static async updateImgTournoi(jeu) {
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/upload`, jeu)).data;
+  }
   static formatId(tournoi) {
     return {
       ...tournoi,
