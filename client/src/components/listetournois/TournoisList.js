@@ -13,8 +13,11 @@ export function TournoiList({ tournoiList }) {
         return (
           <div key={tournoi.id} className="tournoi_container">
            <Hometournois 
+              picture={tournoi.picture}
               title={tournoi.title}
               subtitle={tournoi.createdAt}
+              nJoueur={tournoi.nJoueur}
+              horaire={tournoi.horaire}
               // description={tournoi.description}
               
               onClick={()=> navigate("/tournoi/"+ tournoi.id)}

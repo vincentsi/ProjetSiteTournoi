@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       picture: {
         type: Sequelize.STRING,
-        defaultValue: "./uploads/profil/random-user.png"
+        defaultValue: "./../uploads/profil/random-user.png"
       },
       prix: {
         type: Sequelize.STRING
@@ -23,6 +23,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       contact: {
+        type: Sequelize.STRING
+      },
+      platforme: {
         type: Sequelize.STRING
       }
     });

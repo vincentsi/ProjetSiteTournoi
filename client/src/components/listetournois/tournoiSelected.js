@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { BracketAPI } from "../../actions/bracket.action";
 import { MatchList } from "../brackets/matchList";
 import { TournoiAPI } from "../../actions/tournoi.actions";
 import { updateTournoi } from "../../store/tournoi/tournois.reducer";
+import UploadImgTournois from "./UploadImgTournois";
 // Composant TournoiSelec qui affiche les détails d'un tournoi et permet à l'utilisateur de s'inscrire ou de se désinscrire
 export function TournoiSelec({ tournoi }) {
   // Utilisation de useSelector pour récupérer les données de l'utilisateur depuis le state Redux
@@ -20,7 +21,7 @@ export function TournoiSelec({ tournoi }) {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedTournoi, setEditedTournoi] = useState({ ...tournoi });
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const handleInputChange = (e, field) => {
     const newValue = e.target.value;
     // Mettre à jour le tournoi édité en fonction du champ modifié
@@ -146,7 +147,16 @@ export function TournoiSelec({ tournoi }) {
       {/* Header du composant qui affiche l'image du tournoi, le titre et le bouton d'inscription/désinscription */}
       <div className="tounois-selected-header">
         <div className="row">
-          <div className="col-4">tournoi picture</div>
+          <div className="col-4">
+              <img
+                src={tournoi.picture}
+                alt="tournoi-pic-tournoi"
+                className="tournoi-pic-tournoi"
+              />
+              {isEditMode && (
+                       <UploadImgTournois tournoiId={tournoi.id} tournoiTitle={tournoi.title}/>
+                )}
+          </div>
           <div className="col-4">
             {isEditMode ? (
               <>
@@ -341,27 +351,31 @@ export function TournoiSelec({ tournoi }) {
             </>
           )}
         </div>
-        <div className="regles-tournoi">{button === "régles" && <> 
-        {isEditMode ? (
+        <div className="regles-tournoi">
+          {button === "régles" && (
+            <>
+              {isEditMode ? (
                 <>
-                <label htmlFor="regle">regles:</label>
-                <textarea
-                  rows={10}
-                  cols={70}
-                  type="text"
-                  id="regle"
-                  value={editedTournoi.regle}
-                  onChange={(e) => handleInputChange(e, "regle")}
-                />
+                  <label htmlFor="regle">regles:</label>
+                  <textarea
+                    rows={10}
+                    cols={70}
+                    type="text"
+                    id="regle"
+                    value={editedTournoi.regle}
+                    onChange={(e) => handleInputChange(e, "regle")}
+                  />
                 </>
-            ) : (
-              <>
-                  <p  style={{ width: '600px', textAlign: 'right' }}>regles:</p>
-               
-                  <p className="wrap-text-regles "  >{tournoi.regle}</p>
-                  
-              </>
-            )}</>}</div>
+              ) : (
+                <>
+                  <p style={{ width: "600px", textAlign: "right" }}>regles:</p>
+
+                  <p className="wrap-text-regles ">{tournoi.regle}</p>
+                </>
+              )}
+            </>
+          )}
+        </div>
         <div className="brackets-tournoi">
           {button === "brackets" && (
             <>

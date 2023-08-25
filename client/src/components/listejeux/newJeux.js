@@ -11,6 +11,10 @@ const VALIDATORS = {
   description: (value) => {
     return ValidatorService.min(value, 3);
   },
+  genres: (value) => {
+    return value ? undefined : "Genre is required"; 
+  },
+
 };
 export function JeuForm({
   jeu,
@@ -23,10 +27,12 @@ export function JeuForm({
   const [formValues, setFormValues] = useState({
     name: jeu?.name || "",
     description: jeu?.description || "",
+    genres: jeu?.genres || "", 
   });
   const [formErrors, setFormErrors] = useState({
     name: jeu?.name ? undefined : "",
     description: jeu?.description ? undefined : "",
+    genres: jeu?.genres ? undefined : "",
   });
 
   function hasError() {
@@ -99,7 +105,28 @@ export function JeuForm({
       </ButtonPrimary>
     </div>
   );
+  const genreOptions = ["Action", "Aventure", "Stratégie", "RPG", "Sport", "Simulation"];
 
+  const genreSelect = (
+    <div className="mb-5">
+      <label className="form-label">genres</label>
+      <select
+        onChange={updateFormValues}
+        name="genres"
+        className="form-control"
+        value={formValues.genres}
+      >
+        <option value="">Sélectionner un genre</option>
+        {genreOptions.map((genres) => (
+          <option key={genres} value={genres}>
+            {genres}
+          </option>
+        ))}
+      </select>
+      <FieldError msg={formErrors.genres} />
+    </div>
+  );
+  console.log(formValues)
   return (
     <div className="nj_container">
       <div className="row justify-description-space-between">
@@ -114,6 +141,7 @@ export function JeuForm({
       <div className="mb-3">
         {isEditable ? descriptionInput : <pre>{jeu.description}</pre>}
       </div>
+      {isEditable && genreSelect}
       {onSubmit && submitButton}
     </div>
   );

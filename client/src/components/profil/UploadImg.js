@@ -13,7 +13,7 @@ const UploadImg = () => {
     data.append("name", userData.username);
     data.append("userId", userData.id);
     data.append("file", file);
-
+ 
     dispatch(uploadPicture(data, userData.id));
   };
 

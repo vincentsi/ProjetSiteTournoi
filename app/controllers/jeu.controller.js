@@ -17,6 +17,7 @@ module.exports.jeuInfo = (req, res) => {
           name: id.name,
           title: id.title,
           picture: id.picture,
+          genres: id.genres,
           description: id.description,
           createdAt: id.createdAt,
         });
@@ -38,6 +39,7 @@ module.exports.jeuInfo = (req, res) => {
     await JeuModel.create({
       name: req.body.name,
       title: req.body.title,
+      genres: req.body.genres,
       description: req.body.description,
       picture:  req.body.picture,
     })
@@ -54,7 +56,8 @@ module.exports.jeuInfo = (req, res) => {
           if (JeuModel != null) {
             JeuModel.update(
               { name: req.body.name , 
-               title: req.body.title, 
+               title: req.body.title,
+               genres: req.body.genres, 
               description: req.body.description }, 
               { where: { id: req.params.id } }
               );   

@@ -14,6 +14,7 @@ module.exports.tournoiInfo = (req, res) => {
         res.status(200).send({
           id: id.id,
           name: id.name,
+          platforme: id.platforme,
           description: id.description,
           createdAt: id.createdAt,
         });
@@ -49,6 +50,7 @@ module.exports.tournoiInfo = (req, res) => {
         nJoueur: req.body.nJoueur,
         prix: req.body.prix,
         contact: req.body.contact,
+        platforme: req.body.platforme,
         regle: req.body.regle,
         listejeuId: req.body.listejeuId,
         userId: req.body.userId, // Attribution à l'utilisateur connecté
@@ -60,6 +62,7 @@ module.exports.tournoiInfo = (req, res) => {
         information: req.body.information,
         horaire: req.body.horaire,
         prix: req.body.prix,
+        platforme: req.body.platforme,
         contact: req.body.contact,
         regle: req.body.regle,
         listejeuId: req.body.listejeuId,
@@ -83,6 +86,7 @@ module.exports.tournoiInfo = (req, res) => {
                 horaire: req.body.horaire,
                 nJoueur: req.body.nJoueur,
                 prix: req.body.prix,
+                platforme: req.body.platforme,
                 contact: req.body.contact,
                 regle: req.body.regle }, 
               { where: { id: req.params.id } }

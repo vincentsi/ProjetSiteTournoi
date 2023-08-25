@@ -116,18 +116,18 @@ module.exports.uploadProfil = async (req, res) => {
           try {
             await sharp(req.file.buffer)
               // .resize({ width: 350, height: 350 }) 
-              .toFile(`${__dirname}/../../client/public/img/imagejeux/${fileName}`
+              .toFile(`${__dirname}/../../client/public/img/imagetournois/${fileName}`
               );
             res.status(200).send("Photo de profil chargé avec succés");
           } catch (err) {
             res.status(400).send(err);
           } 
           try{
-            await TournoiModel.findByPk(req.params.tournoiId)
+            await TournoiModel.findByPk(req.body.id)
                 if (TournoiModel != null) {
                   TournoiModel.update(
-                        {picture: "./img/imagejeux/" + fileName},
-                        { where: { id: req.params.tournoiId }}
+                        {picture: "./../img/imagetournois/" + fileName},
+                        { where: { id: req.body.id }}
                         )
                     }   
                 } catch (err) {

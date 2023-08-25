@@ -1,5 +1,7 @@
 import axios from "axios";
 
+export const UPLOAD_PICTURE = "UPLOAD_PICTURE";
+
 export class TournoiAPI {
   static async fetchAll() {
     return (
@@ -14,9 +16,11 @@ export class TournoiAPI {
     return (await axios.put(`${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`, tournoi)).data;
    
   }
-  static async updateImgTournoi(jeu) {
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/upload`, jeu)).data;
+  static async updateImgTournoi(tournoi, data) {
+    console.log("Data to be uploaded:", data);
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`, data)).data;
   }
+
   static formatId(tournoi) {
     return {
       ...tournoi,
@@ -24,3 +28,18 @@ export class TournoiAPI {
     };
   }
 }
+export const uploadPictureTournoi = (data, id) => {
+  return (dispatch) => {
+ 
+    return axios
+      .post(`${process.env.REACT_APP_API_URL}app/tournoi`, data)
+      .then((res) => {
+        return axios
+          .get(`${process.env.REACT_APP_API_URL}app/tournoi/${id}`)
+          .then((res) => {
+            dispatch({ type: UPLOAD_PICTURE, payload: res.data.picture });
+          });
+      })
+      .catch((err) => console.log(err));
+  };
+};

@@ -10,11 +10,13 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         defaultValue: "./uploads/profil/random-user.png"
       },
+      genres: {
+        type: Sequelize.STRING
+      },
       description: {
         type: Sequelize.STRING
       }
-    });
-  
+    });  
     return listejeu;
   };
   
