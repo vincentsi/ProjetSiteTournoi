@@ -123,11 +123,11 @@ module.exports.uploadProfil = async (req, res) => {
             res.status(400).send(err);
           } 
           try{
-            await TournoiModel.findByPk(req.body.id)
+            await TournoiModel.findByPk(req.body.tournoiId)
                 if (TournoiModel != null) {
                   TournoiModel.update(
                         {picture: "./../img/imagetournois/" + fileName},
-                        { where: { id: req.body.id }}
+                        { where: { id: req.body.tournoiId }}
                         )
                     }   
                 } catch (err) {

@@ -38,12 +38,13 @@ const HomeListeJeux = (props) => {
             onTextChange={setSearchText}
           />
         </div>
-        <div className="col-sm-12 col-md-8">
+        <div className="col-sm-12 col-md-1">
     <div className="mb-3">
       <label htmlFor="genreSelect">Select Genre:</label>
       <select
         id="genreSelect"
         className="form-select"
+      
         value={selectedGenre}
         onChange={(e) => setSelectedGenre(e.target.value)}
       >

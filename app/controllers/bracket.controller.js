@@ -3,7 +3,7 @@ const { Op, where } = require("sequelize");
 // const { round } = require("lodash");
 // const { match } = require("assert");
 const UserModel = db.user;
-// const TournoisModel = db.listetournoi;
+const TournoisModel = db.listetournoi;
 const UserTournoiModel = db.user_tournoi;
 const MatchesModel = db.matches;
 exports.affParticipant = async (req, res) => {
@@ -165,35 +165,42 @@ exports.fetchBracket = async (req, res) => {
   }
 };
 
-exports.bracketRandomiser = async (req, res) => {
+exports.startBracketRandomiser = async (req, res) => {
   try {
     const userBracketfind = await UserTournoiModel.findAll({
       where: {
         tournoiId: req.body.tournoiId,
       },
     });
+    const infoTournois = await TournoisModel.findOne({
+      where: {
+        id: req.body.tournoiId,
+      },
+    });
 
-    const nbMaxPlayers = 8;
+    const nbPlayers = infoTournois.nJoueur;
     let x = 0; // pour les numMatch
     let j = 1; // pour les rounds
-    let y = nbMaxPlayers / 2; // pour les nextMatch
-
+    let y = nbPlayers / 2  ; // pour les nextMatch
+   
     const shuffledPlayers = shuffle(userBracketfind);
     const tournoiId = shuffledPlayers[0].tournoiId;
 
     // Création des matchs avec les utilisateurs inscrits
-    for (let i = 0; i < nbMaxPlayers - 1; i += 2) {
-      x += 1;
-      if (i % 4 === 0) y += 1; // Changement de nextMatch tous les 2 matchs
-
-      await MatchesModel.create({
-        Round: 1,
-        numMatch: x,
-        nextMatch: y,
-        user1: shuffledPlayers[i].userId,
-        user2: shuffledPlayers[i + 1].userId,
-        tournoiId: tournoiId,
-      });
+    for (let i = 0; i < nbPlayers - 1; i += 2) {
+      if (shuffledPlayers[i] && shuffledPlayers[i + 1]) {
+        x += 1;
+        if (i % 4 === 0) y += 1;
+    
+        await MatchesModel.create({
+          Round: 1,
+          numMatch: x,
+          nextMatch: y,
+          user1: shuffledPlayers[i].userId,
+          user2: shuffledPlayers[i + 1].userId,
+          tournoiId: tournoiId,
+        });
+      }
     }
 
     let nRound;
@@ -221,7 +228,14 @@ exports.bracketRandomiser = async (req, res) => {
         });
       }
     } while (nRound > 2);
-
+    await TournoisModel.update(
+      { status: "lancé" }, // Mettez à jour le statut ici
+      {
+        where: {
+          id: tournoiId,
+        },
+      }
+    );
     res.status(200).json(userBracketfind);
   } catch (err) {
     console.log(err);
@@ -237,17 +251,17 @@ exports.bracketRandomiser = async (req, res) => {
 //         tournoiId: req.body.tournoiId,
 //       },
 //     });
-//     const nbMaxPlayers = 8;
+//     const nbPlayers = 8;
 //     // x pour les numMatch
 //     let x = 0;
 //     // j  pour les rounds
 //     let j = 1;
 //     // y  pour les nextMatch
-//     let y = nbMaxPlayers/2;
+//     let y = nbPlayers/2;
 //     userBracketfind = shuffle(userBracketfind);
 //     tournoiid = userBracketfind[0].tournoiId;
 //     //creation des matchs avec utilisateur inscrit
-//     for (let i = 0; i < nbMaxPlayers - 1; i += 2) {
+//     for (let i = 0; i < nbPlayers - 1; i += 2) {
 //         x += 1;
 //         //on change le prochain match attribue du match tout les 2 matchs
 //         if(i%4==0) y += 1;

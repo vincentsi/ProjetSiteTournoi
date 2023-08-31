@@ -4,11 +4,12 @@ import { useDispatch } from "react-redux";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { BracketAPI } from "../../actions/bracket.action";
 import { MatchList } from "../brackets/matchList";
-import { TournoiAPI } from "../../actions/tournoi.actions";
+import { TournoiAPI } from "../../actions/tournoi.actions"
 import { updateTournoi } from "../../store/tournoi/tournois.reducer";
 import UploadImgTournois from "./UploadImgTournois";
 // Composant TournoiSelec qui affiche les détails d'un tournoi et permet à l'utilisateur de s'inscrire ou de se désinscrire
-export function TournoiSelec({ tournoi }) {
+const TournoiSelec = ({ tournoi })  => {
+
   // Utilisation de useSelector pour récupérer les données de l'utilisateur depuis le state Redux
   const userData = useSelector((state) => state.USER.user);
 
@@ -37,15 +38,33 @@ export function TournoiSelec({ tournoi }) {
       const test = await TournoiAPI.updateTournoi(editedTournoi);
       // Appeler la fonction fournie par le composant parent pour mettre à jour le tournoi
       dispatch(updateTournoi(editedTournoi));
-      console.log(test);
+    
       setIsEditMode(false); // Sortir du mode éditable
     } catch (error) {
-      console.error(error);
+      console.error("Erreur lors du lancement du tournoi:", error);
+      alert("Une erreur est survenue lors du lancement du tournoi.");
     }
   };
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode);
   };
+
+  async function launchTournament() {
+    try {
+     
+      const updatedTournoi = await BracketAPI.genereBracket({ tournoiId: tournoi.id });
+ 
+      dispatch(updateTournoi(updatedTournoi));
+
+      setEditedTournoi({ ...tournoi, status: "Lancé" });
+      
+   
+      alert("Le tournoi a été lancé avec succès !");
+    } catch (error) {
+      console.error(error);
+    
+    }
+  }
 
   // Utiliser useEffect pour charger les participants lorsque le bouton "participants" est sélectionné
   useEffect(() => {
@@ -172,7 +191,10 @@ export function TournoiSelec({ tournoi }) {
               <pre>{tournoi.title}</pre>
             )}
           </div>
+         
+
           <div className="col-4">
+          { tournoi.status !== "lancé" ? (<> 
             {/* Afficher le bouton d'inscription/désinscription en fonction du statut d'inscription de l'utilisateur */}
             {userInscrit === true ? (
               <div className="nj_submit_btn">
@@ -186,8 +208,19 @@ export function TournoiSelec({ tournoi }) {
                   S'inscrire
                 </ButtonPrimary>
               </div>
-            )}
-
+            )},
+          {/* </>  ) : (<div className="test">
+                  test
+              </div> )} */}
+   {userData.id === tournoi.userId && !isEditMode && (
+        <div className="nj_submit_btn">
+          <ButtonPrimary 
+          onClick={() => launchTournament()}
+          >
+            Lancer le tournoi
+          </ButtonPrimary>
+        </div>
+      )}
             {isEditMode ? (
               <>
                 <div className="nj_submit_btn">
@@ -207,7 +240,9 @@ export function TournoiSelec({ tournoi }) {
                   </div>
                 )}
               </>
-            )}
+            )} </>  ) : (<div className="test">
+            <p>tournois en cours </p>
+        </div> )}
           </div>
         </div>
       </div>

@@ -8,8 +8,8 @@ import { updateJeu, deleteJeu } from "../store/jeu/jeu.reducer";
 import { addTournoi } from "../store/tournoi/tournois.reducer";
 import { TournoiList } from "../components/listetournois/TournoisList";
 import { TournoiNew } from "../components/listetournois/newTournoi";
+const Jeu = () => {
 
-export function Jeu() {
   // Déclaration des états locaux avec le hook useState
   const userData = useSelector((state) => state.USER.user);
   const [isEditable, setIsEditable] = useState(false);
@@ -62,11 +62,13 @@ export function Jeu() {
       navigate("/homeListeJeux"); // Rediriger vers la liste des jeux après suppression
     }
   }
-
+  const [selectedPlatform, setSelectedPlatform] = useState(""); // Ajout de l'état pour la plateforme sélectionnée
   // Filtrer les tournois associés au jeu
   const tournoiList = useSelector((store) => store.TOURNOI.tournoiList);
   const filteredList = tournoiList.filter(
-    (tournoi) => tournoi.listejeuId === Number(jeuId)
+    (tournoi) => tournoi.listejeuId === Number(jeuId)&&
+    (selectedPlatform === "" || tournoi.platforme === selectedPlatform)
+    
   );
 
   return (
@@ -83,6 +85,7 @@ export function Jeu() {
           </div>
         )}
       </div>
+      
       <div className="mb-1">
         {/* Afficher le formulaire de modification du jeu */}
         {jeu && showCreateTournoi && (
@@ -95,6 +98,21 @@ export function Jeu() {
             onSubmit={isEditable && submit}
           />
         )}
+      </div>
+      <div className="row justify-content-center">
+        {/* Ajout du filtre de sélection de plateforme */}
+        <div className="nj_submit_btn">
+          <select
+            value={selectedPlatform}
+            onChange={(e) => setSelectedPlatform(e.target.value)}
+          >
+            <option value="">Toutes les plateformes</option>
+            <option value="PlayStation">PlayStation</option>
+            <option value="Xbox">Xbox</option>
+            <option value="pc">pc</option>
+            {/* Ajoutez d'autres options de plateforme si nécessaire */}
+          </select>
+        </div>
       </div>
       <div className="mb-5">
         {/* Afficher le formulaire pour créer un nouveau tournoi */}

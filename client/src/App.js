@@ -41,7 +41,7 @@ const App = () => {
       })
         .then((res) => {
           setUid(res.data);
-          console.log(res.data);
+          // console.log(res.data);
           // console.log(uid);
         })
         .catch((err) => console.log("No token"));
@@ -49,7 +49,8 @@ const App = () => {
     fetchToken();
 
     if (uid) {getUser(uid);
-      console.log( uid)}
+      // console.log( uid)
+    }
   }, [uid]);
   
   // useEffect(() => {

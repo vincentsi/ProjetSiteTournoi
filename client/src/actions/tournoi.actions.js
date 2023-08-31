@@ -28,14 +28,13 @@ export class TournoiAPI {
     };
   }
 }
-export const uploadPictureTournoi = (data, id) => {
+export const uploadPictureTournoi = (data, tournoiId) => {
   return (dispatch) => {
- 
     return axios
       .post(`${process.env.REACT_APP_API_URL}app/tournoi`, data)
       .then((res) => {
         return axios
-          .get(`${process.env.REACT_APP_API_URL}app/tournoi/${id}`)
+          .get(`${process.env.REACT_APP_API_URL}app/tournoi/${tournoiId}`)
           .then((res) => {
             dispatch({ type: UPLOAD_PICTURE, payload: res.data.picture });
           });

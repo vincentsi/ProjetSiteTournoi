@@ -43,7 +43,7 @@ export function JeuForm({
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
     validate(e.target.name, e.target.value);
   }
-  console.log(formErrors);
+  // console.log(formErrors);
   function validate(fieldName, fieldValue) {
     setFormErrors({
       ...formErrors,
@@ -126,7 +126,7 @@ export function JeuForm({
       <FieldError msg={formErrors.genres} />
     </div>
   );
-  console.log(formValues)
+  // console.log(formValues)
   return (
     <div className="nj_container">
       <div className="row justify-description-space-between">

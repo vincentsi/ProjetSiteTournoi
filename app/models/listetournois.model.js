@@ -27,6 +27,10 @@ module.exports = (sequelize, Sequelize) => {
       },
       platforme: {
         type: Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: "non lancé"
       }
     });
   
