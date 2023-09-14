@@ -18,7 +18,7 @@ export class BracketAPI {
   }
   static async genereBracket(tournoiId) {
     console.log(tournoiId);
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracketRandomiser`,tournoiId)).data;
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/generateBracket`,tournoiId)).data;
   }
   static async affBracket(bracket) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/matches/all`,bracket)).data;
