@@ -3,8 +3,13 @@ import React from "react";
 const home = () => {
   return (
     <div>
-      hello depuis home
-      
+      <div className="home_container">
+        <div className="home_header">
+        hello depuis home
+        </div>
+        <div className="home_detail"></div>
+        <div className="home_recomendation"></div>
+      </div>
     </div>
     
   );

@@ -1,0 +1,17 @@
+.home_container{
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+.home_header{
+    flex: 2;
+    background-color: red;
+}
+.home_detail{
+    flex: 2;
+     background-color: blue;
+}
+.home_recomendation{
+  flex: 2;
+  background-color: red;
+}
