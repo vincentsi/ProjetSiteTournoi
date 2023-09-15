@@ -1,5 +1,6 @@
 const db = require("../models");
 const UserModel = db.user;
+const UserRankModel = db.user_rank;
 // const userModel = require("../models/user.model");
 // const config = require("../config/auth.config");
 
@@ -49,7 +50,6 @@ module.exports.updateUser = async (req, res) => {
     console.log(err);
     res.status(500).send({ message: err });
   }
-
   // try {
   //     UserModel.findOne({
   //   where: {
@@ -62,6 +62,20 @@ module.exports.updateUser = async (req, res) => {
   //   console.log(err)
   //   return res.status(500).send({ message: err });
   // }
+};
+
+module.exports.updateRankUser = async (req, res) => {
+
+  try {
+    addRank = await UserRankModel.create({
+      rankId: req.body.rankId,
+      userId: req.body.userId,
+    });
+    res.send(addRank);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err });
+  }
 };
 
 // exports.allAccess = (req, res) => {

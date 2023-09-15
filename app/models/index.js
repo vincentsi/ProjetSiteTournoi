@@ -29,9 +29,10 @@ db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.listejeu = require("../models/listejeu.model.js")(sequelize, Sequelize);
 db.listetournoi = require("../models/listetournois.model.js")(sequelize, Sequelize);
-
 db.matches = require("../models/matches.model.js")(sequelize, Sequelize);
+db.rank = require("../models/rank.model.js")(sequelize, Sequelize);
 
+db.listejeu.hasOne(db.rank,{foreignKey: 'jeuId'})
 db.listetournoi.hasOne(db.matches,{foreignKey: 'tournoiId'})
 db.matches.belongsTo(db.listetournoi,{foreignKey: 'tournoiId'});
 
@@ -49,6 +50,17 @@ db.listetournoi.belongsTo(db.user);
 db.listejeu.hasOne(db.listetournoi);
 db.listetournoi.belongsTo(db.listejeu);
 
+db.user_rank = sequelize.define('user_ranks');
+db.rank.belongsToMany(db.user, {
+  through: "user_ranks",
+  foreignKey: "rankId",
+  otherKey: "userId"
+});
+db.user.belongsToMany(db.rank, {
+  through: "user_ranks",
+  foreignKey: "userId",
+  otherKey: "rankId"
+});
 
 db.user_tournoi = sequelize.define('user_tournoi');
 

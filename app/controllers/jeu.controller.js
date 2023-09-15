@@ -1,11 +1,36 @@
 const db = require("../models");
 const JeuModel = db.listejeu;
-
-//recherche les informations de un jeu
+const RankModel = db.rank;
+//recherche les informations de un jeu avec son id dans url
 module.exports.jeuInfo = (req, res) => {
     JeuModel.findOne({
       where: {
         id: req.params.id,
+      },
+    })
+      .then((id) => {
+        if (!id) {
+          return res.status(200).send({ errorsid: "id Not found." });
+        }
+        res.status(200).send({
+          id: id.id,
+          name: id.name,
+          title: id.title,
+          picture: id.picture,
+          genres: id.genres,
+          description: id.description,
+          createdAt: id.createdAt,
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err.message });
+      });
+  };
+  //recherche les informations de un jeu avec son nom
+  module.exports.jeuInfo2 = (req, res) => {
+    JeuModel.findOne({
+      where: {
+        name: req.body.name,
       },
     })
       .then((id) => {
@@ -86,4 +111,35 @@ module.exports.jeuInfo = (req, res) => {
         res.status(500).send({ message: err.message });
       });
     };
-//   INSERT INTO listejeus (name, title, picture, description)VALUES ('league of legend', 'league of legend','./uploads/img/imagejeux.jpg','jeu de strategie')
+
+module.exports.jeuRank = async (req, res) => {
+
+  try{
+          RankModel.create(
+            { name: req.body.name , 
+            jeuId: req.body.jeuId }, 
+            { where: { jeuId: req.body.jeuId } }
+            );   
+            res.status(200).send("updated successfully");
+              
+        } catch (err) {
+          console.log(err)
+          res.status(500).send({ message: err });
+    }
+  }
+
+  module.exports.jeuRankInfo = async (req, res) => {
+    try {
+      const allRank = await RankModel.findAll({
+        where: { jeuId: req.body.jeuId },
+      });
+      
+      // Utilisez la méthode map pour extraire les noms de rang
+      const rankNames = allRank.map((rank) => rank.name);
+  
+      res.status(200).send(rankNames);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send({ message: err });
+    }
+  };

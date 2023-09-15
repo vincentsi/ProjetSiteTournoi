@@ -1,14 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { dateParser } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import UploadImg from "./UploadImg";
 import { updateBio } from "../../actions/user.actions";
+import { JeuAPI } from "../../actions/pjeu.actions";
 
 const UpdateProfil = () => {
   const [bio, setBio] = useState("");
   const [updateForm, setUpdateForm] = useState(false);
+  const [selectedGame, setSelectedGame] = useState(""); // État pour stocker le jeu sélectionné
+  const [gameList, setGameList] = useState([]); // État pour stocker la liste des jeux prédéfinis
+  const [gameRanks, setGameRanks] = useState([]); // État pour stocker les rangs prédéfinis du jeu sélectionné
+  const [selectedRank, setSelectedRank] = useState("");
   const userData = useSelector((state) => state.USER.user);
   const dispatch = useDispatch();
+
+  const jeuList = useSelector((store) => store.JEU.jeuList);
+  useEffect(() => {
+    setGameList(jeuList);
+  }, [jeuList]);
+
+
+  const handleGameChange = async (selectedGameName) => {
+    try {
+
+      console.log(gameList);
+      console.log(selectedGameName);
+      // Recherchez l'objet de jeu correspondant au nom du jeu sélectionné
+      const selectedGame = gameList.find(
+        (game) => game.id === selectedGameName
+      );
+      // console.log(game.name)
+      console.log(selectedGame);
+      if (selectedGame) {
+        // Si le jeu est trouvé, utilisez son ID pour récupérer les rangs
+        const gameId = selectedGame.id;
+        console.log(gameId);
+        // Effectuez une requête au backend pour récupérer les rangs prédéfinis pour le jeu sélectionné
+        const response = await JeuAPI.infoRank({ jeuId: gameId });
+        console.log(response);
+        if (Array.isArray(response)) {
+          // Vérifiez si la réponse est un tableau de noms de rangs
+          setGameRanks(response); // Mettez à jour l'état avec le tableau de noms de rangs
+          setSelectedRank(""); // Réinitialisez le rang sélectionné car il pourrait ne pas être valide pour le nouveau jeu
+        } else {
+          throw new Error(
+            "La réponse du serveur n'est pas un tableau de noms de rangs."
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'ID du jeu :", error);
+    }
+  };
 
   const handleUpdate = () => {
     dispatch(updateBio(userData.id, bio));
@@ -29,10 +73,16 @@ const UpdateProfil = () => {
             <h3>Bio</h3>
             {!updateForm ? (
               <>
-                <p className="bio-text" onClick={() => setUpdateForm(!updateForm)}>
+                <p
+                  className="bio-text"
+                  onClick={() => setUpdateForm(!updateForm)}
+                >
                   {userData.bio}
                 </p>
-                <button className="update-profil-btn" onClick={() => setUpdateForm(true)}>
+                <button
+                  className="update-profil-btn"
+                  onClick={() => setUpdateForm(true)}
+                >
                   Modifier bio
                 </button>
               </>
@@ -46,15 +96,60 @@ const UpdateProfil = () => {
                 <button className="update-profil-btn" onClick={handleUpdate}>
                   Valider modifications
                 </button>
-                <button className="update-profil-btn" onClick={() => setUpdateForm(false)}>
+                <button
+                  className="update-profil-btn"
+                  onClick={() => setUpdateForm(false)}
+                >
                   Annuler
                 </button>
               </>
             )}
           </div>
-            <div className="date-container">
-              <h4>Membre depuis le : {dateParser(userData.createdAt)}</h4>
+          <div className="date-container">
+            <h4>Membre depuis le : {dateParser(userData.createdAt)}</h4>
           </div>
+        </div>
+        <div className="profil-container">
+          <h1>Profil de {userData.username}</h1>
+          {/* Autres éléments */}
+          <div className="game-rank-update">
+            <h3>Choisissez un jeu et un rang</h3>
+            <div className="game-selector">
+              <select
+                value={selectedGame}
+                onChange={(e) => handleGameChange(e.target.value)}
+              >
+                <option value="">Sélectionnez un jeu</option>
+                {gameList.map((game) => (
+                  <option key={game.id} value={game.id}>
+                    {game.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="rank-selector">
+              <select
+                value={selectedRank}
+                onChange={(e) => setSelectedRank(e.target.value)}
+              >
+                <option value="">Sélectionnez un rang</option>
+                {gameRanks.map(
+                  (
+                    rank,
+                    index // Ajoutez une clé unique ici, par exemple, index
+                  ) => (
+                    <option key={index} value={rank}>
+                      {rank}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+          </div>
+          <button className="update-profil-btn" onClick={handleUpdate}>
+            Valider modifications
+          </button>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ export class JeuAPI {
    
     // .data.map(this.formatId);
   }
-  
+
   static async fetchById(jeuId) {
     return this.formatId((await axios.get(`${process.env.REACT_APP_API_URL}/${jeuId}`)).data);
   }
@@ -19,6 +19,12 @@ export class JeuAPI {
   }
   static async update(jeu) {
     return (await axios.put(`${process.env.REACT_APP_API_URL}app/jeu/${jeu.id}`, jeu)).data;
+  }
+  static async infoGameByName(jeu) {
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/info`, jeu)).data;
+  }
+  static async infoRank(jeu) {
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/rank`, jeu)).data;
   }
   static async updateImgJeu(jeu) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/upload`, jeu)).data;
