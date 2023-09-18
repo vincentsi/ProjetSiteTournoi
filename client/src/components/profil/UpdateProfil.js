@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UploadImg from "./UploadImg";
 import { updateBio } from "../../actions/user.actions";
 import { JeuAPI } from "../../actions/pjeu.actions";
-
+import { updateRank } from "../../actions/user.actions";
 const UpdateProfil = () => {
   const [bio, setBio] = useState("");
   const [updateForm, setUpdateForm] = useState(false);
@@ -36,13 +36,13 @@ const UpdateProfil = () => {
         // Si le jeu est trouvé, utilisez son ID pour récupérer les rangs
         const gameId = selectedGame.id;
         console.log(gameId);
-        // Effectuez une requête au backend pour récupérer les rangs prédéfinis pour le jeu sélectionné
+        // Effectue une requête au backend pour récupérer les rangs prédéfinis pour le jeu sélectionné
         const response = await JeuAPI.infoRank({ jeuId: gameId });
         console.log(response);
         if (Array.isArray(response)) {
-          // Vérifiez si la réponse est un tableau de noms de rangs
-          setGameRanks(response); // Mettez à jour l'état avec le tableau de noms de rangs
-          setSelectedRank(""); // Réinitialisez le rang sélectionné car il pourrait ne pas être valide pour le nouveau jeu
+          // Vérifie si la réponse est un tableau de noms de rangs
+          setGameRanks(response); // Met à jour l'état avec le tableau de noms de rangs
+          setSelectedRank(""); // Réinitialise le rang sélectionné car il pourrait ne pas être valide pour le nouveau jeu
         } else {
           throw new Error(
             "La réponse du serveur n'est pas un tableau de noms de rangs."
@@ -55,6 +55,8 @@ const UpdateProfil = () => {
   };
 
   const handleUpdate = () => {
+    console.log(userData.id , selectedRank)
+    dispatch(updateRank(userData.id, selectedRank));
     dispatch(updateBio(userData.id, bio));
     setUpdateForm(false);
   };
