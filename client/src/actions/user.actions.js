@@ -97,3 +97,13 @@ export const updateBio = (userId, bio) => {
       .catch((err) => console.log(err));
   };
 };
+
+
+export const getRanks = (userId) => async (dispatch) => {
+  try {
+    const response = await axios.get(`/api/user/${userId}/ranks`);
+    dispatch({ type: 'GET_RANKS_SUCCESS', payload: response.data });
+  } catch (error) {
+    dispatch({ type: 'GET_RANKS_FAILURE', payload: error.message });
+  }
+};

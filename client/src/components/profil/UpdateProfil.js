@@ -12,6 +12,7 @@ const UpdateProfil = () => {
   const [gameList, setGameList] = useState([]); // État pour stocker la liste des jeux prédéfinis
   const [gameRanks, setGameRanks] = useState([]); // État pour stocker les rangs prédéfinis du jeu sélectionné
   const [selectedRank, setSelectedRank] = useState("");
+  const [error, setError] = useState(null);
   const userData = useSelector((state) => state.USER.user);
   const dispatch = useDispatch();
 
@@ -20,10 +21,8 @@ const UpdateProfil = () => {
     setGameList(jeuList);
   }, [jeuList]);
 
-
   const handleGameChange = async (selectedGameName) => {
     try {
-
       console.log(gameList);
       console.log(selectedGameName);
       // Recherchez l'objet de jeu correspondant au nom du jeu sélectionné
@@ -35,32 +34,34 @@ const UpdateProfil = () => {
       if (selectedGame) {
         // Si le jeu est trouvé, utilisez son ID pour récupérer les rangs
         const gameId = selectedGame.id;
-        console.log(gameId);
+      
         // Effectue une requête au backend pour récupérer les rangs prédéfinis pour le jeu sélectionné
         const response = await JeuAPI.infoRank({ jeuId: gameId });
-        console.log(response);
+    
         if (Array.isArray(response)) {
           // Vérifie si la réponse est un tableau de noms de rangs
           setGameRanks(response); // Met à jour l'état avec le tableau de noms de rangs
           setSelectedRank(""); // Réinitialise le rang sélectionné car il pourrait ne pas être valide pour le nouveau jeu
         } else {
-          throw new Error(
-            "La réponse du serveur n'est pas un tableau de noms de rangs."
-          );
+          // Si la réponse de l'API indique une erreur, affichez le message d'erreur de l'API
+          setError(response.message || "Une erreur s'est produite lors de la récupération des rangs du jeu.");
         }
       }
     } catch (error) {
       console.error("Erreur lors de la récupération de l'ID du jeu :", error);
+      setError("Une erreur s'est produite lors de la récupération des rangs du jeu.");
     }
   };
 
+  const handleUpdateRank = () => {
+
+   const test = dispatch(updateRank(userData.id, selectedRank));
+    console.log(test.AxiosError )
+  };
   const handleUpdate = () => {
-    console.log(userData.id , selectedRank)
-    dispatch(updateRank(userData.id, selectedRank));
     dispatch(updateBio(userData.id, bio));
     setUpdateForm(false);
   };
-
   return (
     <div className="profil-container">
       <h1>Profil de {userData.username}</h1>
@@ -136,20 +137,16 @@ const UpdateProfil = () => {
                 onChange={(e) => setSelectedRank(e.target.value)}
               >
                 <option value="">Sélectionnez un rang</option>
-                {gameRanks.map(
-                  (
-                    rank,
-                    index // Ajoutez une clé unique ici, par exemple, index
-                  ) => (
-                    <option key={index} value={rank}>
-                      {rank}
-                    </option>
-                  )
-                )}
+                {gameRanks.map((rank) => (
+                  <option key={rank.id} value={rank.id}>
+                    {rank.name}
+                  </option>
+                ))}
               </select>
+              {error && <p className="error-message">{error}</p>}
             </div>
           </div>
-          <button className="update-profil-btn" onClick={handleUpdate}>
+          <button className="update-profil-btn" onClick={handleUpdateRank}>
             Valider modifications
           </button>
         </div>

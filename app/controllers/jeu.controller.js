@@ -61,14 +61,14 @@ module.exports.jeuInfo = (req, res) => {
  // crée un jeu 
   exports.jeuCrée = async (req, res) => {
 
-    await JeuModel.create({
+    const jeu = await JeuModel.create({
       name: req.body.name,
       title: req.body.title,
       genres: req.body.genres,
       description: req.body.description,
       picture:  req.body.picture,
     })
-    if (JeuModel){res.send({ message: "game registered successfully!" });
+    if (JeuModel){ res.status(200).send(jeu);
     } else {res.send({ message: "error" });}
 
   };
@@ -128,18 +128,23 @@ module.exports.jeuRank = async (req, res) => {
     }
   }
 
-  module.exports.jeuRankInfo = async (req, res) => {
-    try {
-      const allRank = await RankModel.findAll({
-        where: { jeuId: req.body.jeuId },
-      });
-      
-      // Utilisez la méthode map pour extraire les noms de rang
-      const rankNames = allRank.map((rank) => rank.name);
-  
-      res.status(200).send(rankNames);
-    } catch (err) {
-      console.log(err);
-      res.status(500).send({ message: err });
-    }
-  };
+ module.exports.jeuRankInfo = async (req, res) => {
+  try {
+    const allRanks = await RankModel.findAll({
+      where: { jeuId: req.body.jeuId },
+    });
+
+    // Créez un tableau d'objets avec les propriétés ID et nom
+    const rankInfo = allRanks.map((rank) => {
+      return {
+        id: rank.id,
+        name: rank.name,
+      };
+    });
+
+    res.status(200).send(rankInfo);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err });
+  }
+}

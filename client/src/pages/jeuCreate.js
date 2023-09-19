@@ -9,15 +9,12 @@ const JeuCreate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   async function createJeu(formValues){
-    const createJeu = await JeuAPI.create({
-        ...formValues,
-        // created_at: new Date().toLocaleDateString(),
-     
-    });
+    const createJeu = await JeuAPI.create({...formValues,// created_at: new Date().toLocaleDateString(),
+});
     console.log(createJeu)
     console.log(formValues)
     // dispatch(addJeu(createJeu));
-    dispatch(addJeu(formValues));
+    dispatch(addJeu(createJeu));
     navigate("/homeListeJeux");
   }
    
