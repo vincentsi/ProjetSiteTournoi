@@ -9,7 +9,7 @@ const HomeListeJeux = (props) => {
   const jeuList = useSelector((store) => store.JEU.jeuList);
   // console.log(searchText);
   const filteredList = jeuList.filter((jeu) => {
-    const containsName = jeu.name
+    const containsName = jeu.title
       .toUpperCase()
       .includes(searchText.trim().toUpperCase());
     const containsDescription = jeu.description

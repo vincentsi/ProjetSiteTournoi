@@ -24,7 +24,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
     });
     // validate(e.target.name, e.target.value);
   }
-  console.log(formValuesTournois);
+  // console.log(formValuesTournois);
   // const [formErrors, setFormErrors] = useState({
   //   name: jeu?.name ? undefined : "",
   //   description: jeu?.description ? undefined : "",
@@ -132,7 +132,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
       </ButtonPrimary>
     </div>
   );
-  console.log(affTournois);
+  // console.log(affTournois);
   return (
     <div className="tounois-selected-container">
       <div className="tounois-selected-header">

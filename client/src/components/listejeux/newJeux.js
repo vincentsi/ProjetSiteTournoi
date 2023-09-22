@@ -5,7 +5,7 @@ import { ValidatorService } from "../../services/form-validators";
 import { FieldError } from "../FieldError/FieldError";
 
 const VALIDATORS = {
-  name: (value) => {
+  title: (value) => {
     return ValidatorService.min(value, 3) || ValidatorService.max(value, 20);
   },
   description: (value) => {
@@ -19,18 +19,18 @@ const VALIDATORS = {
 export function JeuForm({
   jeu,
   isEditable = true,
-  name,
+  title,
   onClickEdit,
   onClickTrash,
   onSubmit,
 }) {
   const [formValues, setFormValues] = useState({
-    name: jeu?.name || "",
+    title: jeu?.title || "",
     description: jeu?.description || "",
     genres: jeu?.genres || "", 
   });
   const [formErrors, setFormErrors] = useState({
-    name: jeu?.name ? undefined : "",
+    title: jeu?.title ? undefined : "",
     description: jeu?.description ? undefined : "",
     genres: jeu?.genres ? undefined : "",
   });
@@ -40,8 +40,8 @@ export function JeuForm({
   }
 
   function updateFormValues(e) {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
-    validate(e.target.name, e.target.value);
+    setFormValues({ ...formValues, [e.target.title]: e.target.value });
+    validate(e.target.title, e.target.value);
   }
   // console.log(formErrors);
   function validate(fieldName, fieldValue) {
@@ -66,17 +66,17 @@ export function JeuForm({
     </>
   );
 
-  const nameInput = (
+  const titleInput = (
     <div className="mb-5">
-      <label className="form-label">name</label>
+      <label className="form-label">title</label>
       <input
         onChange={updateFormValues}
         type="text"
-        name="name"
+        title="title"
         className="form-control"
-        value={formValues.name}
+        value={formValues.title}
       />
-      <FieldError msg={formErrors.name} />
+      <FieldError msg={formErrors.title} />
     </div>
   );
 
@@ -86,7 +86,7 @@ export function JeuForm({
       <textarea
         onChange={updateFormValues}
         type="text"
-        name="description"
+        title="description"
         className="form-control"
         row="5"
         value={formValues.description}
@@ -112,7 +112,7 @@ export function JeuForm({
       <label className="form-label">genres</label>
       <select
         onChange={updateFormValues}
-        name="genres"
+        title="genres"
         className="form-control"
         value={formValues.genres}
       >
@@ -131,12 +131,12 @@ export function JeuForm({
     <div className="nj_container">
       <div className="row justify-description-space-between">
         <div className="col-10">
-          <h2 className="mb-3">{name}</h2>
+          <h2 className="mb-3">{title}</h2>
         </div>
         {actionIcons}
       </div>
-      <div className={"mb-3 nj_name_input_container"}>
-        {isEditable && nameInput}
+      <div className={"mb-3 nj_title_input_container"}>
+        {isEditable && titleInput}
       </div>
       <div className="mb-3">
         {isEditable ? descriptionInput : <pre>{jeu.description}</pre>}

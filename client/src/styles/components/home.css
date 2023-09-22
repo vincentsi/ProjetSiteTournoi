@@ -1,17 +1,62 @@
-.home_container{
+
+  .container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Styles du header */
+  .header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 2rem 0;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  /* Styles des fonctionnalités */
+  .features {
     display: flex;
-    height: 100vh;
-    flex-direction: column;
+    flex-wrap: wrap; /* Passage à la ligne pour les petits écrans */
+    justify-content: space-around;
+    margin: 2rem 0;
+  }
+  
+  .feature {
+    flex: 1; /* Largeur égale pour chaque fonctionnalité */
+    text-align: center;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin: 1rem; /* Espacement entre les fonctionnalités */
+    width: 30%;
+      
+  }
+  
+  .feature img {
+    max-width: 90%;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+  .background-image {
+  background-size: cover;
+  background-position: center;
+  
 }
-.home_header{
-    flex: 2;
-    background-color: red;
-}
-.home_detail{
-    flex: 2;
-     background-color: blue;
-}
-.home_recomendation{
-  flex: 2;
-  background-color: red;
-}
+  /* Autres styles (témoignage, bouton d'appel à l'action, footer) */
+  
+  /* Media queries pour la mise en page responsive */
+  @media (max-width: 768px) {
+    .features {
+      flex-direction: column; /* Affichage en colonne pour les petits écrans */
+      align-items: center;
+    }
+  }
+
+ 
+  
+  

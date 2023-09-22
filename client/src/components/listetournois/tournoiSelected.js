@@ -4,12 +4,11 @@ import { useDispatch } from "react-redux";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { BracketAPI } from "../../actions/bracket.action";
 import { MatchList } from "../brackets/matchList";
-import { TournoiAPI } from "../../actions/tournoi.actions"
+import { TournoiAPI } from "../../actions/tournoi.actions";
 import { updateTournoi } from "../../store/tournoi/tournois.reducer";
 import UploadImgTournois from "./UploadImgTournois";
 // Composant TournoiSelec qui affiche les détails d'un tournoi et permet à l'utilisateur de s'inscrire ou de se désinscrire
-const TournoiSelec = ({ tournoi })  => {
-
+const TournoiSelec = ({ tournoi }) => {
   // Utilisation de useSelector pour récupérer les données de l'utilisateur depuis le state Redux
   const userData = useSelector((state) => state.USER.user);
 
@@ -38,7 +37,7 @@ const TournoiSelec = ({ tournoi })  => {
       const test = await TournoiAPI.updateTournoi(editedTournoi);
       // Appeler la fonction fournie par le composant parent pour mettre à jour le tournoi
       dispatch(updateTournoi(editedTournoi));
-    
+
       setIsEditMode(false); // Sortir du mode éditable
     } catch (error) {
       console.error("Erreur lors du lancement du tournoi:", error);
@@ -51,18 +50,17 @@ const TournoiSelec = ({ tournoi })  => {
 
   async function launchTournament() {
     try {
-     
-      const updatedTournoi = await BracketAPI.genereBracket({ tournoiId: tournoi.id });
- 
+      const updatedTournoi = await BracketAPI.genereBracket({
+        tournoiId: tournoi.id,
+      });
+
       dispatch(updateTournoi(updatedTournoi));
 
       setEditedTournoi({ ...tournoi, status: "Lancé" });
-      
-   
+
       alert("Le tournoi a été lancé avec succès !");
     } catch (error) {
       console.error(error);
-    
     }
   }
 
@@ -164,17 +162,20 @@ const TournoiSelec = ({ tournoi })  => {
   return (
     <div className="tounois-selected-container">
       {/* Header du composant qui affiche l'image du tournoi, le titre et le bouton d'inscription/désinscription */}
-      <div className="tounois-selected-header">
-        <div className="row">
+      <div className="row tounois-selected-header">
+  
           <div className="col-4">
-              <img
-                src={tournoi.picture}
-                alt="tournoi-pic-tournoi"
-                className="tournoi-pic-tournoi"
+            <img
+              src={tournoi.picture}
+              alt="tournoi-pic-tournoi-selec"
+              className="tournoi-pic-tournoi-selec"
+            />
+            {isEditMode && (
+              <UploadImgTournois
+                tournoiId={tournoi.id}
+                tournoiTitle={tournoi.title}
               />
-              {isEditMode && (
-                       <UploadImgTournois tournoiId={tournoi.id} tournoiTitle={tournoi.title}/>
-                )}
+            )}
           </div>
           <div className="col-4">
             {isEditMode ? (
@@ -191,60 +192,67 @@ const TournoiSelec = ({ tournoi })  => {
               <pre>{tournoi.title}</pre>
             )}
           </div>
-         
 
           <div className="col-4">
-          { tournoi.status !== "lancé" ? (<> 
-            {/* Afficher le bouton d'inscription/désinscription en fonction du statut d'inscription de l'utilisateur */}
-            {userInscrit === true ? (
-              <div className="nj_submit_btn">
-                <ButtonPrimary onClick={handleInscription}>
-                  Se désinscrire
-                </ButtonPrimary>
-              </div>
-            ) : (
-              <div className="nj_submit_btn">
-                <ButtonPrimary onClick={handleInscription}>
-                  S'inscrire
-                </ButtonPrimary>
-              </div>
-            )},
-          {/* </>  ) : (<div className="test">
-                  test
-              </div> )} */}
-   {userData.id === tournoi.userId && !isEditMode && (
-        <div className="nj_submit_btn">
-          <ButtonPrimary 
-          onClick={() => launchTournament()}
-          >
-            Lancer le tournoi
-          </ButtonPrimary>
-        </div>
-      )}
-            {isEditMode ? (
+            {tournoi.status !== "lancé" ? (
               <>
-                <div className="nj_submit_btn">
-                  <button onClick={saveChanges}>
-                    Enregistrer les modifications
-                  </button>
-                  <button onClick={() => setIsEditMode(false)}>Annuler</button>
-                </div>
-              </>
-            ) : (
-              <>
-                {userData.id === tournoi.userId && (
+                {/* Afficher le bouton d'inscription/désinscription en fonction du statut d'inscription de l'utilisateur */}
+                {userInscrit === true ? (
                   <div className="nj_submit_btn">
-                    <ButtonPrimary onClick={() => setIsEditMode(!isEditMode)}>
-                      {"Modifier le tournoi"}
+                    <ButtonPrimary onClick={handleInscription}>
+                      Se désinscrire
+                    </ButtonPrimary>
+                  </div>
+                ) : (
+                  <div className="nj_submit_btn">
+                    <ButtonPrimary onClick={handleInscription}>
+                      S'inscrire
                     </ButtonPrimary>
                   </div>
                 )}
+                ,
+                {/* </>  ) : (<div className="test">
+                  test
+              </div> )} */}
+                {userData.id === tournoi.userId && !isEditMode && (
+                  <div className="nj_submit_btn">
+                    <ButtonPrimary onClick={() => launchTournament()}>
+                      Lancer le tournoi
+                    </ButtonPrimary>
+                  </div>
+                )}
+                {isEditMode ? (
+                  <>
+                    <div className="nj_submit_btn">
+                      <button onClick={saveChanges}>
+                        Enregistrer les modifications
+                      </button>
+                      <button onClick={() => setIsEditMode(false)}>
+                        Annuler
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {userData.id === tournoi.userId && (
+                      <div className="nj_submit_btn">
+                        <ButtonPrimary
+                          onClick={() => setIsEditMode(!isEditMode)}
+                        >
+                          {"Modifier le tournoi"}
+                        </ButtonPrimary>
+                      </div>
+                    )}
+                  </>
+                )}{" "}
               </>
-            )} </>  ) : (<div className="test">
-            <p>tournois en cours </p>
-        </div> )}
+            ) : (
+              <div className="test">
+                <p>tournois en cours </p>
+              </div>
+            )}
           </div>
-        </div>
+        
       </div>
 
       {/* Section de boutons pour basculer entre différentes informations du tournoi */}
@@ -458,6 +466,6 @@ const TournoiSelec = ({ tournoi })  => {
       </div>
     </div>
   );
-}
+};
 
 export default TournoiSelec;

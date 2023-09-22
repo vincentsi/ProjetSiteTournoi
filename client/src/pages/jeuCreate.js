@@ -9,12 +9,14 @@ const JeuCreate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   async function createJeu(formValues){
-    const createJeu = await JeuAPI.create({...formValues,// created_at: new Date().toLocaleDateString(),
-});
-    console.log(createJeu)
-    console.log(formValues)
+    const createJeu = await JeuAPI.create({...formValues});
+    const idAsString = createJeu.id.toString();
+    const jeuAcreer = { ...formValues, id: idAsString };
+    jeuAcreer.picture = "./uploads/profil/random-user.png";
+    // console.log(jeuAcreer)
+    // console.log(formValues)
     // dispatch(addJeu(createJeu));
-    dispatch(addJeu(createJeu));
+    dispatch(addJeu(jeuAcreer));
     navigate("/homeListeJeux");
   }
    

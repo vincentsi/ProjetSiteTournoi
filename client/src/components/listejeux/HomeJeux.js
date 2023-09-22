@@ -1,7 +1,7 @@
 import { useState } from "react";
 // import { Trash as TrashIcon } from "reac/t-bootstrap-icons";
 
-export function HomeJeux({ name, picture, subtitle, description, onClickTrash, onClick }) {
+export function HomeJeux({ title, picture, subtitle, description, onClickTrash, onClick }) {
   
   const [isCardHovered, setIsCardHovered] = useState(false);
   // const [isTrashHovered, setIsTrashHovered] = useState(false);
@@ -11,6 +11,7 @@ export function HomeJeux({ name, picture, subtitle, description, onClickTrash, o
   //   e.stopPropagation();
   // }
   return (
+    
     <div
       onClick={onClick}
       onMouseEnter={() => setIsCardHovered(true)}
@@ -20,15 +21,8 @@ export function HomeJeux({ name, picture, subtitle, description, onClickTrash, o
     >
 
       <div className="name_row">
-      <img alt={name} className="listejeu_img" src={picture}></img>
-        <h5 className="listejeu_name">{name}</h5>
-          {/* <TrashIcon
-            size={20}
-            onMouseEnter={() => setIsTrashHovered(true)}
-            onMouseLeave={() => setIsTrashHovered(false)}
-            style={{ color: isTrashHovered ? "#FF7373" : "#b8b8b8" }}
-            onClick={onClickTrash_}
-          /> */}
+      <img alt={title} className="listejeu_img" src={picture}></img>
+        <h5 className="listejeu_name">{title}</h5>
       </div>
     </div>
   );

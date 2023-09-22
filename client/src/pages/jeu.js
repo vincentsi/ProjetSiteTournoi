@@ -45,15 +45,22 @@ const Jeu = () => {
       listejeuId: jeuId,
       userId: userData.id,
     });
+    console.log(createdTournoi);
     if (createdTournoi.message === "User has already created a tournament.") {
       alert(createdTournoi.message);
     } else {
-    dispatch(addTournoi(createdTournoi)); // Ajouter le nouveau tournoi à l'état global
+    const idAsString = createdTournoi.id.toString();
+    const jeuIdAsInt = parseInt(jeuId, 10);
+    console.log(idAsString);
+    const tournoiAcreer = { ...formValuesTournois, id: idAsString,listejeuId: jeuIdAsInt,userId: userData.id };
+    console.log(tournoiAcreer);
+    tournoiAcreer.picture = "./../uploads/profil/random-user.png";
+    dispatch(addTournoi(tournoiAcreer)); // Ajouter le nouveau tournoi à l'état global
     setAffTournois(!affTournois); // Changer l'affichage des tournois
   }
 
   }
- 
+
   // Fonction pour supprimer le jeu
   function deleteJeu_(jeu) {
     if (window.confirm("Supprimer le jeu ?")) {
@@ -72,7 +79,7 @@ const Jeu = () => {
   );
 
   return (
-    <>
+    <div className="main_container_jeu">
       <div className="row justify-content-center">
         {/* Bouton pour afficher/cacher la création de tournoi */}
         {userData.id && ( // Vérification de l'utilisateur connecté
@@ -91,7 +98,7 @@ const Jeu = () => {
         {jeu && showCreateTournoi && (
           <JeuForm
             isEditable={isEditable}
-            name={isEditable ? "Edit jeu" : jeu.title}
+            title={isEditable ? "Edit jeu" : jeu.title}
             jeu={jeu}
             onClickEdit={() => setIsEditable(!isEditable)}
             onClickTrash={() => deleteJeu_(jeu)}
@@ -126,7 +133,7 @@ const Jeu = () => {
           <TournoiList tournoiList={filteredList} />
         )}
       </div>
-    </>
+    </div>
   );
 }
 

@@ -27,7 +27,7 @@ export function JeuList({ jeuList }) {
         return (
           <div key={jeu.id} className="jeu_container">
             <HomeJeux
-              name={jeu.name}
+              title={jeu.title}
               subtitle={jeu.createdAt}
               description={jeu.description}
               picture={jeu.picture}
