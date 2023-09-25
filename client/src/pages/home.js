@@ -14,19 +14,19 @@ const home = () => {
 
         <section className="features">
           <div className="feature">
-            <img src="./img/homeImg/smash.jpg" alt="Image 1" />
+            <img src="./img/homeImg/smash.jpg" alt="Image1" />
             <h2>Gérez vos compétitions de jeux</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
           </div>
 
           <div className="feature">
-            <img src="image2.jpg" alt="Image 2" />
+            <img src="image2.jpg" alt="Image2" />
             <h2>Fonctionnalité 2</h2>
             <p>Nulla facilisi. Sed sed tellus nec lorem finibus.</p>
           </div>
 
           <div className="feature">
-            <img src="image3.jpg" alt="Image 3" />
+            <img src="image3.jpg" alt="Image3" />
             <h2>Fonctionnalité 3</h2>
             <p>Donec eget semper ante, vel suscipit lorem.</p>
           </div>

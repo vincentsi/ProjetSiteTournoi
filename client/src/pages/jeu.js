@@ -77,11 +77,15 @@ const Jeu = () => {
     (selectedPlatform === "" || tournoi.platforme === selectedPlatform)
     
   );
-
   return (
     <div className="main_container_jeu">
       <div className="row justify-content-center">
         {/* Bouton pour afficher/cacher la création de tournoi */}
+    
+      </div>
+      
+      <div className="mb-1" style={{ backgroundImage: `url(./.${jeu?.picture || ''})` }}>
+        {/* Afficher le formulaire de modification du jeu */}
         {userData.id && ( // Vérification de l'utilisateur connecté
           <div className="nj_submit_btn">
             <button onClick={() => setShowCreateTournoi(!showCreateTournoi)}>
@@ -91,25 +95,19 @@ const Jeu = () => {
             </button>
           </div>
         )}
-      </div>
-      
-      <div className="mb-1">
-        {/* Afficher le formulaire de modification du jeu */}
         {jeu && showCreateTournoi && (
+          
           <JeuForm
             isEditable={isEditable}
             title={isEditable ? "Edit jeu" : jeu.title}
             jeu={jeu}
             onClickEdit={() => setIsEditable(!isEditable)}
+            
             onClickTrash={() => deleteJeu_(jeu)}
             onSubmit={isEditable && submit}
           />
         )}
-      </div>
-      <div className="row justify-content-center">
-        {/* Ajout du filtre de sélection de plateforme */}
-        <div className="nj_submit_btn">
-          <select
+             <select
             value={selectedPlatform}
             onChange={(e) => setSelectedPlatform(e.target.value)}
           >
@@ -119,14 +117,15 @@ const Jeu = () => {
             <option value="pc">pc</option>
             {/* Ajoutez d'autres options de plateforme si nécessaire */}
           </select>
-        </div>
       </div>
-      <div className="mb-5">
+        {/* Ajout du filtre de sélection de plateforme */}
+    
+      {/* <div className="mb-5"> */}
         {/* Afficher le formulaire pour créer un nouveau tournoi */}
         {jeu && !isEditable && !showCreateTournoi && (
           <TournoiNew onSubmit={createTournoi} />
         )}
-      </div>
+      {/* </div> */}
       <div className="mb-5">
         {/* Afficher la liste des tournois associés au jeu */}
         {jeu && !isEditable && showCreateTournoi && (
