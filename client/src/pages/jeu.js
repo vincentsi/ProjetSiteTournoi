@@ -79,13 +79,9 @@ const Jeu = () => {
   );
   return (
     <div className="main_container_jeu">
-      <div className="row justify-content-center">
-        {/* Bouton pour afficher/cacher la création de tournoi */}
-    
-      </div>
-      
+  
       <div className="mb-1" style={{ backgroundImage: `url(./.${jeu?.picture || ''})` }}>
-        {/* Afficher le formulaire de modification du jeu */}
+        {/* Affiche le formulaire de modification du jeu */}
         {userData.id && ( // Vérification de l'utilisateur connecté
           <div className="nj_submit_btn">
             <button onClick={() => setShowCreateTournoi(!showCreateTournoi)}>

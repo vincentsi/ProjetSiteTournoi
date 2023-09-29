@@ -113,7 +113,6 @@ const UpdateProfil = () => {
           </div>
         </div>
         <div className="profil-container">
-          <h1>Profil de {userData.username}</h1>
           {/* Autres éléments */}
           <div className="game-rank-update">
             <h3>Choisissez un jeu et un rang</h3>

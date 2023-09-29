@@ -6,18 +6,15 @@ module.exports = (sequelize, Sequelize) => {
       numMatch: {
         type: Sequelize.INTEGER
       },
-      nextMatch: {
+      user1: {
+        type: Sequelize.STRING,
+      },
+      user2: {
         type: Sequelize.STRING
       },
-      // user1: {
-      //   type: Sequelize.STRING,
-      // },
-      // user2: {
-      //   type: Sequelize.STRING
-      // },
-      // winner: {
-      //   type: Sequelize.STRING
-      // },
+      winner: {
+        type: Sequelize.STRING
+      },
       // loser: {
       //   type: Sequelize.STRING
       // },

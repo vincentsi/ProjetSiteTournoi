@@ -138,8 +138,8 @@ export function JeuForm({
       <div className={"mb-3 nj_title_input_container"}>
         {isEditable && titleInput}
       </div>
-      <div className="mb-3">
-        {isEditable ? descriptionInput : <pre>{jeu.description}</pre>}
+      <div className="mb-3 description">
+        {isEditable ? descriptionInput : <p>{jeu.description}</p>}
       </div>
       {isEditable && genreSelect}
       {onSubmit && submitButton}

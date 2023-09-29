@@ -1,11 +1,6 @@
 import axios from "axios";
 
 export class BracketAPI {
-
-  // static async create(bracket) {
-  //   return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/createbracket`, bracket)).data;
-  // }
-  
   static async UTCreate(bracket) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/adduser`, bracket)).data;
   }
@@ -28,6 +23,14 @@ export class BracketAPI {
   }
   static async getUserMatches (bracket) {
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/bracket/matches`,bracket)).data;
+  }
+  static async reportWinner (matchId,winnerId) {
+    console.log(matchId,winnerId)
+    return (await axios.put(`${process.env.REACT_APP_API_URL}app/bracket/reportwinner`,{
+      matchId: matchId,
+      winnerId: winnerId,
+     
+    })).data;
   }
   static formatId(bracket) {
     return {

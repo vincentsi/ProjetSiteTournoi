@@ -51,22 +51,60 @@ cursor: pointer;
   }
 
   .info-label {
-    margin-top: 50px;
-    margin-left: -60px;
-    white-space: pre-line;
+    /* text-align: center;
+    width: auto;
+    white-space: pre-line; */
+
   }
-  .wrap-text {
-    word-wrap: break-word;
-    max-width: 400px; /* ou la largeur souhaitée */
-    margin-left: 270px;
+  
+  .regles-tournoi{
+    text-align: center;
+    width: auto;
   }
   .wrap-text-regles {
     word-wrap: break-word;
-    max-width: 230px; /* ou la largeur souhaitée */
-    margin-left: 270px;
-    text-align: right;
-  }
-  .tournoi-pic-tournoi-selec {
-    max-width: 100%;
+   
 
   }
+ 
+  .tournoi-pic-tournoi-selec {
+    max-width: 90%;
+
+  }
+ 
+
+  .all_ts_submit_btn {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+  }
+  .ts_submit_btn {
+    margin-top: 5px;
+  }
+
+  @media screen and (max-width: 768px) {
+
+  .tounois-selected-header {
+    text-align: center; /* Centrer le contenu du header */
+  }
+
+  .tounois-selected-header img {
+    max-width: 150%; /* Ajuster la largeur de l'image à la largeur de l'écran */
+
+  }
+
+  .All-button {
+    padding: 6px 16px; /* Réduisez la taille du bouton pour les écrans plus petits */
+    font-size: 14px;
+  }
+
+  .space-all-button {
+    margin-bottom: 10px; /* Ajouter de l'espace entre les boutons */
+  }
+
+  .tounois-selected-bas {
+    text-align: center; /* Centrer le contenu de la section basse */
+  }
+
+  /* Ajoutez d'autres styles CSS selon les besoins de votre mise en page */
+}

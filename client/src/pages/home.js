@@ -15,26 +15,26 @@ const home = () => {
         <section className="features">
           <div className="feature">
             <img src="./img/homeImg/smash.jpg" alt="Image1" />
-            <h2>Gérez vos compétitions de jeux</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <h2> Participez à des tournois gratuits en quelques clics</h2>
+            {/* <p></p> */}
           </div>
 
           <div className="feature">
-            <img src="image2.jpg" alt="Image2" />
-            <h2>Fonctionnalité 2</h2>
-            <p>Nulla facilisi. Sed sed tellus nec lorem finibus.</p>
+            <img src="./img/homeImg/tgestion.jpg" alt="Image2" />
+            <h2>Gérez vos compétitions de jeux</h2>
+            <p></p>
           </div>
 
           <div className="feature">
             <img src="image3.jpg" alt="Image3" />
             <h2>Fonctionnalité 3</h2>
-            <p>Donec eget semper ante, vel suscipit lorem.</p>
+            <p>.</p>
           </div>
         </section>
 
         <section className="call-to-action">
           <h2>Prêt à rejoindre la compétition ?</h2>
-          <a href="/inscription" className="button">
+          <a href="/profil" className="button">
             S'inscrire
           </a>
         </section>

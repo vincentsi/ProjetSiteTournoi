@@ -9,6 +9,7 @@
 
 .update-container {
   display: flex;
+  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne lorsque l'espace est insuffisant */
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -52,7 +53,7 @@
   line-height: 1.5;
 }
 
-.update-profil-btn{
+.update-profil-btn {
   padding: 10px 20px;
   margin-right: 10px;
   border: none;
@@ -73,6 +74,19 @@
   line-height: 1.5;
   margin-bottom: 10px;
 }
+
 .date-container {
   text-align: center;
+}
+
+/* Media Queries pour les petits écrans (par exemple, les smartphones) */
+@media screen and (max-width: 768px) {
+  .update-container {
+    flex-direction: column; /* Passe à une disposition verticale sur les petits écrans */
+    align-items: center;
+  }
+
+  .left-part {
+    margin-right: 0;
+  }
 }

@@ -1,20 +1,23 @@
+
 .tournois-container{
     cursor: pointer;
     box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
     width: auto;
-    margin: 20px; 
+    margin: 20px;
+    height: 170px; 
 }
 .tournoi-pic-tournoi {
     max-width: 100%;
-    height: auto; 
+    
+    height: 170px; 
   }
 .nj_container {
     padding: 30px;
     color: rgb(255, 255, 255);
-
     border-radius: 20px;
+
   }
-  
+ 
   .nj_icon {
     cursor: pointer;
   }
@@ -29,17 +32,14 @@
   .button {
     border-radius: 50px;
     font-weight: bold;
-    width: 180px;
-    height: 50px;
+    width: 150px;
+    height: 55px;
   }
-/* .main_container_jeu{
-    display: flex;
-    flex-direction: column;
-} */
+
 .mb-1 {
-  background-size: cover; /* Réduit la taille de l'image tout en la maintenant entièrement visible */
-  background-repeat: no-repeat; /* Évite la répétition de l'image de fond */
-  background-position: center; /* Centre l'image de fond horizontalement */
+  background-size: cover; 
+  background-repeat: no-repeat;
+  background-position: center; 
 }
 
 

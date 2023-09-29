@@ -7,6 +7,8 @@ import { MatchList } from "../brackets/matchList";
 import { TournoiAPI } from "../../actions/tournoi.actions";
 import { updateTournoi } from "../../store/tournoi/tournois.reducer";
 import UploadImgTournois from "./UploadImgTournois";
+import MatchDetails from "../brackets/matchDetail";
+
 // Composant TournoiSelec qui affiche les détails d'un tournoi et permet à l'utilisateur de s'inscrire ou de se désinscrire
 const TournoiSelec = ({ tournoi }) => {
   // Utilisation de useSelector pour récupérer les données de l'utilisateur depuis le state Redux
@@ -19,6 +21,7 @@ const TournoiSelec = ({ tournoi }) => {
   const [participants, setParticipants] = useState([]);
   const [userMatches, setUserMatches] = useState([]); // État local pour stocker les matchs de l'utilisateur connecté
   const [selectedMatch, setSelectedMatch] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedTournoi, setEditedTournoi] = useState({ ...tournoi });
   const dispatch = useDispatch();
@@ -158,101 +161,130 @@ const TournoiSelec = ({ tournoi }) => {
       console.error(error);
     }
   }
+  async function removeParticipant(participantId) {
+    try {
+      console.log(userData.id, tournoi.userId, participantId);
+      if (userData.id === tournoi.userId) {
+        await BracketAPI.DelOneUserBracket({
+          tournoiId: tournoi.id,
+          userId: participantId,
+        });
+        affParticipant();
+      } else {
+        alert("Vous n'avez pas la permission de supprimer des participants.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async function handleReportWinner(matchId, winnerId) {
+    try {
+      console.log(matchId,winnerId)
+      const updatedMatch = await BracketAPI.reportWinner(matchId, winnerId);
 
+      // Mettez à jour l'état local pour refléter le vainqueur signalé
+      setSelectedMatch((prevMatch) => ({
+        ...prevMatch,
+        winner: updatedMatch.winnerId,
+      }));
+
+      alert(`Le vainqueur du match a été signalé avec succès : ${winnerId}`);
+    } catch (error) {
+
+      console.error(error);
+      setErrorMessage(`Une erreur s'est produite lors de la signalisation du vainqueur :  ${error.response.data.message}`);
+    }
+  }
+ 
   return (
     <div className="tounois-selected-container">
       {/* Header du composant qui affiche l'image du tournoi, le titre et le bouton d'inscription/désinscription */}
       <div className="row tounois-selected-header">
-  
-          <div className="col-4">
-            <img
-              src={tournoi.picture}
-              alt="tournoi-pic-tournoi-selec"
-              className="tournoi-pic-tournoi-selec"
+        <div className="col-4">
+          <img
+            src={tournoi.picture}
+            alt="tournoi-pic-tournoi-selec"
+            className="tournoi-pic-tournoi-selec"
+          />
+          {isEditMode && (
+            <UploadImgTournois
+              tournoiId={tournoi.id}
+              tournoiTitle={tournoi.title}
             />
-            {isEditMode && (
-              <UploadImgTournois
-                tournoiId={tournoi.id}
-                tournoiTitle={tournoi.title}
+          )}
+        </div>
+        <div className="col-4">
+          {isEditMode ? (
+            <>
+              <label htmlFor="title">title:</label>
+              <input
+                type="text"
+                id="title"
+                value={editedTournoi.title}
+                onChange={(e) => handleInputChange(e, "title")}
               />
-            )}
-          </div>
-          <div className="col-4">
-            {isEditMode ? (
-              <>
-                <label htmlFor="title">title:</label>
-                <input
-                  type="text"
-                  id="title"
-                  value={editedTournoi.title}
-                  onChange={(e) => handleInputChange(e, "title")}
-                />
-              </>
-            ) : (
-              <pre>{tournoi.title}</pre>
-            )}
-          </div>
+            </>
+          ) : (
+            <pre>{tournoi.title}</pre>
+          )}
+        </div>
 
-          <div className="col-4">
-            {tournoi.status !== "lancé" ? (
-              <>
-                {/* Afficher le bouton d'inscription/désinscription en fonction du statut d'inscription de l'utilisateur */}
-                {userInscrit === true ? (
-                  <div className="nj_submit_btn">
-                    <ButtonPrimary onClick={handleInscription}>
-                      Se désinscrire
-                    </ButtonPrimary>
-                  </div>
-                ) : (
-                  <div className="nj_submit_btn">
-                    <ButtonPrimary onClick={handleInscription}>
-                      S'inscrire
-                    </ButtonPrimary>
-                  </div>
-                )}
-                ,
-                {/* </>  ) : (<div className="test">
+        <div className="col-4 all_ts_submit_btn">
+          {tournoi.status !== "lancé" ? (
+            <>
+              {/* Afficher le bouton d'inscription/désinscription en fonction du statut d'inscription de l'utilisateur */}
+              {userInscrit === true ? (
+                <div className="ts_submit_btn">
+                  <ButtonPrimary onClick={handleInscription}>
+                    Se désinscrire
+                  </ButtonPrimary>
+                </div>
+              ) : (
+                <div className="ts_submit_btn">
+                  <ButtonPrimary onClick={handleInscription}>
+                    S'inscrire
+                  </ButtonPrimary>
+                </div>
+              )}
+              {/* </>  ) : (<div className="test">
                   test
               </div> )} */}
-                {userData.id === tournoi.userId && !isEditMode && (
-                  <div className="nj_submit_btn">
-                    <ButtonPrimary onClick={() => launchTournament()}>
-                      Lancer le tournoi
-                    </ButtonPrimary>
+              {userData.id === tournoi.userId && !isEditMode && (
+                <div className="ts_submit_btn">
+                  <ButtonPrimary onClick={() => launchTournament()}>
+                    Lancer le tournoi
+                  </ButtonPrimary>
+                </div>
+              )}
+              {isEditMode ? (
+                <>
+                  <div className="ts_submit_btn">
+                    <button onClick={saveChanges}>
+                      Enregistrer les modifications
+                    </button>
+                    <button onClick={() => setIsEditMode(false)}>
+                      Annuler
+                    </button>
                   </div>
-                )}
-                {isEditMode ? (
-                  <>
-                    <div className="nj_submit_btn">
-                      <button onClick={saveChanges}>
-                        Enregistrer les modifications
-                      </button>
-                      <button onClick={() => setIsEditMode(false)}>
-                        Annuler
-                      </button>
+                </>
+              ) : (
+                <>
+                  {userData.id === tournoi.userId && (
+                    <div className="ts_submit_btn">
+                      <ButtonPrimary onClick={() => setIsEditMode(!isEditMode)}>
+                        {"Modifier le tournoi"}
+                      </ButtonPrimary>
                     </div>
-                  </>
-                ) : (
-                  <>
-                    {userData.id === tournoi.userId && (
-                      <div className="nj_submit_btn">
-                        <ButtonPrimary
-                          onClick={() => setIsEditMode(!isEditMode)}
-                        >
-                          {"Modifier le tournoi"}
-                        </ButtonPrimary>
-                      </div>
-                    )}
-                  </>
-                )}{" "}
-              </>
-            ) : (
-              <div className="test">
-                <p>tournois en cours </p>
-              </div>
-            )}
-          </div>
-        
+                  )}
+                </>
+              )}{" "}
+            </>
+          ) : (
+            <div className="tStart">
+              <p>tournois en cours </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Section de boutons pour basculer entre différentes informations du tournoi */}
@@ -348,7 +380,9 @@ const TournoiSelec = ({ tournoi }) => {
                   <div className="col-8">
                     <div className="info-label">
                       <p>information:</p>
-                      <p className="wrap-text">{tournoi.information}</p>
+                      <p className="wrap-text-information">
+                        {tournoi.information}
+                      </p>
                     </div>
                   </div>
                   <div className="col-4">
@@ -365,13 +399,6 @@ const TournoiSelec = ({ tournoi }) => {
                       <span>{tournoi.prix}</span>
                     </div>
                   </div>
-                  {userData.id === tournoi.userId && (
-                    <div className="nj_submit_btn">
-                      <button onClick={() => setIsEditMode(true)}>
-                        Modifier le tournoi
-                      </button>
-                    </div>
-                  )}
                 </>
               )}
             </>
@@ -380,14 +407,23 @@ const TournoiSelec = ({ tournoi }) => {
         <div className="button-participants-tournoi">
           {button === "participants" && (
             <>
-              <h3>Participant:</h3>
+              <h3>Participants :</h3>
               <div className="participants-tournoi">
                 {participants.map((participant) => (
-                  <div key={participant.id}>
+                  <div key={participant.id} className="participant-item">
                     {/* Afficher le nom d'utilisateur du participant */}
                     <p className="participant-username">
                       {participant.username}
                     </p>
+                    {userData.id === tournoi.userId && (
+                      // Bouton de suppression pour le créateur du tournoi
+                      <button
+                        className="remove-participant-btn"
+                        onClick={() => removeParticipant(participant.id)}
+                      >
+                        Supprimer
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -411,7 +447,7 @@ const TournoiSelec = ({ tournoi }) => {
                 </>
               ) : (
                 <>
-                  <p style={{ width: "600px", textAlign: "right" }}>regles:</p>
+                  <p>regles:</p>
 
                   <p className="wrap-text-regles ">{tournoi.regle}</p>
                 </>
@@ -420,11 +456,13 @@ const TournoiSelec = ({ tournoi }) => {
           )}
         </div>
         <div className="brackets-tournoi">
+          <div className="brackets-tournoi">
           {button === "brackets" && (
             <>
               <MatchList tournoi={tournoi} />
             </>
           )}
+          </div>
           {button === "match" && (
             <div className="match-details">
               {userData.id ? (
@@ -440,7 +478,7 @@ const TournoiSelec = ({ tournoi }) => {
                         onClick={() => setSelectedMatch(match)}
                       >
                         <h4>Match round: {match.Round}</h4>
-                        <p>Statut: {match.winner}</p>
+                        <p>Statut: {match.winner} a gagné</p>
                       </div>
                     ))
                   )}
@@ -451,18 +489,18 @@ const TournoiSelec = ({ tournoi }) => {
 
               {/* Afficher les détails du match sélectionné */}
               {selectedMatch && (
-                <>
-                  <div className="selected-match-details">
-                    {/* Afficher les détails du match sélectionné */}
-                    <h3>Détails du match {selectedMatch.Round}</h3>
-                    <h4>user1: {selectedMatch.user1}</h4>
-                    <h4>user2: {selectedMatch.user2}</h4>
-                  </div>
-                </>
+                <MatchDetails
+                  selectedMatch={selectedMatch}
+                  onReportWinner={handleReportWinner} // Passez la fonction de gestion du vainqueur
+                />
+                
               )}
+                {errorMessage && <div className="error-message">{errorMessage}</div>}
             </div>
           )}
+         
         </div>
+       
       </div>
     </div>
   );

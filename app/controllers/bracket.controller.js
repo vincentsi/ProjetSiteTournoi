@@ -1,15 +1,17 @@
 const db = require("../models");
 const { Op, where } = require("sequelize");
-// const { round } = require("lodash");
-// const { match } = require("assert");
 const UserModel = db.user;
 const TournoisModel = db.listetournoi;
 const UserTournoiModel = db.user_tournoi;
 const MatchesModel = db.matches;
+const TournoiRolesModel = db.tournoiroles;
 exports.affParticipant = async (req, res) => {
   try {
-    const addAllUser = await UserTournoiModel.findAll({
-      where: { tournoiId: req.body.tournoiId }
+    const addAllUser = await TournoiRolesModel.findAll({
+      where: { 
+        tournoiId: req.body.tournoiId,
+        roleId: 4 // 4 = joueur
+      }
     });
 
 
@@ -46,25 +48,13 @@ exports.getUserMatches = async (req, res) => {
   }
 };
 
-exports.updateBracket = async (req, res) => {
-  //Ajoute un utilisateur dans le bracket
-  try {
-    addUser = await UserTournoiModel.create({
-      tournoiId: req.body.tournoiId,
-      userId: req.body.userId,
-    });
-    res.send(addUser);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({ message: err });
-  }
-};
+
 exports.updateBracketDel = async (req, res) => {
   //Suprime un utilisateur dans le bracket
   try {
-    delUser = await UserTournoiModel.destroy({
+    delUser = await TournoiRolesModel.destroy({
         where: {
-          [Op.and]: [{  tournoiId: req.body.tournoiId}, { userId: req.body.userId}],
+          [Op.and]: [{  tournoiId: req.body.tournoiId}, { userId: req.body.userId}, { roleId: 4}],
         },     
   })
     res.send("user bien supprimer");
@@ -76,10 +66,11 @@ exports.updateBracketDel = async (req, res) => {
 exports.searchOneUserBracket = async (req, res) => {
   //trouver l'utilisateur dans le bracket selon leur id
   try {
-    const userBracketfind = await UserTournoiModel.findOne({
+    const userBracketfind = await TournoiRolesModel.findOne({
       where: {
         tournoiId: req.body.tournoiId,
         userId: req.body.userId,
+        roleId:4,
       },
     });
 
@@ -105,7 +96,34 @@ function shuffle(array) {
   return array;
 }
 
+exports.reportWinner = async (req, res) => {
+  try {
+    // Récupérer le numéro de match à mettre à jour et le gagnant depuis la requête
+    const matchId = req.body.matchId; 
+    const winnerId = req.body.winnerId;
 
+    // Vérifier si le match existe
+    const matchToUpdate = await MatchesModel.findByPk(matchId);
+    console.log(matchToUpdate);
+    if (!matchToUpdate) {
+      return res.status(404).json({ message: "Match introuvable." });
+    }
+
+    // Vérifier si le match n'a pas déjà de gagnant
+    if (matchToUpdate.winner !== null) {
+      return res.status(400).json({ message: "Ce match a déjà un gagnant." });
+    }
+
+    // Mettre à jour le gagnant du match
+    matchToUpdate.winner = winnerId;
+    await matchToUpdate.save();
+
+    res.status(200).json({ message: "Gagnant signalé avec succès." });
+  } catch (error) {
+    console.error(`Erreur lors de la signalisation du gagnant : ${error.message}`);
+    res.status(500).json({ message: "Une erreur s'est produite lors de la signalisation du gagnant." });
+  }
+};
 exports.updateMatch = async (req, res) => {
   try {
     // Récupére le numéro de tournoi, le numéro de match à mettre à jour et le gagnant depuis la requête
@@ -156,35 +174,12 @@ exports.updateMatch = async (req, res) => {
     res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour du match." });
   }
 };
-
-// exports.fetchBracket = async (req, res) => {
-//   try {
-//     const { tournoiId } = req.body;
-//     const matches = await MatchesModel.findAll({
-//       where: { tournoiId: tournoiId },
-//       include: [{ model: UserModel, as: 'user1' }, { model: UserModel, as: 'user2' }],
-//     });
-
-//     const formattedMatches = matches.map((match) => ({
-//       id: match.id,
-//       user1: match.user1 ? match.user1.username : '',
-//       user2: match.user2 ? match.user2.username : '',
-//       winner: match.winner,
-//       round: match.Round,
-//     }));
-
-//     res.status(200).json({ matchList: formattedMatches });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// };
-
 exports.generateBracket = async (req, res) => {
   try {
-    const participants = await UserTournoiModel.findAll({
+    const participants = await TournoiRolesModel.findAll({
       where: {
         tournoiId: req.body.tournoiId,
+        roleId: 4
       },
     });
 
@@ -259,3 +254,26 @@ module.exports.getAllMatches = async (req, res) => {
     res.status(500).send({ message: err });
   }
 };
+
+// exports.deleteUserFromBracket = async (req, res) => {
+//   try {
+//     const { tournoiId, userId } = req.body;
+
+//     // Supprime l'utilisateur du bracket en fonction de l'ID du tournoi et de l'ID de l'utilisateur
+//     const result = await UserTournoiModel.destroy({
+//       where: {
+//         tournoiId: tournoiId,
+//         userId: userId,
+//       },
+//     });
+
+//     if (result === 1) {
+//       res.status(200).json({ message: "L'utilisateur a été supprimé du bracket avec succès." });
+//     } else {
+//       res.status(404).json({ message: "L'utilisateur n'a pas été trouvé dans le bracket." });
+//     }
+//   } catch (error) {
+//     console.error(`Erreur lors de la suppression de l'utilisateur du bracket : ${error.message}`);
+//     res.status(500).json({ message: "Une erreur s'est produite lors de la suppression de l'utilisateur du bracket." });
+//   }
+// };
