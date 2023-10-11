@@ -11,7 +11,7 @@ module.exports = function (app) {
     app.post("/app/jeu/jeucreation",
     // [authmiddleware.tokenAdmin], 
     controller.jeuCrée);
-    app.post("/app/jeu/jeuRank", controller.jeuRank);
+    app.post("/app/jeu/addjeurank", controller.addJeuRank);
     app.put("/app/jeu/:id", controller.updateJeu);
     app.delete("/app/jeu/:id", controller.deleteJeu);
     app.post("/app/jeu/upload", upload.single("file"), uploadController.uploadImgJeu);

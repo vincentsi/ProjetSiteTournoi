@@ -78,6 +78,19 @@ module.exports.updateRankUser = async (req, res) => {
   }
 };
 
+module.exports.infoRankUser = async (req, res) => {
+
+  try {
+    infoRank = await UserRankModel.findAll({
+      userId: req.body.userId,
+    });
+    res.send(infoRank);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err });
+  }
+};
+
 // exports.allAccess = (req, res) => {
 //   res.status(200).send("Public Content.");
 // };

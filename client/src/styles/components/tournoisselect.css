@@ -1,12 +1,32 @@
+
 .tounois-selected-container{
   display:flex;
   height: 100vh;
   flex-direction: column;
 
 }
-.tounois-selected-header{
+.tournois-selected-header{
   flex: 1;
+  /* flex-direction: column; */
+  /* background-color: red; */
 }
+.img_tournoiselec{
+  flex: 2
+ }
+.title_tournoiselec{
+  flex: 1 
+ }
+ .all_ts_submit_btn {
+  flex:1;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+}
+.ts_submit_btn {
+  margin-top: 5px;
+
+}
+ 
 .tounois-selected-bas{
   flex: 3;
 
@@ -31,9 +51,7 @@ cursor: pointer;
 
 .information-tournoi {
   display: flex;
-  /* flex-direction: column; */
   text-align: center;
-
   h3 {
     margin-bottom: 10px;
   }
@@ -50,13 +68,6 @@ cursor: pointer;
     font-weight: bold;
   }
 
-  .info-label {
-    /* text-align: center;
-    width: auto;
-    white-space: pre-line; */
-
-  }
-  
   .regles-tournoi{
     text-align: center;
     width: auto;
@@ -66,32 +77,40 @@ cursor: pointer;
    
 
   }
- 
+  .tounois-selected-header {
+    text-align: center; /* Centrer le contenu du header */
+    flex-direction: row;
+   
+  }
+
   .tournoi-pic-tournoi-selec {
-    max-width: 90%;
-
+    max-width: 100%;
+    /* min-width: 70%; */
+    height: 305px;
   }
  
 
-  .all_ts_submit_btn {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-  }
-  .ts_submit_btn {
-    margin-top: 5px;
-  }
+
 
   @media screen and (max-width: 768px) {
 
-  .tounois-selected-header {
+  .tournois-selected-header {
     text-align: center; /* Centrer le contenu du header */
+    flex-direction: column;
+    /* background-color: red; */
+  }
+  .all_ts_submit_btn {
+    flex-direction: row; 
+   
   }
 
-  .tounois-selected-header img {
-    max-width: 150%; /* Ajuster la largeur de l'image à la largeur de l'écran */
+  
+  .tournoi-pic-tournoi-selec {
+    max-width: 100%;
 
+    height: 170px;
   }
+
 
   .All-button {
     padding: 6px 16px; /* Réduisez la taille du bouton pour les écrans plus petits */

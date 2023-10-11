@@ -8,7 +8,8 @@ module.exports = function (app) {
   app.get("/app/user/:id", controller.userInfo);
   app.get("/app/all", controller.getAllUsers);
   app.post("/app/user/RankUser", controller.updateRankUser);
-  
+  app.post("/app/user/infoUser", controller.infoRankUser);
+
   app.post("/app/upload", upload.single("file"), uploadController.uploadProfil);
   app.put("/app/user/:id", controller.updateUser);
 };

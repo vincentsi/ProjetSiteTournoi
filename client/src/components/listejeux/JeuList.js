@@ -31,8 +31,9 @@ export function JeuList({ jeuList }) {
               subtitle={jeu.createdAt}
               description={jeu.description}
               picture={jeu.picture}
-              onClick={() => navigate("/jeu/" + jeu.id)} // Rediriger vers la page détaillée du jeu
-              onClickTrash={() => deleteJeu_(jeu)} // Supprimer le jeu
+              // Rediriger vers la page détaillée du jeu
+              onClick={() => navigate("/jeu/" + jeu.id)} 
+              onClickTrash={() => deleteJeu_(jeu)} 
             />
           </div>
         );

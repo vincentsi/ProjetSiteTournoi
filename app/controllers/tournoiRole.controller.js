@@ -47,6 +47,30 @@ module.exports.assignRoleTournoiAdminToUser = async (req, res) => {
     }
   };
   
+ 
+
+exports.getOrganisateurTournoi = async (req, res) => {
+    try {
+      const tournoiId = req.params.tournoiId; 
   
   
+      const organizerRole = await TournoiRolesModel.findOne({
+        where: {
+          tournoiId: tournoiId,
+          roleId: 6 
+        }
+      });
   
+      if (organizerRole) {
+       
+        const organizer = await UserModel.findByPk(organizerRole.userId);
+  
+        res.status(200).json(organizer);
+      } else {
+        res.status(404).json({ message: "Organisateur introuvable pour ce tournoi." });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Une erreur s'est produite lors de la récupération de l'organisateur du tournoi." });
+    }
+};

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { dateParser } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import UploadImg from "./UploadImg";
-import { updateBio } from "../../actions/user.actions";
+import { UserAPI, updateBio,updateRank } from "../../actions/user.actions";
 import { JeuAPI } from "../../actions/pjeu.actions";
-import { updateRank } from "../../actions/user.actions";
+
 const UpdateProfil = () => {
   const [bio, setBio] = useState("");
   const [updateForm, setUpdateForm] = useState(false);
@@ -12,6 +12,7 @@ const UpdateProfil = () => {
   const [gameList, setGameList] = useState([]); // État pour stocker la liste des jeux prédéfinis
   const [gameRanks, setGameRanks] = useState([]); // État pour stocker les rangs prédéfinis du jeu sélectionné
   const [selectedRank, setSelectedRank] = useState("");
+  const [userRanks, setUserRanks] = useState([]);
   const [error, setError] = useState(null);
   const userData = useSelector((state) => state.USER.user);
   const dispatch = useDispatch();
@@ -20,6 +21,8 @@ const UpdateProfil = () => {
   useEffect(() => {
     setGameList(jeuList);
   }, [jeuList]);
+
+ 
 
   const handleGameChange = async (selectedGameName) => {
     try {
@@ -37,13 +40,10 @@ const UpdateProfil = () => {
       
         // Effectue une requête au backend pour récupérer les rangs prédéfinis pour le jeu sélectionné
         const response = await JeuAPI.infoRank({ jeuId: gameId });
-    
         if (Array.isArray(response)) {
-          // Vérifie si la réponse est un tableau de noms de rangs
           setGameRanks(response); // Met à jour l'état avec le tableau de noms de rangs
           setSelectedRank(""); // Réinitialise le rang sélectionné car il pourrait ne pas être valide pour le nouveau jeu
         } else {
-          // Si la réponse de l'API indique une erreur, affichez le message d'erreur de l'API
           setError(response.message || "Une erreur s'est produite lors de la récupération des rangs du jeu.");
         }
       }
@@ -148,6 +148,15 @@ const UpdateProfil = () => {
           <button className="update-profil-btn" onClick={handleUpdateRank}>
             Valider modifications
           </button>
+        </div>
+        
+        <div className="user-ranks">
+          <h3>Rangs du joueur :</h3>
+          <ul>
+            {userRanks.map((rank) => (
+              <li key={rank.id}>{rank.name}</li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

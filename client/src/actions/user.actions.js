@@ -24,9 +24,7 @@ export const updateUserRankFailure = (error) => ({
 
 export class UserAPI {
   static async getUser (uid)  {
-  
     return (await axios.get(`${process.env.REACT_APP_API_URL}app/user/${uid}`)).data;
-     
 };
     static async updateRankUser(data) {
       console.log("Data to be uploaded:", data.userId);
@@ -48,6 +46,11 @@ export class UserAPI {
     throw error;
   }
 }
+
+static async infoUser (userId)  {
+  // console.log(user)
+  return (await axios.get(`${process.env.REACT_APP_API_URL}/app/user/infoUser`,userId)).data;
+};
 
 }
 export const updateRank = (userId, selectedRank) => {

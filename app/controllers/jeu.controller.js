@@ -112,7 +112,7 @@ module.exports.jeuInfo = (req, res) => {
       });
     };
 
-module.exports.jeuRank = async (req, res) => {
+module.exports.addJeuRank = async (req, res) => {
 
   try{
           RankModel.create(

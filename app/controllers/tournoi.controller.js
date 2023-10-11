@@ -31,49 +31,7 @@ module.exports.tournoiInfo = (req, res) => {
   };
   
 
-  exports.tournoiCrée = async (req, res) => {
-    try {
-      // Vérification si l'utilisateur a déjà créé un tournoi
-      const existingTournoi = await TournoiModel.findOne({
-        where: { userId: req.body.userId },
-      });
-  
-      if (existingTournoi) {
-        return res.status(200).json({ message: "User has already created a tournament." });
-      }
-  
-      // Création du tournoi et attribution à l'utilisateur
-      const TournoiCreate = await TournoiModel.create({
-        title: req.body.title,
-        information: req.body.information,
-        horaire: req.body.horaire,
-        nJoueur: req.body.nJoueur,
-        prix: req.body.prix,
-        contact: req.body.contact,
-        platforme: req.body.platforme,
-        regle: req.body.regle,
-        listejeuId: req.body.listejeuId,
-        userId: req.body.userId, // Attribution à l'utilisateur connecté
-      });
-  
-      res.send({
-        id: TournoiCreate.id,
-        title: req.body.title,
-        information: req.body.information,
-        horaire: req.body.horaire,
-        prix: req.body.prix,
-        platforme: req.body.platforme,
-        contact: req.body.contact,
-        regle: req.body.regle,
-        listejeuId: req.body.listejeuId,
-      });
-    } catch (err) {
-      console.log(err);
-      res.status(500).send({ message: err });
-    }
-  };
 
-  
   module.exports.updateTournament = async (req, res) => {
 
     try{
@@ -98,3 +56,58 @@ module.exports.tournoiInfo = (req, res) => {
             res.status(500).send({ message: err });
       }
     }
+    exports.tournoiCrée = async (req, res) => {
+      try {
+        const { userId } = req.body;
+    
+      
+        const existingAdminTournoi = await TournoiRolesModel.findOne({
+          where: {
+            userId: userId,
+            roleId: 6 //organisateurTournoi
+          },
+        });
+    
+        if (existingAdminTournoi) {
+          return res.status(200).json({ message: "User is already an admin for a tournament." });
+        }
+    
+    
+        const tournoi = await TournoiModel.create({
+          title: req.body.title,
+          information: req.body.information,
+          horaire: req.body.horaire,
+          nJoueur: req.body.nJoueur,
+          prix: req.body.prix,
+          contact: req.body.contact,
+          platforme: req.body.platforme,
+          regle: req.body.regle,
+          listejeuId: req.body.listejeuId,
+        });
+   
+        const tournoiRole = await TournoiRolesModel.create({
+          userId: userId,
+          tournoiId: tournoi.id, 
+          roleId: 6 , //organisateurTournoi
+        });
+    
+      
+        tournoiRole.tournoiId = tournoi.id;
+        await tournoiRole.save();
+    
+        res.send({
+          id: tournoi.id,
+          title: req.body.title,
+          information: req.body.information,
+          horaire: req.body.horaire,
+          prix: req.body.prix,
+          platforme: req.body.platforme,
+          contact: req.body.contact,
+          regle: req.body.regle,
+          listejeuId: req.body.listejeuId,
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(500).send({ message: err });
+      }
+    };

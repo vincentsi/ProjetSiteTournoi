@@ -1,62 +1,88 @@
-
-  .container {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-  
-  /* Styles du header */
-  .header {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 2rem 0;
-  }
-  
-  .header h1 {
-    font-size: 2rem;
-  }
-  
-  /* Styles des fonctionnalités */
-  .features {
-    display: flex;
-    flex-wrap: wrap; /* Passage à la ligne pour les petits écrans */
-    justify-content: space-around;
-    margin: 2rem 0;
-  }
-  
-  .feature {
-    flex: 1; /* Largeur égale pour chaque fonctionnalité */
-    text-align: center;
-    padding: 1rem;
-    background-color: #fff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    margin: 1rem; /* Espacement entre les fonctionnalités */
-    width: 30%;
-      
-  }
-  
-  .feature img {
-    max-width: 90%;
-    height: auto;
-    margin-bottom: 1rem;
-  }
-  .background-image {
-  background-size: cover;
-  background-position: center;
+body, html {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.background-image {
+  /* position: absolute; */
+  top: 150;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+}
+/* Styles du header */
+.header {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 2rem 0;
   
 }
-  /* Autres styles (témoignage, bouton d'appel à l'action, footer) */
-  
-  /* Media queries pour la mise en page responsive */
-  @media (max-width: 768px) {
-    .features {
-      flex-direction: column; /* Affichage en colonne pour les petits écrans */
-      align-items: center;
-    }
+
+/* Styles des fonctionnalités */
+.features {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap; /* Passage à la ligne pour les petits écrans */
+  justify-content: space-around;
+  margin: 2rem 0;
+}
+
+.feature1_home,
+.feature2_home,
+.feature3_home {
+  flex: 1; /* Largeur égale pour chaque fonctionnalité */
+  text-align: center;
+  display: flex;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.feature1_home img,
+.feature2_home img,
+.feature3_home img {
+  flex:1;
+  max-width: 60%; /* La largeur maximale de l'image */
+ min-height: 400px; /* Ajuster automatiquement la hauteur en fonction de la largeur */
+ max-height: 550px;
+}
+.texte_row{
+  flex-direction: row;
+
+}
+.feature1_home h2,
+.feature2_home h2,
+.feature3_home h2 {
+  flex: 1; /* Le texte occupe tout l'espace disponible à droite de l'image */
+
+  padding: 1rem;
+}
+
+
+/* Nouvelle Media Query pour les écrans plus petits */
+@media (max-width: 768px) {
+  .feature1_home,
+  .feature2_home,
+  .feature3_home {
+    flex-direction: column;
+    text-align: center;
   }
 
- 
-  
-  
+  .feature1_home img,
+  .feature2_home img,
+  .feature3_home img {
+    max-width:100%; /* Réinitialisez la largeur maximale de l'image */
+    min-height: 50px;
+  }
+}

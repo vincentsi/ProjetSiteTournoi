@@ -5,12 +5,13 @@ const TournoisModel = db.listetournoi;
 const UserTournoiModel = db.user_tournoi;
 const MatchesModel = db.matches;
 const TournoiRolesModel = db.tournoiroles;
+const JOUEUR_ROLE_ID = 4;
 exports.affParticipant = async (req, res) => {
   try {
     const addAllUser = await TournoiRolesModel.findAll({
       where: { 
         tournoiId: req.body.tournoiId,
-        roleId: 4 // 4 = joueur
+        roleId: JOUEUR_ROLE_ID 
       }
     });
 
@@ -127,41 +128,38 @@ exports.reportWinner = async (req, res) => {
 exports.updateMatch = async (req, res) => {
   try {
     // Récupére le numéro de tournoi, le numéro de match à mettre à jour et le gagnant depuis la requête
-    const tournoiId = req.body.tournoiId;
     const matchId = req.body.matchId; 
     const winnerId = req.body.winnerId;
 
     // Vérifie si le match existe
     const matchToUpdate = await MatchesModel.findByPk(matchId);
-    console.log(matchToUpdate.numMatch)
+   
     if (!matchToUpdate) {
       return res.status(404).json({ message: "Match introuvable." });
     }
-
-    // Vérifie si le match n'a pas déjà de gagnant
-    if (matchToUpdate.winner !== null) {
-      return res.status(400).json({ message: "Ce match a déjà un gagnant." });
-    }
-    console.log(matchToUpdate.numMatch)
-    console.log(matchToUpdate.Round + 1)
+    const ancienWinner = matchToUpdate.winner
     // Met à jour le gagnant du match
     matchToUpdate.winner = winnerId;
     await matchToUpdate.save();
 
+
     // Vérifie s'il y a un match suivant pour ce tour
     const nextMatch = await MatchesModel.findOne({
       where: {
-        tournoiId: tournoiId,
-        numMatch: Math.ceil(matchToUpdate.numMatch / 2), 
+        numMatch: Math.ceil(matchToUpdate.numMatch / 2), // matchToUpdate.numMatch a: 1 = 1| 2= 1 |3 = 2 | 4 = 2..
         Round: matchToUpdate.Round + 1, 
       },
     });
-
+    if (!nextMatch) {
+      // Aucun match suivant trouvé, renvoyer une réponse d'erreur
+      return res.status(404).json({ message: "Aucun match suivant trouvé. Le tournoi est terminé" });
+    }
+    console.log(nextMatch.user1)
     if (nextMatch) {
       // Mettez à jour le match suivant avec le gagnant
-      if (!nextMatch.user1) {
+      if (!nextMatch.user1 ||nextMatch.user1 === ancienWinner ) {
         nextMatch.user1 = winnerId;
-      } else if (!nextMatch.user2) {
+      } else if (!nextMatch.user2 || nextMatch.user1 !== matchToUpdate.winner) {
         nextMatch.user2 = winnerId;
       }
 
@@ -179,7 +177,7 @@ exports.generateBracket = async (req, res) => {
     const participants = await TournoiRolesModel.findAll({
       where: {
         tournoiId: req.body.tournoiId,
-        roleId: 4
+        roleId: JOUEUR_ROLE_ID,
       },
     });
 
@@ -187,25 +185,26 @@ exports.generateBracket = async (req, res) => {
       throw new Error('La liste des participants est invalide.');
     }
 
-    const numberOfRounds = Math.ceil(Math.log2(participants.length));
-    const shuffledPlayers = shuffle(participants);
-    const tournoiId = shuffledPlayers[0].tournoiId;
+    const numberOfParticipants = participants.length;
+   // Calculez le nombre de rounds nécessaires (exemple numberOfParticipants=8  2x2x2=8 donc number of rounds =3 )
+    const numberOfRounds = Math.ceil(Math.log2(numberOfParticipants));
+
+    // Vérifie que le nombre de participants est une puissance de 2
+    if (numberOfParticipants !== Math.pow(2, numberOfRounds)) {
+      throw new Error('Le nombre de participants doit être une puissance de 2.');
+    }
+
+    const shuffledAllPlayers = shuffle(participants);
+    const tournoiId = shuffledAllPlayers[0].tournoiId;
 
     for (let round = 1; round <= numberOfRounds; round++) {
-      console.log(`Round ${round}`);
-      
-      // Créez une copie du tableau shuffledPlayers au début de chaque tour
-      const currentRoundPlayers = [...shuffledPlayers];
-      console.log(`Nombre de participants : ${currentRoundPlayers.length}`);
-    
-      const numberOfMatches = currentRoundPlayers.length / Math.pow(2, round);
-      console.log(`Nombre de matches dans ce round : ${numberOfMatches}`);
-    
+      // utilise le nombre de joueur total divisé par 2^le round pour le nombre de match du round
+      const numberOfMatches = numberOfParticipants / Math.pow(2, round);
+
       for (let match = 1; match <= numberOfMatches; match++) {
-        const player1 = currentRoundPlayers.shift();
-        const player2 = currentRoundPlayers.shift();
-    
-        if (round === 1 ) {
+        if (round === 1) {
+          const player1 = shuffledAllPlayers.shift();
+          const player2 = shuffledAllPlayers.shift();
           // Si les deux joueurs sont définis, créez le match avec les joueurs réels
           await MatchesModel.create({
             numMatch: match,
@@ -216,7 +215,7 @@ exports.generateBracket = async (req, res) => {
             tournoiId: tournoiId,
           });
         } else {
-           await MatchesModel.create({
+          await MatchesModel.create({
             numMatch: match,
             Round: round,
             user1: null,
@@ -225,22 +224,24 @@ exports.generateBracket = async (req, res) => {
             tournoiId: tournoiId,
           });
         }
-      }  
+      }
     }
+
     await TournoisModel.update(
-      { status: "lancé" }, // Mettez à jour le statut ici
+      { status: 'lancé' }, // Mettez à jour le statut ici
       {
         where: {
           id: tournoiId,
         },
       }
     );
-    res.status(200).json("tournois crée");
+
+    res.status(200).json('tournois créé');
   } catch (error) {
     console.error(`Erreur lors de la génération du bracket : ${error.message}`);
-    return null;
+    res.status(500).json({ error: error.message }); // Renvoyer un code d'erreur 500 avec le message d'erreur
   }
-}
+};
 
 
 module.exports.getAllMatches = async (req, res) => {

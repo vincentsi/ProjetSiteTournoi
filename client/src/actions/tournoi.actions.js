@@ -20,7 +20,14 @@ export class TournoiAPI {
     console.log("Data to be uploaded:", data);
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`, data)).data;
   }
-
+  static async infoOrga(tournoi) {
+  
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/infoOrga/${tournoi.id}`)).data;
+  }
+  // static async infoOrga(tournoi) {
+  //   return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/infoOrga`, tournoi)).data;
+   
+  // }
   static formatId(tournoi) {
     return {
       ...tournoi,

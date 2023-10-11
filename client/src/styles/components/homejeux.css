@@ -1,8 +1,12 @@
+.jp_top{
+  align-items: center;
+ }
 .jeux-container{
     cursor: pointer;
   
     
 }
+
 .jeu_container{
     width: 350px;
     margin: 15px;
@@ -41,3 +45,4 @@
     overflow: hidden;
     white-space: nowrap;
   }
+ 

@@ -4,12 +4,6 @@ import { useState } from "react";
 export function HomeJeux({ title, picture, subtitle, description, onClickTrash, onClick }) {
   
   const [isCardHovered, setIsCardHovered] = useState(false);
-  // const [isTrashHovered, setIsTrashHovered] = useState(false);
-  
-  // function onClickTrash_(e) {
-  //   onClickTrash();
-  //   e.stopPropagation();
-  // }
   return (
     
     <div

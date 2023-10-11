@@ -6,7 +6,7 @@ import UpdateProfil from "../components/profil/UpdateProfil";
 const Profil = () => {
   const uid  = React.useContext(UidContext);
   return (
-    <div className="profil-page">
+    <div className="profil-page" style={{ backgroundImage: `url(./../img/homeImg/fond.jpeg)` }}>
       {uid ?(
         <UpdateProfil />
       ) : (

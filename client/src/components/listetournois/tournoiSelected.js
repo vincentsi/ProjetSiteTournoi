@@ -24,6 +24,7 @@ const TournoiSelec = ({ tournoi }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedTournoi, setEditedTournoi] = useState({ ...tournoi });
+  const [isOrganizer, setIsOrganizer] = useState(false);
   const dispatch = useDispatch();
   const handleInputChange = (e, field) => {
     const newValue = e.target.value;
@@ -33,6 +34,30 @@ const TournoiSelec = ({ tournoi }) => {
       [field]: newValue,
     }));
   };
+
+async function checkUserRole(userId, tournoiId) {
+  try {
+    const response = await TournoiAPI.infoOrga({ id: tournoiId });
+    const organizerUserId = response.id; // Récupère le userId de l'organisateur
+    
+    // Compare le userId de l'organisateur avec le userId de l'utilisateur connecté
+    return organizerUserId === userId;
+  } catch (error) {
+    console.error('Erreur lors de la vérification du rôle de l\'utilisateur.', error);
+    return false;
+  }
+}
+
+  useEffect(() => {
+    if (userData.id) {
+      async function fetchData() {
+        const isOrganizer = await checkUserRole(userData.id, tournoi.id);
+        setIsOrganizer(isOrganizer);
+      }
+  
+      fetchData();
+    }
+  }, [userData.id, tournoi.id]);
 
   const saveChanges = async () => {
     try {
@@ -163,8 +188,7 @@ const TournoiSelec = ({ tournoi }) => {
   }
   async function removeParticipant(participantId) {
     try {
-      console.log(userData.id, tournoi.userId, participantId);
-      if (userData.id === tournoi.userId) {
+      if (isOrganizer) {
         await BracketAPI.DelOneUserBracket({
           tournoiId: tournoi.id,
           userId: participantId,
@@ -199,8 +223,8 @@ const TournoiSelec = ({ tournoi }) => {
   return (
     <div className="tounois-selected-container">
       {/* Header du composant qui affiche l'image du tournoi, le titre et le bouton d'inscription/désinscription */}
-      <div className="row tounois-selected-header">
-        <div className="col-4">
+      <div className="row tournois-selected-header">
+        <div className="img_tournoiselec">
           <img
             src={tournoi.picture}
             alt="tournoi-pic-tournoi-selec"
@@ -213,7 +237,7 @@ const TournoiSelec = ({ tournoi }) => {
             />
           )}
         </div>
-        <div className="col-4">
+        <div className="title_tournoiselec">
           {isEditMode ? (
             <>
               <label htmlFor="title">title:</label>
@@ -229,7 +253,7 @@ const TournoiSelec = ({ tournoi }) => {
           )}
         </div>
 
-        <div className="col-4 all_ts_submit_btn">
+        <div className="all_ts_submit_btn">
           {tournoi.status !== "lancé" ? (
             <>
               {/* Afficher le bouton d'inscription/désinscription en fonction du statut d'inscription de l'utilisateur */}
@@ -249,7 +273,7 @@ const TournoiSelec = ({ tournoi }) => {
               {/* </>  ) : (<div className="test">
                   test
               </div> )} */}
-              {userData.id === tournoi.userId && !isEditMode && (
+              {isOrganizer && !isEditMode && (
                 <div className="ts_submit_btn">
                   <ButtonPrimary onClick={() => launchTournament()}>
                     Lancer le tournoi
@@ -269,7 +293,7 @@ const TournoiSelec = ({ tournoi }) => {
                 </>
               ) : (
                 <>
-                  {userData.id === tournoi.userId && (
+                  {isOrganizer && (
                     <div className="ts_submit_btn">
                       <ButtonPrimary onClick={() => setIsEditMode(!isEditMode)}>
                         {"Modifier le tournoi"}
@@ -415,7 +439,7 @@ const TournoiSelec = ({ tournoi }) => {
                     <p className="participant-username">
                       {participant.username}
                     </p>
-                    {userData.id === tournoi.userId && (
+                    {isOrganizer && (
                       // Bouton de suppression pour le créateur du tournoi
                       <button
                         className="remove-participant-btn"
