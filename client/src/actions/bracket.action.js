@@ -32,6 +32,14 @@ export class BracketAPI {
      
     })).data;
   }
+  static async updateMatch (matchId,winnerId) {
+    console.log(matchId,winnerId)
+    return (await axios.put(`${process.env.REACT_APP_API_URL}app/bracket/updateMatch`,{
+      matchId: matchId,
+      winnerId: winnerId,
+     
+    })).data;
+  }
   static formatId(bracket) {
     return {
       ...bracket,

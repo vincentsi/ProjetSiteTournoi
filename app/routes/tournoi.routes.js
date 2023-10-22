@@ -10,6 +10,9 @@ module.exports = function (app) {
     app.put("/app/tournoi/:id", controller.updateTournament);
     app.post("/app/tournoi/tournoicreation", controller.tournoiCrée);
     app.post("/app/tournoi/infoOrga/:tournoiId", controllerRole.getOrganisateurTournoi);
+    app.post("/app/tournoi/infoAdmin/:tournoiId", controllerRole.getAdminsTournoi);
+    app.post("/app/tournoi/newAdmin", controllerRole.addAdminToTournament);    
+
     
     app.post("/app/tournoi", upload.single("file"), uploadController.uploadImgTournoi);
 

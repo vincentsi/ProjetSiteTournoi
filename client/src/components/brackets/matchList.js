@@ -1,49 +1,38 @@
-
-// import { useNavigate} from "react-router-dom"
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { BracketAPI } from "../../actions/bracket.action";
-import { useDispatch,useSelector } from "react-redux";
-import BracketGeneration from "./bracketGeneration";
 import { setMatchList } from "../../store/match/match.reducer";
-import { useEffect } from "react";
+import TournamentTree from "./bracketGeneration"; // Importez le composant TournamentTree ici
 
-export function MatchList({tournoi}) {
-//   const tournoi =  useSelector((store) =>  store.TOURNOI.tournoiList);
+export function MatchList({ tournoi }) {
   const dispatch = useDispatch();
 
-async function matchC() {
-    const matchList = await BracketAPI.affBracket({tournoiId: tournoi.id});
-  
+  async function matchC() {
+    const matchList = await BracketAPI.affBracket({ tournoiId: tournoi.id });
     dispatch(setMatchList(matchList));
   }
-  useEffect(()=>{
+
+  useEffect(() => {
     matchC();
-  },[])
+  }, []);
 
-  
-  const matchList =  useSelector((store) =>  store.MATCH.matchList);
+  const matchList = useSelector((store) => store.MATCH.matchList);
+console.log(matchList)
 
+const organizedMatches = matchList.reduce((result, match) => {
+  const round = match.Round;
+  if (!result[round]) {
+    result[round] = [];
+  }
+  result[round].push(match);
+  return result;
+}, {});
 
   return (
-    <div className="row justify-content-center">
-      {matchList?.map((match) => {
-        return (
-          <div key={match.id} className="match_container">
-           {/* <div key={match.id} onClick={() => onMatchClick(match.id)}>
-          <p>Nom du match: {match.name}</p> */}
-            <BracketGeneration
-              matches={match}
-              user1={match.user1}
-              user2={match.user2}
-              winner={match.winner}
-              round={match.Round}
-              
-            //   tournoiId={match.tournoiId}
-            //   onClick={()=> navigate("/match/"+ match.id)}
-              
-            />
-          </div>
-        );
-      })}
+    <div className="tournament-tree">
+    
+      {/* Intégrez le composant TournamentTree ici */}
+      <TournamentTree round={organizedMatches} />
     </div>
   );
 }

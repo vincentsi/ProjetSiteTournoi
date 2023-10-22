@@ -130,7 +130,7 @@ exports.updateMatch = async (req, res) => {
     // Récupére le numéro de tournoi, le numéro de match à mettre à jour et le gagnant depuis la requête
     const matchId = req.body.matchId; 
     const winnerId = req.body.winnerId;
-
+    
     // Vérifie si le match existe
     const matchToUpdate = await MatchesModel.findByPk(matchId);
    
@@ -205,12 +205,15 @@ exports.generateBracket = async (req, res) => {
         if (round === 1) {
           const player1 = shuffledAllPlayers.shift();
           const player2 = shuffledAllPlayers.shift();
+          const user1Data = await UserModel.findByPk(player1.userId);
+          const user2Data = await UserModel.findByPk(player2.userId);
+
           // Si les deux joueurs sont définis, créez le match avec les joueurs réels
           await MatchesModel.create({
             numMatch: match,
             Round: round,
-            user1: player1.userId,
-            user2: player2.userId,
+            user1: user1Data.username,
+            user2: user2Data.username,
             winner: null,
             tournoiId: tournoiId,
           });

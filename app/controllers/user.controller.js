@@ -34,6 +34,33 @@ module.exports.userInfo = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+module.exports.userInfoByUsername = (req, res) => {
+  const username = req.body.username; 
+
+  UserModel.findOne({
+    where: {
+      username: username, 
+    },
+  })
+    .then((user) => {
+      if (!user) {
+        return res.status(200).send({ errors: "Utilisateur non trouvé." });
+      }
+
+      // Renvoyez les informations de l'utilisateur
+      res.status(200).send({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        picture: user.picture,
+        bio: user.bio,
+        createdAt: user.createdAt,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+};
 
 module.exports.updateUser = async (req, res) => {
   try {

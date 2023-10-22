@@ -122,7 +122,9 @@ const Jeu = () => {
           <TournoiNew onSubmit={createTournoi} />
         )}
       {/* </div> */}
-      <div className="mb-5 background-image" style={{ backgroundImage: `url(./../img/homeImg/fond.jpeg)` }}>
+      <div className="mb-5 background-image" 
+      // style={{ backgroundImage: `url(./../img/homeImg/fond.jpeg)` }}
+      >
         {/* Afficher la liste des tournois associés au jeu */}
         {jeu && !isEditable && showCreateTournoi && (
           <TournoiList tournoiList={filteredList} />

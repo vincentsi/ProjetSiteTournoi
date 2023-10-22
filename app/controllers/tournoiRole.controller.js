@@ -74,3 +74,77 @@ exports.getOrganisateurTournoi = async (req, res) => {
       res.status(500).json({ message: "Une erreur s'est produite lors de la récupération de l'organisateur du tournoi." });
     }
 };
+
+module.exports.addAdminToTournament = async (req, res) => {
+  try {
+    const tournoiId = req.body.tournoiId;
+    const username = req.body.username;
+
+    // Recherchez l'utilisateur par son nom d'utilisateur
+    const user = await UserModel.findOne({
+      where: {
+        username: username,
+      },
+    });
+
+    if (!user) {
+      // L'utilisateur n'a pas été trouvé, renvoyez une réponse indiquant que l'utilisateur n'existe pas
+      return res.status(400).send({ message: "L'utilisateur n'existe pas." });
+    }
+
+    // Vérifiez si l'utilisateur est déjà administrateur du tournoi
+    const existingAdmin = await TournoiRolesModel.findOne({
+      where: {
+        userId: user.id,
+        tournoiId: tournoiId,
+        roleId: 5, // Assurez-vous que ceci correspond au rôle d'administrateur
+      },
+    });
+
+    if (existingAdmin) {
+      // L'utilisateur est déjà administrateur, renvoyez une réponse indiquant qu'il est déjà administrateur
+      return res.status(400).send({ message: "L'utilisateur est déjà administrateur du tournoi." });
+    }
+
+    // L'utilisateur n'est pas encore administrateur, ajoutez-le en tant qu'administrateur du tournoi
+    await TournoiRolesModel.create({
+      userId: user.id, // Utilisation de l'ID de l'utilisateur
+      tournoiId: tournoiId,
+      roleId: 5,
+    });
+
+    res.status(200).send({ message: "L'utilisateur a été ajouté comme administrateur du tournoi." });
+  } catch (err) {
+    res.status(500).send({ message: "Une erreur s'est produite lors de l'ajout de l'administrateur." });
+  }
+};
+
+exports.getAdminsTournoi = async (req, res) => {
+  try {
+    const tournoiId = req.params.tournoiId;
+
+    const adminRoles = await TournoiRolesModel.findAll({
+      where: {
+        tournoiId: tournoiId,
+        roleId: 5, // Supposons que le rôle d'administrateur ait l'ID 5
+      }
+    });
+
+    if (adminRoles.length > 0) {
+      const adminUserIds = adminRoles.map((adminRole) => adminRole.userId);
+
+      const admins = await UserModel.findAll({
+        where: {
+          id: adminUserIds
+        }
+      });
+
+      res.status(200).json(admins);
+    } else {
+      res.status(404).json({ message: "Aucun administrateur trouvé pour ce tournoi." });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des administrateurs du tournoi." });
+  }
+};

@@ -17,12 +17,20 @@ export class TournoiAPI {
    
   }
   static async updateImgTournoi(tournoi, data) {
-    console.log("Data to be uploaded:", data);
+    // console.log("Data to be uploaded:", data);
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`, data)).data;
+  }
+  static async addAdmin(adminData) {
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/newAdmin`, adminData)).data;
+   
   }
   static async infoOrga(tournoi) {
   
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/infoOrga/${tournoi.id}`)).data;
+  }
+  static async getTournamentAdmins(tournoi) {
+  
+    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/infoAdmin/${tournoi.id}`)).data;
   }
   // static async infoOrga(tournoi) {
   //   return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/infoOrga`, tournoi)).data;

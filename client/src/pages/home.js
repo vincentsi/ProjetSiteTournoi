@@ -3,8 +3,8 @@ import React from "react";
 const home = () => {
   return (
     <div
-      className="background-image"
-      style={{ backgroundImage: `url(./img/homeImg/fond.jpeg)` }}
+      // className="background-image"
+      // style={{ backgroundImage: `url(./img/homeImg/fond.jpeg)` }}
     >
       <div className="container">
         <header className="header">

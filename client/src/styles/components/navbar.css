@@ -1,6 +1,6 @@
 /* Style de base de la navbar */
 .navbar {
-    background-color: rgb(55, 31, 31);
+    background-color: rgb(10, 9, 9);
     padding: 20px; /* Réduit la taille de la barre de navigation pour les petits écrans */
     display: flex;
     align-items: center;
@@ -10,7 +10,7 @@
 }
 
 .navbar a {
-    color: red;
+    color: rgb(9, 159, 218)
 }
 
 .navbar .logo {

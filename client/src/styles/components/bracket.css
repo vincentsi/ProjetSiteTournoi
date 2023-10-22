@@ -1,71 +1,54 @@
-/* #tree{
-    display:table;
-    width:60%;
-    vertical-align:middle;
-  } */
-  /* .affiche_match_containers{
-      display: absolute;
-    
-    /* flex-direction: row;  */
-    /* background-color: rgb(225, 130, 130)  */
-    
-    
-  /* }  */
-  .affiche_match{
-    display: flex;
-    flex-direction: row; 
+/* Styles pour la case du joueur en vert */
+.match.winner {
+  background-color: rgb(15, 173, 15); /* ou la couleur que vous préférez */
+}
+
+/* Styles pour la case du joueur en rouge */
+.match.loser {
+  background-color: rgb(226, 132, 132); /* ou la couleur que vous préférez */
+}
+
+/* Autres styles CSS pour votre arbre de tournoi... */
+.tournament-tree {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.round.round-2 .match {
+  margin-bottom: 20px; /* Ajustez la valeur selon vos besoins */
+}
+.round {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #000;
+  padding: 10px;
+  background-color: grey;
+  min-width: 150px;
+  text-align: center;
+}
+
+.match p {
+  margin: 0;
+}
+
+
+@media (max-width: 620px) {
  
+  .match {
+ 
+    min-width: 60px;
    
- }
-  .affiche_round{
-    flex: 1;
-  
   }
-  .traitnextmatch{
-    position: absolute;
-    transform: rotate(7deg);
-    border-bottom: 2px solid black;
-    margin-top: 25px;
-    padding-left: 20px;
-    margin-left: 88px;
-    }
-  .trait{
-    border-bottom: 2px solid black;
-    margin-bottom: 10px;
-  
+  .round {
+    margin: 10px;
   }
-  .round1{
-    cursor: pointer;
-    position: relative;
-    width:33%;
-    top : 50px;
-    margin-left: 30px;
-    /* padding-left: 10px; */
-    /* border-radius: 10px; */
-    background-color: rgb(250, 247, 247);
-  }
-  .round2{
-    cursor: pointer;
-    position: relative;
-    width:50%;
-    margin-bottom: 107px;
-    /* height: 50%; */
-    top: -250px;
-    left: -50px;
-    background-color: rgb(255, 255, 255);
-  }
-  .round3{
-    cursor: pointer;
-    position: relative;
-    width:50%;
-    top: -515px;
-    left: -70px;
-    background-color: rgb(254, 254, 254);
-  }
-  .round4{
-    cursor: pointer;
-    position: absolute;
-    width:50%;
-    top: 500px;
-    background-color: rgb(255, 255, 255);
-  }
+}

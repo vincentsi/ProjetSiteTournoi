@@ -8,6 +8,8 @@ import { TournoiAPI } from "../../actions/tournoi.actions";
 import { updateTournoi } from "../../store/tournoi/tournois.reducer";
 import UploadImgTournois from "./UploadImgTournois";
 import MatchDetails from "../brackets/matchDetail";
+import ManageMatches from "../brackets/manageMatchAdmin";
+import AddAdmin from "./AddAdmin";
 
 // Composant TournoiSelec qui affiche les détails d'un tournoi et permet à l'utilisateur de s'inscrire ou de se désinscrire
 const TournoiSelec = ({ tournoi }) => {
@@ -35,18 +37,26 @@ const TournoiSelec = ({ tournoi }) => {
     }));
   };
 
-async function checkUserRole(userId, tournoiId) {
-  try {
-    const response = await TournoiAPI.infoOrga({ id: tournoiId });
-    const organizerUserId = response.id; // Récupère le userId de l'organisateur
-    
-    // Compare le userId de l'organisateur avec le userId de l'utilisateur connecté
-    return organizerUserId === userId;
-  } catch (error) {
-    console.error('Erreur lors de la vérification du rôle de l\'utilisateur.', error);
-    return false;
+  async function checkUserRole(userId, tournoiId) {
+    try {
+      const response = await TournoiAPI.infoOrga({ id: tournoiId });
+      const organizerUserId = response.id; // Récupère le userId de l'organisateur
+
+      // Récupère la liste des administrateurs de tournoi
+      const adminsResponse = await TournoiAPI.getTournamentAdmins({ id: tournoiId });
+
+      const adminUserIds = adminsResponse.map((admin) => admin.id);
+
+      // Compare le userId de l'organisateur avec le userId de l'utilisateur connecté
+      return organizerUserId === userId || adminUserIds.includes(userId);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la vérification du rôle de l'utilisateur.",
+        error
+      );
+      return false;
+    }
   }
-}
 
   useEffect(() => {
     if (userData.id) {
@@ -54,7 +64,7 @@ async function checkUserRole(userId, tournoiId) {
         const isOrganizer = await checkUserRole(userData.id, tournoi.id);
         setIsOrganizer(isOrganizer);
       }
-  
+
       fetchData();
     }
   }, [userData.id, tournoi.id]);
@@ -101,7 +111,7 @@ async function checkUserRole(userId, tournoiId) {
 
   // Utiliser useEffect pour charger les matchs de l'utilisateur lorsque le bouton "match" est sélectionné
   useEffect(() => {
-    if (button === "match" && userData.id) {
+    if (button === "match" && userData.username) {
       loadUserMatches();
     }
   }, [button, userData]);
@@ -123,7 +133,7 @@ async function checkUserRole(userId, tournoiId) {
     try {
       const response = await BracketAPI.getUserMatches({
         tournoiId: tournoi.id,
-        userId: userData.id,
+        userId: userData.username,
       });
       setUserMatches(response);
     } catch (error) {
@@ -203,7 +213,7 @@ async function checkUserRole(userId, tournoiId) {
   }
   async function handleReportWinner(matchId, winnerId) {
     try {
-      console.log(matchId,winnerId)
+      console.log(matchId, winnerId);
       const updatedMatch = await BracketAPI.reportWinner(matchId, winnerId);
 
       // Mettez à jour l'état local pour refléter le vainqueur signalé
@@ -214,12 +224,13 @@ async function checkUserRole(userId, tournoiId) {
 
       alert(`Le vainqueur du match a été signalé avec succès : ${winnerId}`);
     } catch (error) {
-
       console.error(error);
-      setErrorMessage(`Une erreur s'est produite lors de la signalisation du vainqueur :  ${error.response.data.message}`);
+      setErrorMessage(
+        `Une erreur s'est produite lors de la signalisation du vainqueur :  ${error.response.data.message}`
+      );
     }
   }
- 
+
   return (
     <div className="tounois-selected-container">
       {/* Header du composant qui affiche l'image du tournoi, le titre et le bouton d'inscription/désinscription */}
@@ -256,29 +267,25 @@ async function checkUserRole(userId, tournoiId) {
         <div className="all_ts_submit_btn">
           {tournoi.status !== "lancé" ? (
             <>
-              {/* Afficher le bouton d'inscription/désinscription en fonction du statut d'inscription de l'utilisateur */}
-              {userInscrit === true ? (
-                <div className="ts_submit_btn">
-                  <ButtonPrimary onClick={handleInscription}>
-                    Se désinscrire
-                  </ButtonPrimary>
-                </div>
-              ) : (
-                <div className="ts_submit_btn">
-                  <ButtonPrimary onClick={handleInscription}>
-                    S'inscrire
-                  </ButtonPrimary>
-                </div>
-              )}
-              {/* </>  ) : (<div className="test">
-                  test
-              </div> )} */}
               {isOrganizer && !isEditMode && (
-                <div className="ts_submit_btn">
-                  <ButtonPrimary onClick={() => launchTournament()}>
-                    Lancer le tournoi
-                  </ButtonPrimary>
+                <>
+                  {userInscrit ? ( // Si l'utilisateur est inscrit, afficher le bouton "Se désinscrire"
+                    <ButtonPrimary onClick={handleInscription}>
+                      Se désinscrire
+                    </ButtonPrimary>
+                  ) : (
+                    // Sinon, afficher le bouton "S'inscrire"
+                    <ButtonPrimary onClick={handleInscription}>
+                      S'inscrire
+                    </ButtonPrimary>
+                  )}
+                  <div className="ts_submit_btn">
+                <ButtonPrimary onClick={() => launchTournament()}>
+                  Lancer le tournoi
+                </ButtonPrimary>
                 </div>
+                </>
+                
               )}
               {isEditMode ? (
                 <>
@@ -289,6 +296,9 @@ async function checkUserRole(userId, tournoiId) {
                     <button onClick={() => setIsEditMode(false)}>
                       Annuler
                     </button>
+                  </div>
+                  <div className="add-admin-section">
+                    <AddAdmin tournoiId={tournoi.id} />
                   </div>
                 </>
               ) : (
@@ -345,6 +355,9 @@ async function checkUserRole(userId, tournoiId) {
             <option value="tournament">brackets/match</option>
             <option value="brackets">Bracket</option>
             <option value="match">Match</option>
+            {(isOrganizer || (userData.isAdmin && userData.isTournamentAdmin)) && (
+          <option value="all-matches">Tous les matchs</option>
+          )}
           </select>
         </div>
       </div>
@@ -402,7 +415,7 @@ async function checkUserRole(userId, tournoiId) {
               ) : (
                 <>
                   <div className="col-8">
-                    <div className="info-label">
+                    <div className="info-label-ts">
                       <p>information:</p>
                       <p className="wrap-text-information">
                         {tournoi.information}
@@ -410,15 +423,15 @@ async function checkUserRole(userId, tournoiId) {
                     </div>
                   </div>
                   <div className="col-4">
-                    <div className="info-label">
+                    <div className="info-label-ts">
                       <p>Horaire:</p>
                       <span>{tournoi.horaire}</span>
                     </div>
-                    <div className="info-label">
+                    <div className="info-label-ts">
                       <p>Contact:</p>
                       <span>{tournoi.contact}</span>
                     </div>
-                    <div className="info-label">
+                    <div className="info-label-ts">
                       <p>Prix:</p>
                       <span>{tournoi.prix}</span>
                     </div>
@@ -481,15 +494,18 @@ async function checkUserRole(userId, tournoiId) {
         </div>
         <div className="brackets-tournoi">
           <div className="brackets-tournoi">
-          {button === "brackets" && (
-            <>
-              <MatchList tournoi={tournoi} />
-            </>
-          )}
+            {button === "brackets" && (
+              <>
+                <MatchList tournoi={tournoi} />
+              </>
+            )}
           </div>
+          {button === "all-matches" && isOrganizer && (
+            <ManageMatches tournoi={tournoi} />
+           )}
           {button === "match" && (
             <div className="match-details">
-              {userData.id ? (
+              {userData.username ? (
                 <div>
                   <h3>Mes matchs :</h3>
                   {userMatches.length === 0 ? (
@@ -502,7 +518,11 @@ async function checkUserRole(userId, tournoiId) {
                         onClick={() => setSelectedMatch(match)}
                       >
                         <h4>Match round: {match.Round}</h4>
-                        <p>Statut: {match.winner} a gagné</p>
+                        {match.winner ? (
+                          <p>Statut: {match.winner} a gagné</p>
+                        ) : (
+                          <p>Pas encore de gagnant pour ce match.</p>
+                        )}
                       </div>
                     ))
                   )}
@@ -517,14 +537,13 @@ async function checkUserRole(userId, tournoiId) {
                   selectedMatch={selectedMatch}
                   onReportWinner={handleReportWinner} // Passez la fonction de gestion du vainqueur
                 />
-                
               )}
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
+              {errorMessage && (
+                <div className="error-message">{errorMessage}</div>
+              )}
             </div>
           )}
-         
         </div>
-       
       </div>
     </div>
   );

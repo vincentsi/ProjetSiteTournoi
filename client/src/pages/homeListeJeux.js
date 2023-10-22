@@ -34,8 +34,8 @@ const HomeListeJeux = (props) => {
   console.log(filteredList);
   return (
     <div
-    className="background-image-jeux"
-    style={{ backgroundImage: `url(./img/homeImg/fond.jpeg)` }}
+    // className="background-image-jeux"
+    // style={{ backgroundImage: `url(./img/homeImg/fond.jpeg)` }}
   >
       <div className="row justify-content-center mb-5 jp_top">
         <div className="col-sm-12 col-md-4">
