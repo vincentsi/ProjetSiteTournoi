@@ -139,9 +139,9 @@ exports.getAdminsTournoi = async (req, res) => {
         }
       });
 
-      res.status(200).json(admins);
+      res.status(200).send({ message: "L'utilisateur est administrateur du tournoi." });
     } else {
-      res.status(404).json({ message: "Aucun administrateur trouvé pour ce tournoi." });
+      res.status(200).json({ message: "Aucun administrateur trouvé pour ce tournoi." });
     }
   } catch (err) {
     console.error(err);

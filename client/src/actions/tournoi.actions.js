@@ -9,6 +9,7 @@ export class TournoiAPI {
     ).data.map(this.formatId);
   }
   static async create(tournoi) {
+    console.log(tournoi)
     return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/tournoicreation`, tournoi)).data;
    
   }

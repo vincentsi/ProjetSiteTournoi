@@ -40,15 +40,36 @@ const TournoiSelec = ({ tournoi }) => {
   async function checkUserRole(userId, tournoiId) {
     try {
       const response = await TournoiAPI.infoOrga({ id: tournoiId });
+
       const organizerUserId = response.id; // Récupère le userId de l'organisateur
 
+      // Vérifie si l'utilisateur est l'organisateur
+      if (organizerUserId === userId) {
+        return true;
+      }
+
       // Récupère la liste des administrateurs de tournoi
-      const adminsResponse = await TournoiAPI.getTournamentAdmins({ id: tournoiId });
+      const adminsResponse = await TournoiAPI.getTournamentAdmins({
+        id: tournoiId,
+      });
 
-      const adminUserIds = adminsResponse.map((admin) => admin.id);
+      // Vérifie si adminsResponse a une propriété "message"
+      if (adminsResponse && adminsResponse.message) {
+        // Si un message est présent, cela signifie qu'aucun administrateur n'a été trouvé
+        return false;
+      }
 
-      // Compare le userId de l'organisateur avec le userId de l'utilisateur connecté
-      return organizerUserId === userId || adminUserIds.includes(userId);
+      // Si adminsResponse existe et ne contient pas de message, c'est une liste d'administrateurs
+      if (adminsResponse) {
+        const adminUserIds = adminsResponse.map((admin) => admin.id);
+
+        if (adminUserIds.includes(userId)) {
+          return true;
+        }
+      }
+
+      // Si l'utilisateur n'est ni l'organisateur ni un administrateur
+      return false;
     } catch (error) {
       console.error(
         "Erreur lors de la vérification du rôle de l'utilisateur.",
@@ -267,7 +288,7 @@ const TournoiSelec = ({ tournoi }) => {
         <div className="all_ts_submit_btn">
           {tournoi.status !== "lancé" ? (
             <>
-              {isOrganizer && !isEditMode && (
+              {!isEditMode && (
                 <>
                   {userInscrit ? ( // Si l'utilisateur est inscrit, afficher le bouton "Se désinscrire"
                     <ButtonPrimary onClick={handleInscription}>
@@ -279,13 +300,7 @@ const TournoiSelec = ({ tournoi }) => {
                       S'inscrire
                     </ButtonPrimary>
                   )}
-                  <div className="ts_submit_btn">
-                <ButtonPrimary onClick={() => launchTournament()}>
-                  Lancer le tournoi
-                </ButtonPrimary>
-                </div>
                 </>
-                
               )}
               {isEditMode ? (
                 <>
@@ -304,11 +319,20 @@ const TournoiSelec = ({ tournoi }) => {
               ) : (
                 <>
                   {isOrganizer && (
-                    <div className="ts_submit_btn">
-                      <ButtonPrimary onClick={() => setIsEditMode(!isEditMode)}>
-                        {"Modifier le tournoi"}
-                      </ButtonPrimary>
-                    </div>
+                    <>
+                      <div className="ts_submit_btn">
+                        <ButtonPrimary onClick={() => launchTournament()}>
+                          Lancer le tournoi
+                        </ButtonPrimary>
+                      </div>
+                      <div className="ts_submit_btn">
+                        <ButtonPrimary
+                          onClick={() => setIsEditMode(!isEditMode)}
+                        >
+                          {"Modifier le tournoi"}
+                        </ButtonPrimary>
+                      </div>
+                    </>
                   )}
                 </>
               )}{" "}
@@ -355,9 +379,10 @@ const TournoiSelec = ({ tournoi }) => {
             <option value="tournament">brackets/match</option>
             <option value="brackets">Bracket</option>
             <option value="match">Match</option>
-            {(isOrganizer || (userData.isAdmin && userData.isTournamentAdmin)) && (
-          <option value="all-matches">Tous les matchs</option>
-          )}
+            {(isOrganizer ||
+              (userData.isAdmin && userData.isTournamentAdmin)) && (
+              <option value="all-matches">Tous les matchs</option>
+            )}
           </select>
         </div>
       </div>
@@ -502,7 +527,7 @@ const TournoiSelec = ({ tournoi }) => {
           </div>
           {button === "all-matches" && isOrganizer && (
             <ManageMatches tournoi={tournoi} />
-           )}
+          )}
           {button === "match" && (
             <div className="match-details">
               {userData.username ? (

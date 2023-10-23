@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-// import HomeJeux from "../components/listejeux/HomeJeux";
 import { JeuList } from "../components/listejeux/JeuList";
 import { SearchBar } from "../components/SearchBar/searchBarJeux";
 import { useSelector } from "react-redux";
 
-const HomeListeJeux = (props) => {
+export const HomeListeJeux = (props) => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [searchText, setSearchText] = useState("");
 
@@ -31,12 +30,9 @@ const HomeListeJeux = (props) => {
     { value: "moba", label: "moba" },
     { value: "combat", label: "combat" },
   ];
-  // console.log(filteredList);
+  console.log(filteredList);
   return (
-    <div
-    // className="background-image-jeux"
-    // style={{ backgroundImage: `url(./img/homeImg/fond.jpeg)` }}
-  >
+    <div>
       <div className="row justify-content-center mb-5 jp_top">
         <div className="col-sm-12 col-md-4">
           <SearchBar
@@ -66,5 +62,3 @@ const HomeListeJeux = (props) => {
     </div>
   );
 };
-
-export default HomeListeJeux;

@@ -3,9 +3,9 @@
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { useState } from "react";
 
-
 export function TournoiNew({ affTournois = true, onSubmit }) {
   const [button, setButton] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [formValuesTournois, setFormValuesTounois] = useState({
     title: "",
@@ -14,7 +14,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
     horaire: "",
     contact: "",
     regle: "",
-    nJoueur:"",
+    nJoueur: "",
   });
 
   function updateFormValuesTournois(e) {
@@ -42,7 +42,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         type="text"
         name="title"
         className="form-control"
-        value={formValuesTournois.title} 
+        value={formValuesTournois.title}
       />
     </>
   );
@@ -62,12 +62,11 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
   const numberPlayerInput = (
     <>
       <label className="form-label">Nombre de joueur</label>
-      <select  onChange={updateFormValuesTournois} name="nJoueur" id="nJoueur">
+      <select onChange={updateFormValuesTournois} name="nJoueur" id="nJoueur">
         <option value="4">4</option>
         <option value="8">8</option>
         <option value="16">16</option>
         <option value="32">32</option>
-        
       </select>
     </>
   );
@@ -80,7 +79,6 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         type="text"
         name="contact"
         className="form-control"
-      
       />
     </>
   );
@@ -106,7 +104,6 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         name="information"
         className="form-control"
         row="5"
-        
       />
     </>
   );
@@ -138,7 +135,9 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
       <div className="tounois-selected-header">
         <div className="row">
           <div className="col-4">tournoi picture</div>
-          <div className="col-4">{titleInput} {numberPlayerInput}</div>
+          <div className="col-4">
+            {titleInput} {numberPlayerInput}
+          </div>
           <div className="col-4">tournoi inscription</div>
         </div>
       </div>
@@ -205,6 +204,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         </div>
         {submitButton}
       </div>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
     </div>
   );
 }

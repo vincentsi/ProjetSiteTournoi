@@ -1,6 +1,6 @@
 const db = require("../models");
 const TournoiModel = db.listetournoi;
-
+const TournoiRolesModel = db.tournoiroles;
 module.exports.tournoiInfo = (req, res) => {
     TournoiModel.findOne({
       where: {
@@ -60,7 +60,7 @@ module.exports.tournoiInfo = (req, res) => {
       try {
         const { userId } = req.body;
     
-      
+        
         const existingAdminTournoi = await TournoiRolesModel.findOne({
           where: {
             userId: userId,
@@ -69,7 +69,7 @@ module.exports.tournoiInfo = (req, res) => {
         });
     
         if (existingAdminTournoi) {
-          return res.status(200).json({ message: "User is already an admin for a tournament." });
+          return res.status(400).json({ message: "Vous etez deja organisateur d'un tournoi" });
         }
     
     

@@ -39,25 +39,30 @@ const Jeu = () => {
 
   // Fonction pour créer un nouveau tournoi
   async function createTournoi(formValuesTournois) {
-
-    const createdTournoi = await TournoiAPI.create({
-      ...formValuesTournois,
-      listejeuId: jeuId,
-      userId: userData.id,
-    });
-    console.log(createdTournoi);
-    if (createdTournoi.message === "User has already created a tournament.") {
-      alert(createdTournoi.message);
-    } else {
-    const idAsString = createdTournoi.id.toString();
-    const jeuIdAsInt = parseInt(jeuId, 10);
-    console.log(idAsString);
-    const tournoiAcreer = { ...formValuesTournois, id: idAsString,listejeuId: jeuIdAsInt,userId: userData.id };
-    console.log(tournoiAcreer);
-    tournoiAcreer.picture = "./../uploads/profil/random-user.png";
-    dispatch(addTournoi(tournoiAcreer)); // Ajouter le nouveau tournoi à l'état global
-    setAffTournois(!affTournois); // Changer l'affichage des tournois
-  }
+    try {
+      const createdTournoi = await TournoiAPI.create({
+        ...formValuesTournois,
+        listejeuId: jeuId,
+        userId: userData.id,
+      });
+  
+      const idAsString = createdTournoi.id.toString();
+      const jeuIdAsInt = parseInt(jeuId, 10);
+      const tournoiAcreer = { ...formValuesTournois, id: idAsString, listejeuId: jeuIdAsInt, userId: userData.id };
+      tournoiAcreer.picture = "./../uploads/profil/random-user.png";
+      dispatch(addTournoi(tournoiAcreer));
+      setAffTournois(!affTournois); // Changer l'affichage des tournois
+  
+    } catch (error) {
+      if (error.response.data.message) {
+        alert("Erreur lors de la création du tournoi: " + error.response.data.message);
+      } else {
+        console.error(error);
+        alert("Une erreur inattendue s'est produite lors de la création du tournoi.");
+      }
+    }
+  
+  
 
   }
 
