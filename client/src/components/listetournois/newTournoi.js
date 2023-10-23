@@ -6,7 +6,9 @@ import { useState } from "react";
 export function TournoiNew({ affTournois = true, onSubmit }) {
   const [button, setButton] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState('');
 
+  
   const [formValuesTournois, setFormValuesTounois] = useState({
     title: "",
     information: "",
@@ -205,6 +207,8 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         {submitButton}
       </div>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
+      {successMessage && (<div className="success-message">{successMessage}</div>
+      )}
     </div>
   );
 }

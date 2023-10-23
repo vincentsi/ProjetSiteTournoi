@@ -52,7 +52,8 @@ const Jeu = () => {
       tournoiAcreer.picture = "./../uploads/profil/random-user.png";
       dispatch(addTournoi(tournoiAcreer));
       setAffTournois(!affTournois); // Changer l'affichage des tournois
-  
+      // setSuccessMessage('Le tournoi a été créé avec succès!');
+      window.location.href = `/jeu/${jeuId}`;
     } catch (error) {
       if (error.response.data.message) {
         alert("Erreur lors de la création du tournoi: " + error.response.data.message);

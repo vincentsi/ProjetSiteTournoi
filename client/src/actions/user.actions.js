@@ -26,6 +26,7 @@ export class UserAPI {
   static async getUser (uid)  {
     return (await axios.get(`${process.env.REACT_APP_API_URL}app/user/${uid}`)).data;
 };
+
     static async updateRankUser(data) {
       console.log("Data to be uploaded:", data.userId);
       console.log("Data to be uploaded:", data.selectedRank);

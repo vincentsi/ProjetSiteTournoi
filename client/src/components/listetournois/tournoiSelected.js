@@ -10,6 +10,7 @@ import UploadImgTournois from "./UploadImgTournois";
 import MatchDetails from "../brackets/matchDetail";
 import ManageMatches from "../brackets/manageMatchAdmin";
 import AddAdmin from "./AddAdmin";
+import { Link } from 'react-router-dom';
 
 // Composant TournoiSelec qui affiche les détails d'un tournoi et permet à l'utilisateur de s'inscrire ou de se désinscrire
 const TournoiSelec = ({ tournoi }) => {
@@ -473,10 +474,13 @@ const TournoiSelec = ({ tournoi }) => {
               <div className="participants-tournoi">
                 {participants.map((participant) => (
                   <div key={participant.id} className="participant-item">
-                    {/* Afficher le nom d'utilisateur du participant */}
-                    <p className="participant-username">
+                    {/* Utilisez le composant Link pour créer un lien vers le profil de l'utilisateur */}
+                    <Link
+                      to={`/profil/${participant.id}`}
+                      className="participant-username"
+                    >
                       {participant.username}
-                    </p>
+                    </Link>
                     {isOrganizer && (
                       // Bouton de suppression pour le créateur du tournoi
                       <button
