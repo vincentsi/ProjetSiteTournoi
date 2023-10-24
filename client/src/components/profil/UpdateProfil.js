@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { dateParser } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import UploadImg from "./UploadImg";
-import { UserAPI, updateBio,updateRank } from "../../actions/user.actions";
+import { UserAPI, updateBio, updateRank } from "../../actions/user.actions";
 import { JeuAPI } from "../../actions/pjeu.actions";
-
+import { setUserRankss,updateUserRank} from "../../store/user/user.reducer";
 const UpdateProfil = () => {
   const [bio, setBio] = useState("");
   const [updateForm, setUpdateForm] = useState(false);
@@ -12,6 +12,7 @@ const UpdateProfil = () => {
   const [gameList, setGameList] = useState([]); // État pour stocker la liste des jeux prédéfinis
   const [gameRanks, setGameRanks] = useState([]); // État pour stocker les rangs prédéfinis du jeu sélectionné
   const [selectedRank, setSelectedRank] = useState("");
+  const [selectedGameName, setSelectedGameName] = useState("Sélectionnez un jeu");
   const [userRanks, setUserRanks] = useState([]);
   const [error, setError] = useState(null);
   const userData = useSelector((state) => state.USER.user);
@@ -20,44 +21,84 @@ const UpdateProfil = () => {
   const jeuList = useSelector((store) => store.JEU.jeuList);
   useEffect(() => {
     setGameList(jeuList);
-  }, [jeuList]);
+   fetchUserRanks(userData.id);
+  }, [jeuList, userData]);
 
- 
+  const fetchUserRanks = async () => {
+    if (!userData.id) {
+      // Vérifiez si userId est défini, sinon ne faites rien
+      return;
+    }
+    try {
+
+      const response = await UserAPI.affRankUser({ userId: userData.id }); // Remplacez par l'appel API approprié pour récupérer les rangs de l'utilisateur
+
+      dispatch(setUserRankss(response));
+      setUserRanks(response); // Mettez à jour l'état avec les rangs de l'utilisateur
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des rangs de l'utilisateur :",
+        error
+      );
+      setError(
+        "Une erreur s'est produite lors de la récupération des rangs de l'utilisateur."
+      );
+    }
+  };
 
   const handleGameChange = async (selectedGameName) => {
     try {
-      console.log(gameList);
-      console.log(selectedGameName);
       // Recherchez l'objet de jeu correspondant au nom du jeu sélectionné
       const selectedGame = gameList.find(
         (game) => game.id === selectedGameName
       );
       // console.log(game.name)
-      console.log(selectedGame);
+    
       if (selectedGame) {
         // Si le jeu est trouvé, utilisez son ID pour récupérer les rangs
         const gameId = selectedGame.id;
-      
+
         // Effectue une requête au backend pour récupérer les rangs prédéfinis pour le jeu sélectionné
         const response = await JeuAPI.infoRank({ jeuId: gameId });
         if (Array.isArray(response)) {
           setGameRanks(response); // Met à jour l'état avec le tableau de noms de rangs
           setSelectedRank(""); // Réinitialise le rang sélectionné car il pourrait ne pas être valide pour le nouveau jeu
+          setSelectedGameName(selectedGame.title);
         } else {
-          setError(response.message || "Une erreur s'est produite lors de la récupération des rangs du jeu.");
+          setError(
+            response.message ||
+              "Une erreur s'est produite lors de la récupération des rangs du jeu."
+          );
         }
       }
     } catch (error) {
       console.error("Erreur lors de la récupération de l'ID du jeu :", error);
-      setError("Une erreur s'est produite lors de la récupération des rangs du jeu.");
+      setError(
+        "Une erreur s'est produite lors de la récupération des rangs du jeu."
+      );
     }
   };
 
-  const handleUpdateRank = () => {
+ const handleUpdateRank = async () => {
+  try {
+    // Appeler votre API pour mettre à jour le rang de l'utilisateur
+    const response = await UserAPI.updateRankUser({
+      userId: userData.id,
+      rankId: selectedRank,
+    });
 
-   const test = dispatch(updateRank(userData.id, selectedRank));
-    console.log(test.AxiosError )
-  };
+    dispatch(updateUserRank({
+      userId: userData.id,
+      updatedRank: response.rankName,
+      gameName: response.gameName,
+    }));
+    // Mettre à jour le rang de l'utilisateur dans le Redux Store
+    // dispatch(setUserRankss(response.userRanks));
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du rang de l'utilisateur :", error);
+    // Gérer l'erreur, si nécessaire
+  }
+};
   const handleUpdate = () => {
     dispatch(updateBio(userData.id, bio));
     setUpdateForm(false);
@@ -115,16 +156,16 @@ const UpdateProfil = () => {
         <div className="profil-container">
           {/* Autres éléments */}
           <div className="game-rank-update">
-            <h3>Choisissez un jeu et un rang</h3>
+            <h3>Choasissez un jeu et un rang</h3>
             <div className="game-selector">
               <select
                 value={selectedGame}
                 onChange={(e) => handleGameChange(e.target.value)}
               >
-                <option value="">Sélectionnez un jeu</option>
+                <option value="">{selectedGameName}</option>
                 {gameList.map((game) => (
                   <option key={game.id} value={game.id}>
-                    {game.name}
+                    {game.title}
                   </option>
                 ))}
               </select>
@@ -149,12 +190,14 @@ const UpdateProfil = () => {
             Valider modifications
           </button>
         </div>
-        
+
         <div className="user-ranks">
           <h3>Rangs du joueur :</h3>
           <ul>
-            {userRanks.map((rank) => (
-              <li key={rank.id}>{rank.name}</li>
+            {userRanks.map((data, index) => (
+              <li key={index}>
+                {data.game} - {data.rank}
+              </li>
             ))}
           </ul>
         </div>

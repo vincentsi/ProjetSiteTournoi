@@ -26,27 +26,28 @@ export class UserAPI {
   static async getUser (uid)  {
     return (await axios.get(`${process.env.REACT_APP_API_URL}app/user/${uid}`)).data;
 };
+  static async affRankUser (userId)  {
 
-    static async updateRankUser(data) {
-      console.log("Data to be uploaded:", data.userId);
-      console.log("Data to be uploaded:", data.selectedRank);
+  return (await axios.post(`${process.env.REACT_APP_API_URL}app/user/infoUser`,userId)).data;
+};
+static async updateRankUser(data) {
   try {
     const response = await axios.post(`${process.env.REACT_APP_API_URL}app/user/RankUser`, {
       userId: data.userId,
-      rankId: data.selectedRank,
-     
+      rankId: data.rankId,
     });
-     console.log(response)
-    if (response.status !== 200) {
+
+    if (response.status === 200) {
+      return response.data; // Vous pouvez retourner des données mises à jour si nécessaire
+    } else {
       throw new Error(`Erreur lors de la mise à jour du rang de l'utilisateur : ${response.status}`);
     }
-
-    return response.data;
   } catch (error) {
     console.error("Erreur lors de la mise à jour du rang de l'utilisateur :", error);
     throw error;
   }
 }
+
 
 static async infoUser (userId)  {
   // console.log(user)
@@ -71,6 +72,16 @@ export const updateRank = (userId, selectedRank) => {
     }
   };
 };
+
+export const fetchUserRanks = (userId) => async (dispatch) => {
+  try {
+    const response = await UserAPI.infoRankUser(userId);
+    dispatch({ type: 'SET_USER_RANKS', payload: response });
+  } catch (error) {
+    dispatch({ type: 'FETCH_USER_RANKS_FAILURE', payload: error.message });
+  }
+};
+
 export const uploadPicture = (data, id) => {
   return (dispatch) => {
     return axios
