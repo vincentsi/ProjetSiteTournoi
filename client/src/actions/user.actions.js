@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { setUser } from '../store/user/user.reducer';
 
 export const GET_USER = "GET_USER";
 export const UPLOAD_PICTURE = "UPLOAD_PICTURE";
@@ -83,17 +84,20 @@ export const fetchUserRanks = (userId) => async (dispatch) => {
 };
 
 export const uploadPicture = (data, id) => {
-  return (dispatch) => {
-    return axios
-      .post(`${process.env.REACT_APP_API_URL}app/upload`, data)
-      .then((res) => {
-        return axios
-          .get(`${process.env.REACT_APP_API_URL}app/user/${id}`)
-          .then((res) => {
-            dispatch({ type: UPLOAD_PICTURE, payload: res.data.picture });
-          });
-      })
-      .catch((err) => console.log(err));
+  return async (dispatch) => {
+    try {
+      // Upload de l'image
+      const uploadResponse = await axios.post(`${process.env.REACT_APP_API_URL}app/upload`, data);
+      
+      // Récupération des données utilisateur mises à jour
+      const userResponse = await axios.get(`${process.env.REACT_APP_API_URL}app/user/${id}`);
+      
+      // Mise à jour du state Redux avec toutes les données utilisateur
+      dispatch(setUser(userResponse.data));
+      
+    } catch (err) {
+      console.error("Erreur lors de l'upload de l'image:", err);
+    }
   };
 };
 

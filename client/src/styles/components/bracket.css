@@ -52,3 +52,217 @@
     margin: 10px;
   }
 }
+
+.tournament-bracket {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 2rem;
+  background-color: #1a1a1a;
+  color: white;
+  overflow-x: auto;
+  min-height: 600px;
+  position: relative;
+}
+
+.bracket-round {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 300px;
+  padding: 1rem;
+  position: relative;
+}
+
+/* Ajustement des espacements pour les différents rounds */
+.bracket-round.round-1 .matches-container {
+  gap: 8rem;
+}
+
+.bracket-round.round-2 .matches-container {
+  gap: 26rem;
+  margin-top: 10rem;
+}
+
+.bracket-round.round-3 .matches-container {
+  gap: 16rem;
+  margin-top: 28rem;
+}
+
+.bracket-round.round-4 .matches-container {
+  margin-top: 42rem;
+}
+
+.round-header {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.matches-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.bracket-match {
+  background: #2a2a2a;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  z-index: 2;
+}
+
+/* Lignes de connexion horizontales */
+.bracket-match::after {
+  content: '';
+  position: absolute;
+  right: -2rem;
+  top: 50%;
+  width: 2rem;
+  height: 2px;
+  background-color: #444;
+  z-index: 1;
+}
+
+/* Lignes de connexion verticales */
+.bracket-round:not(:last-child) .bracket-match::before {
+  content: '';
+  position: absolute;
+  right: -2rem;
+  top: 50%;
+  width: 2px;
+  height: calc(200% + 2rem);
+  background-color: #444;
+  z-index: 1;
+}
+
+/* Ajuster les lignes verticales pour chaque paire de matchs */
+.bracket-round.round-1 .bracket-match:nth-child(odd)::before {
+  height: calc(100% + 8rem);
+  top: 50%;
+}
+
+.bracket-round.round-2 .bracket-match:nth-child(odd)::before {
+  height: calc(100% + 27rem);
+  top: 50%;
+}
+
+/* Masquer les lignes pour le dernier match de chaque paire */
+.bracket-round .bracket-match:nth-child(even)::before {
+  display: none;
+}
+
+/* Masquer les lignes après le dernier round */
+.bracket-round:last-child .bracket-match::after,
+.bracket-round:last-child .bracket-match::before {
+  display: none;
+}
+
+.bracket-match:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.bracket-match.completed {
+  border: 2px solid #4CAF50;
+}
+
+.bracket-match.pending {
+  border: 2px solid #FFA500;
+}
+
+.player {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+  transition: background-color 0.3s ease;
+}
+
+.player.winner {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+}
+
+.player.loser {
+  background-color: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+}
+
+.player-name {
+  font-weight: 500;
+  flex-grow: 1;
+}
+
+.winner-badge {
+  margin-left: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.match-separator {
+  text-align: center;
+  font-weight: bold;
+  color: #888;
+  margin: 0.5rem 0;
+}
+
+.match-status {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #FFA500;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+/* Media Queries pour la responsivité */
+@media (max-width: 1200px) {
+  .tournament-bracket {
+    padding: 1rem;
+  }
+
+  .bracket-round {
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tournament-bracket {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bracket-round {
+    width: 100%;
+    min-width: auto;
+    margin-bottom: 2rem;
+  }
+
+  .bracket-round:not(:last-child) .bracket-match::after {
+    display: none;
+  }
+}
+
+.empty-bracket {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1.2rem;
+  color: #888;
+  text-align: center;
+  border: 2px dashed #444;
+  border-radius: 8px;
+  margin: 2rem;
+  padding: 2rem;
+}

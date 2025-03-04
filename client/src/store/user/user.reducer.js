@@ -14,20 +14,33 @@ export const userSlice = createSlice({
       currentSlice.userRanks = action.payload;
     },
     updateUserRank: (currentSlice, action) => {
-      // Mettez à jour le rang de l'utilisateur dans le tableau des rangs
       const { userId, updatedRank, gameName } = action.payload;
-      currentSlice.userRanks = currentSlice.userRanks.map((rank) => {
-        if (rank.userId === userId) {
-          return { ...rank, rank: updatedRank, game: gameName };
-        }
-        return rank;
-      });
+      
+      // Vérifier si le rang existe déjà pour ce jeu
+      const existingRankIndex = currentSlice.userRanks.findIndex(
+        rank => rank.game === gameName
+      );
+
+      if (existingRankIndex !== -1) {
+        // Mettre à jour le rang existant
+        currentSlice.userRanks[existingRankIndex] = {
+          ...currentSlice.userRanks[existingRankIndex],
+          rank: updatedRank
+        };
+      } else {
+        // Ajouter un nouveau rang
+        currentSlice.userRanks.push({
+          userId,
+          game: gameName,
+          rank: updatedRank
+        });
+      }
     },
   },
 });
 
-export const userReducer = userSlice.reducer;
 export const { setUser, setUserRankss, updateUserRank } = userSlice.actions;
+export const userReducer = userSlice.reducer;
 
 // const initialState = {
 //   ranks: [],
