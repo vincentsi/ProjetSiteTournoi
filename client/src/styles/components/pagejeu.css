@@ -1,62 +1,411 @@
-
-.tournois-container{
-    cursor: pointer;
-    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
-    width: auto;
-    margin: 20px;
-    height: 170px; 
+.tournois-container {
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  width: auto;
+  margin: 20px;
+  height: 200px;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 .tournoi-pic-tournoi {
-    max-width: 100%;
-
-    height: 160px; 
-  }
+  max-width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: all 0.4s ease;
+  border-radius: 15px 15px 0 0;
+}
 .nj_container {
-    padding: 30px;
-    color: rgb(224, 8, 8);
-    border-radius: 20px;
+  padding: 30px;
+  color: rgb(224, 8, 8);
+  border-radius: 20px;
+}
 
-  }
-  
-  .nj_container p{
-   background-color: rgba(16, 17, 17, 0.562);
-    color: rgb(255, 255, 255);
+/* Conteneur principal de la page jeu */
+.main_container_jeu {
+  padding-top: 80px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff4757 100%);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
 
+.main_container_jeu::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
 
+@media (max-width: 768px) {
+  .main_container_jeu {
+    padding-top: 110px;
   }
-  
- .tournois-container{
-  background-color: rgba(255, 255, 255, 0.26);
-  border: 5px solid rgb(255, 254, 254);
- }
-  .nj_icon {
-    cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .main_container_jeu {
+    padding-top: 100px;
   }
-  
-  .nj_title_input_container {
-    max-width: 300px;
-  }
+}
+
+.nj_container p {
+  background-color: rgba(16, 17, 17, 0.562);
+  color: rgb(255, 255, 255);
+}
+
+.tournois-container:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.tournois-container:hover .tournoi-pic-tournoi {
+  transform: scale(1.05);
+}
+
+.tournois-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tournois-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  padding: 20px 15px 15px;
+  color: white;
+  z-index: 2;
+}
+
+.tournois-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  line-height: 1.3;
+}
+
+.tournois-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tournois-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.detail-icon {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.detail-text {
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.tournois-overlay {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 3;
+}
+
+.tournois-badge {
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+.nj_icon {
+  cursor: pointer;
+}
+
+.nj_title_input_container {
+  max-width: 300px;
+}
+.nj_submit_btn {
+  text-align: right;
+  padding: 20px;
+  position: relative;
+  z-index: 3;
+}
+
+.nj_submit_btn button {
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.nj_submit_btn button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+  background: linear-gradient(135deg, #ff3838, #ff2f2f);
+}
+
+@media (max-width: 768px) {
   .nj_submit_btn {
-    text-align: right;
+    padding-top: 10px;
   }
+}
 
-  .button {
-    border-radius: 50px;
-    font-weight: bold;
-    width: 150px;
-    height: 55px;
+@media (max-width: 480px) {
+  .nj_submit_btn {
+    padding-top: 5px;
   }
+}
+
+.button {
+  border-radius: 50px;
+  font-weight: bold;
+  width: 150px;
+  height: 55px;
+}
+
+/* Styles pour le select de plateforme */
+.mb-1 select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  padding: 12px 20px;
+  margin: 20px;
+  position: relative;
+  z-index: 3;
+}
+
+.mb-1 select:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.mb-1 select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #ff4757;
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+}
+
+.mb-1 select option {
+  background: #2c2c2c;
+  color: white;
+}
+
+/* Section des tournois */
+.mb-5.background-image {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  margin: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+}
 
 .mb-1 {
-  background-size: cover; 
+  background-size: cover;
   background-repeat: no-repeat;
-  background-position: center; 
+  background-position: center;
+  position: relative;
+  z-index: 1;
+  margin: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-height: 300px;
+}
+
+.mb-1::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  z-index: 1;
+}
+
+.mb-1 > * {
+  position: relative;
+  z-index: 2;
 }
 @media (max-width: 768px) {
+  .main_container_jeu {
+    padding-top: 110px;
+  }
+
+  .mb-1 {
+    margin: 15px;
+    min-height: 250px;
+  }
+
+  .mb-5.background-image {
+    margin: 15px;
+    padding: 1.5rem;
+  }
+
+  .nj_submit_btn {
+    padding: 15px;
+  }
+
+  .nj_submit_btn button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .mb-1 select {
+    margin: 15px;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+
+  .tournois-container {
+    height: 180px;
+    margin: 15px;
+  }
+
   .tournoi-pic-tournoi {
-    flex-direction: row;
-    height: 160px; 
+    height: 160px;
+  }
+
+  .tournois-content {
+    padding: 15px 12px 12px;
+  }
+
+  .tournois-title {
+    font-size: 1.1rem;
+  }
+
+  .tournois-detail-item {
+    font-size: 0.85rem;
+  }
+
+  .tournois-badge {
+    padding: 5px 10px;
+    font-size: 0.75rem;
   }
 }
 
+@media (max-width: 480px) {
+  .main_container_jeu {
+    padding-top: 100px;
+  }
 
+  .mb-1 {
+    margin: 10px;
+    min-height: 200px;
+  }
+
+  .mb-5.background-image {
+    margin: 10px;
+    padding: 1rem;
+  }
+
+  .nj_submit_btn {
+    padding: 10px;
+  }
+
+  .nj_submit_btn button {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+
+  .mb-1 select {
+    margin: 10px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .tournois-container {
+    height: 160px;
+    margin: 10px;
+  }
+
+  .tournoi-pic-tournoi {
+    height: 140px;
+  }
+
+  .tournois-content {
+    padding: 12px 10px 10px;
+  }
+
+  .tournois-title {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .tournois-details {
+    gap: 3px;
+  }
+
+  .tournois-detail-item {
+    font-size: 0.8rem;
+  }
+}

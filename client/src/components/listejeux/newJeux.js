@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { PencilFill, Trash, TrashFill } from "react-bootstrap-icons";
-import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
+import { PencilFill, TrashFill } from "react-bootstrap-icons";
 import { ValidatorService } from "../../services/form-validators";
+import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { FieldError } from "../FieldError/FieldError";
 
 const VALIDATORS = {
@@ -12,9 +12,8 @@ const VALIDATORS = {
     return ValidatorService.min(value, 3);
   },
   genres: (value) => {
-    return value ? undefined : "Genre is required"; 
+    return value ? undefined : "Genre is required";
   },
-
 };
 export function JeuForm({
   jeu,
@@ -23,11 +22,12 @@ export function JeuForm({
   onClickEdit,
   onClickTrash,
   onSubmit,
+  showAdminButtons = false,
 }) {
   const [formValues, setFormValues] = useState({
     title: jeu?.title || "",
     description: jeu?.description || "",
-    genres: jeu?.genres || "", 
+    genres: jeu?.genres || "",
   });
   const [formErrors, setFormErrors] = useState({
     title: jeu?.title ? undefined : "",
@@ -53,16 +53,88 @@ export function JeuForm({
   // console.log(formValues)
   const actionIcons = (
     <>
-      <div className="col-1">
-        {onClickEdit && (
-          <PencilFill onClick={onClickEdit} className="nj_icon" />
-        )}
-      </div>
-      <div className="col-1">
-        {onClickTrash && (
-          <TrashFill onClick={onClickTrash} className="nj_icon" />
-        )}
-      </div>
+      {showAdminButtons && (
+        <>
+          <div className="col-1">
+            {onClickEdit && (
+              <button
+                onClick={onClickEdit}
+                className="admin-edit-btn"
+                style={{
+                  background: "linear-gradient(135deg, #667eea, #764ba2)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "12px",
+                  padding: "10px 15px",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  boxShadow: "0 4px 15px rgba(102, 126, 234, 0.3)",
+                  transition: "all 0.3s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+                title="Modifier le jeu"
+                onMouseEnter={(e) => {
+                  e.target.style.transform = "translateY(-2px) scale(1.05)";
+                  e.target.style.boxShadow =
+                    "0 6px 20px rgba(102, 126, 234, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = "translateY(0) scale(1)";
+                  e.target.style.boxShadow =
+                    "0 4px 15px rgba(102, 126, 234, 0.3)";
+                }}
+              >
+                <PencilFill />
+                Modifier
+              </button>
+            )}
+          </div>
+          <div className="col-1">
+            {onClickTrash && (
+              <button
+                onClick={onClickTrash}
+                className="admin-delete-btn"
+                style={{
+                  background: "linear-gradient(135deg, #ff4757, #ff3838)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "12px",
+                  padding: "10px 15px",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  boxShadow: "0 4px 15px rgba(255, 71, 87, 0.3)",
+                  transition: "all 0.3s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+                title="Supprimer le jeu"
+                onMouseEnter={(e) => {
+                  e.target.style.transform = "translateY(-2px) scale(1.05)";
+                  e.target.style.boxShadow =
+                    "0 6px 20px rgba(255, 71, 87, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = "translateY(0) scale(1)";
+                  e.target.style.boxShadow =
+                    "0 4px 15px rgba(255, 71, 87, 0.3)";
+                }}
+              >
+                <TrashFill />
+                Supprimer
+              </button>
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 
@@ -105,7 +177,14 @@ export function JeuForm({
       </ButtonPrimary>
     </div>
   );
-  const genreOptions = ["Action", "Aventure", "Stratégie", "RPG", "Sport", "Simulation"];
+  const genreOptions = [
+    "Action",
+    "Aventure",
+    "Stratégie",
+    "RPG",
+    "Sport",
+    "Simulation",
+  ];
 
   const genreSelect = (
     <div className="mb-5">

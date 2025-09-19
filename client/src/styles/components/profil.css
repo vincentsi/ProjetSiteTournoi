@@ -1,92 +1,465 @@
+/* Container principal */
 .profil-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff4757 100%);
   padding: 20px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow: hidden;
 }
 
+.profil-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  pointer-events: none;
+}
+
+/* Header du profil */
+.profil-container h1 {
+  text-align: center;
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 300;
+}
+
+/* Container principal du profil */
 .update-container {
-  display: flex;
-  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne lorsque l'espace est insuffisant */
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-top: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+  align-items: start;
 }
 
+/* Partie gauche - Photo et infos de base */
 .left-part {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.right-part {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
+.left-part::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #ff4757);
 }
 
+.left-part h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* Photo de profil */
 .profile-pic {
-  width: 150px;
-  height: 150px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  border: 5px solid #f0f0f0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
-.bio-update {
+.profile-pic:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Partie droite - Bio et infos */
+.right-part {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 20px;
 }
 
-.bio-textarea {
-  width: 100%;
-  height: 100px;
-  resize: none;
-  margin-bottom: 10px;
-  font-size: 16px;
-  line-height: 1.5;
+/* Section bio */
+.bio-update {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
-.update-profil-btn {
-  padding: 10px 20px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #007bff;
-  color: #fff;
-  margin: 5px;
-  transition: background-color 0.2s ease;
+.bio-update::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #ff4757);
 }
 
-.update-profil-btn:hover {
-  background-color: #0056b3;
+.bio-update h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .bio-text {
   font-size: 16px;
-  line-height: 1.5;
-  margin-bottom: 10px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #555;
+  min-height: 60px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.bio-text:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+}
+
+.bio-textarea {
+  width: 100%;
+  height: 120px;
+  resize: none;
+  margin-bottom: 15px;
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.bio-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Date container */
 .date-container {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.date-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #ff4757);
+}
+
+.date-container h4 {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Section jeux et rangs */
+.game-rank-update {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.game-rank-update::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #ff4757);
+}
+
+.game-rank-update h3 {
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 1.4rem;
+  font-weight: 600;
   text-align: center;
 }
 
-/* Media Queries pour les petits écrans (par exemple, les smartphones) */
+.game-selector,
+.rank-selector {
+  margin-bottom: 20px;
+}
+
+.game-selector select,
+.rank-selector select {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.game-selector select:focus,
+.rank-selector select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Section rangs utilisateur */
+.user-ranks {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.user-ranks::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #ff4757);
+}
+
+.user-ranks h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.user-ranks ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-ranks li {
+  background: linear-gradient(135deg, #667eea, #ff4757);
+  color: white;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-ranks li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+}
+
+.user-ranks li:last-child {
+  margin-bottom: 0;
+}
+
+/* Boutons */
+.update-profil-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #667eea, #ff4757);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.update-profil-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+}
+
+.update-profil-btn:active {
+  transform: translateY(0);
+}
+
+.error-message {
+  color: #e74c3c;
+  background: #fdf2f2;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border-left: 4px solid #e74c3c;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.left-part,
+.bio-update,
+.date-container,
+.game-rank-update,
+.user-ranks {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.left-part {
+  animation-delay: 0.1s;
+}
+
+.bio-update {
+  animation-delay: 0.2s;
+}
+
+.date-container {
+  animation-delay: 0.3s;
+}
+
+.game-rank-update {
+  animation-delay: 0.4s;
+}
+
+.user-ranks {
+  animation-delay: 0.5s;
+}
+
+.game-selector select,
+.rank-selector select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 20px;
+  padding-right: 50px;
+}
+
+.user-ranks p {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 10px;
+  margin: 0;
+}
+
+.left-part:hover,
+.bio-update:hover,
+.date-container:hover,
+.game-rank-update:hover,
+.user-ranks:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive Design */
 @media screen and (max-width: 768px) {
-  .update-container {
-    flex-direction: column; /* Passe à une disposition verticale sur les petits écrans */
-    align-items: center;
+  .profil-container {
+    padding: 10px;
   }
 
-  .left-part {
-    margin-right: 0;
+  .profil-container h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .update-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .left-part,
+  .bio-update,
+  .date-container,
+  .game-rank-update,
+  .user-ranks {
+    padding: 20px;
+  }
+
+  .profile-pic {
+    width: 150px;
+    height: 150px;
+  }
+
+  /* Désactiver les animations sur mobile pour de meilleures performances */
+  .left-part,
+  .bio-update,
+  .date-container,
+  .game-rank-update,
+  .user-ranks {
+    animation: none;
+    transform: none !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profil-container h1 {
+    font-size: 1.8rem;
+  }
+
+  .left-part,
+  .bio-update,
+  .date-container,
+  .game-rank-update,
+  .user-ranks {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+  }
+
+  .update-profil-btn {
+    width: 100%;
+    margin: 5px 0;
   }
 }

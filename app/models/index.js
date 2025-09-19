@@ -1,24 +1,19 @@
 const config = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-  config.DB,
-  config.USER,
-  config.PASSWORD,
-  {
-    host: config.HOST,
-    port:  config.PORT,
-    dialect: config.dialect,
-    operatorsAliases: false,
+const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
+  host: config.HOST,
+  port: config.PORT,
+  dialect: config.dialect,
+  operatorsAliases: false,
 
-    pool: {
-      max: config.pool.max,
-      min: config.pool.min,
-      acquire: config.pool.acquire,
-      idle: config.pool.idle
-    }
-  }
-);
+  pool: {
+    max: config.pool.max,
+    min: config.pool.min,
+    acquire: config.pool.acquire,
+    idle: config.pool.idle,
+  },
+});
 
 const db = {};
 
@@ -28,14 +23,27 @@ db.sequelize = sequelize;
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.listejeu = require("../models/listejeu.model.js")(sequelize, Sequelize);
-db.listetournoi = require("../models/listetournois.model.js")(sequelize, Sequelize);
+db.listerank = require("../models/listerank.model.js")(sequelize, Sequelize);
+db.jeu_rank = require("../models/jeu_rank.model.js")(sequelize, Sequelize);
+db.listetournoi = require("../models/listetournois.model.js")(
+  sequelize,
+  Sequelize
+);
 db.matches = require("../models/matches.model.js")(sequelize, Sequelize);
-db.rank = require("../models/rank.model.js")(sequelize, Sequelize);
-db.tournoiroles = require("../models/tournoiRoles.model.js")(sequelize, Sequelize);
+db.tournoiroles = require("../models/tournoiRoles.model.js")(
+  sequelize,
+  Sequelize
+);
 
-db.listejeu.hasOne(db.rank,{foreignKey: 'jeuId'})
-db.listetournoi.hasOne(db.matches,{foreignKey: 'tournoiId'})
-db.matches.belongsTo(db.listetournoi,{foreignKey: 'tournoiId'});
+//relations
+db.listejeu.hasMany(db.jeu_rank, { foreignKey: "jeuId" });
+db.jeu_rank.belongsTo(db.listejeu, { foreignKey: "jeuId" });
+
+db.listerank.hasMany(db.jeu_rank, { foreignKey: "rankId" });
+db.jeu_rank.belongsTo(db.listerank, { foreignKey: "rankId" });
+
+db.listetournoi.hasOne(db.matches, { foreignKey: "tournoiId" });
+db.matches.belongsTo(db.listetournoi, { foreignKey: "tournoiId" });
 
 // db.user.hasOne(db.matches, {foreignKey: 'user1'})
 // db.matches.belongsTo(db.user, {foreignKey: 'user1'});
@@ -50,26 +58,31 @@ db.matches.belongsTo(db.listetournoi,{foreignKey: 'tournoiId'});
 db.listejeu.hasOne(db.listetournoi);
 db.listetournoi.belongsTo(db.listejeu);
 
+db.listetournoi.hasOne(db.tournoiroles, { foreignKey: "tournoiId" });
+db.tournoiroles.belongsTo(db.listetournoi, { foreignKey: "tournoiId" });
+db.user.hasOne(db.tournoiroles, { foreignKey: "userId" });
+db.tournoiroles.belongsTo(db.user, { foreignKey: "userId" });
+db.role.hasOne(db.tournoiroles, { foreignKey: "roleId" });
+db.tournoiroles.belongsTo(db.role, { foreignKey: "roleId" });
 
-db.listetournoi.hasOne(db.tournoiroles,{ foreignKey: 'tournoiId' });
-db.tournoiroles.belongsTo(db.listetournoi,{ foreignKey: 'tournoiId' });
-db.user.hasOne(db.tournoiroles,{ foreignKey: 'userId' });
-db.tournoiroles.belongsTo(db.user,{ foreignKey: 'userId' });
-db.role.hasOne(db.tournoiroles,{ foreignKey: 'roleId' });
-db.tournoiroles.belongsTo(db.role,{ foreignKey: 'roleId' });
+db.user_rank = require("../models/user_rank.model.js")(sequelize, Sequelize);
 
+// associations pour jeu_rank
+db.listejeu.hasMany(db.jeu_rank, { foreignKey: "jeuId", as: "jeuRanks" });
+db.jeu_rank.belongsTo(db.listejeu, { foreignKey: "jeuId", as: "jeu" });
 
-db.user_rank = sequelize.define('user_ranks');
-db.rank.belongsToMany(db.user, {
-  through: "user_ranks",
-  foreignKey: "rankId",
-  otherKey: "userId"
-});
-db.user.belongsToMany(db.rank, {
-  through: "user_ranks",
-  foreignKey: "userId",
-  otherKey: "rankId"
-});
+db.listerank.hasMany(db.jeu_rank, { foreignKey: "rankId", as: "jeuRanks" });
+db.jeu_rank.belongsTo(db.listerank, { foreignKey: "rankId", as: "rank" });
+
+// Associations pour user_rank
+db.user.hasMany(db.user_rank, { foreignKey: "userId", as: "userRanks" });
+db.user_rank.belongsTo(db.user, { foreignKey: "userId", as: "user" });
+
+db.listerank.hasMany(db.user_rank, { foreignKey: "rankId", as: "userRanks" });
+db.user_rank.belongsTo(db.listerank, { foreignKey: "rankId", as: "rank" });
+
+db.listejeu.hasMany(db.user_rank, { foreignKey: "jeuId", as: "userRanks" });
+db.user_rank.belongsTo(db.listejeu, { foreignKey: "jeuId", as: "jeu" });
 
 // db.user_tournoi = sequelize.define('user_tournoi');
 
@@ -87,15 +100,13 @@ db.user.belongsToMany(db.rank, {
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",
-  otherKey: "userId"
+  otherKey: "userId",
 });
 db.user.belongsToMany(db.role, {
   through: "user_roles",
   foreignKey: "userId",
-  otherKey: "roleId"
+  otherKey: "roleId",
 });
-
-
 
 db.ROLES = ["user", "admin"];
 

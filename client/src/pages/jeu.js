@@ -1,20 +1,21 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { JeuForm } from "../components/listejeux/newJeux";
 import { JeuAPI } from "../actions/pjeu.actions";
 import { TournoiAPI } from "../actions/tournoi.actions";
-import { updateJeu, deleteJeu } from "../store/jeu/jeu.reducer";
-import { addTournoi } from "../store/tournoi/tournois.reducer";
+import { UserAPI } from "../actions/user.actions";
+import { JeuForm } from "../components/listejeux/newJeux";
 import { TournoiList } from "../components/listetournois/TournoisList";
 import { TournoiNew } from "../components/listetournois/newTournoi";
+import { deleteJeu, updateJeu } from "../store/jeu/jeu.reducer";
+import { addTournoi } from "../store/tournoi/tournois.reducer";
 const Jeu = () => {
-
   // Déclaration des états locaux avec le hook useState
   const userData = useSelector((state) => state.USER.user);
   const [isEditable, setIsEditable] = useState(false);
   const [affTournois, setAffTournois] = useState(true);
   const [showCreateTournoi, setShowCreateTournoi] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Utilisation du hook useDispatch pour obtenir le dispatch de Redux
   const dispatch = useDispatch();
@@ -30,6 +31,23 @@ const Jeu = () => {
     store.JEU.jeuList.find((jeu) => jeu.id === jeuId)
   );
 
+  // Vérifier si l'utilisateur est admin
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      if (userData.id) {
+        try {
+          const roles = await UserAPI.getUserRoles(userData.id);
+          setIsAdmin(roles.includes("admin"));
+        } catch (error) {
+          console.error("Erreur lors de la vérification du rôle admin:", error);
+          setIsAdmin(false);
+        }
+      }
+    };
+
+    checkAdminRole();
+  }, [userData.id]);
+
   // Fonction pour soumettre le formulaire de modification du jeu
   async function submit(formValues) {
     const updatedJeu = await JeuAPI.update({ ...formValues, id: jeu.id });
@@ -38,34 +56,34 @@ const Jeu = () => {
   }
 
   // Fonction pour créer un nouveau tournoi
-  async function createTournoi(formValuesTournois) {
+  const createTournoi = async (formValuesTournois) => {
     try {
       const createdTournoi = await TournoiAPI.create({
         ...formValuesTournois,
         listejeuId: jeuId,
         userId: userData.id,
       });
-  
+
       const idAsString = createdTournoi.id.toString();
       const jeuIdAsInt = parseInt(jeuId, 10);
-      const tournoiAcreer = { ...formValuesTournois, id: idAsString, listejeuId: jeuIdAsInt, userId: userData.id };
+      const tournoiAcreer = {
+        ...formValuesTournois,
+        id: idAsString,
+        listejeuId: jeuIdAsInt,
+        userId: userData.id,
+      };
       tournoiAcreer.picture = "./../uploads/profil/random-user.png";
       dispatch(addTournoi(tournoiAcreer));
       setAffTournois(!affTournois); // Changer l'affichage des tournois
       // setSuccessMessage('Le tournoi a été créé avec succès!');
       window.location.href = `/jeu/${jeuId}`;
     } catch (error) {
-      if (error.response.data.message) {
-        alert("Erreur lors de la création du tournoi: " + error.response.data.message);
-      } else {
-        console.error(error);
-        alert("Une erreur inattendue s'est produite lors de la création du tournoi.");
-      }
-    }
-  
-  
+      console.error("Erreur complète:", error);
 
-  }
+      // Relancer l'erreur pour que le composant newTournoi.js puisse la gérer
+      throw error;
+    }
+  };
 
   // Fonction pour supprimer le jeu
   function deleteJeu_(jeu) {
@@ -79,14 +97,16 @@ const Jeu = () => {
   // Filtrer les tournois associés au jeu
   const tournoiList = useSelector((store) => store.TOURNOI.tournoiList);
   const filteredList = tournoiList.filter(
-    (tournoi) => tournoi.listejeuId === Number(jeuId)&&
-    (selectedPlatform === "" || tournoi.platforme === selectedPlatform)
-    
+    (tournoi) =>
+      tournoi.listejeuId === Number(jeuId) &&
+      (selectedPlatform === "" || tournoi.platforme === selectedPlatform)
   );
   return (
     <div className="main_container_jeu">
-  
-      <div className="mb-1" style={{ backgroundImage: `url(./.${jeu?.picture || ''})` }}>
+      <div
+        className="mb-1"
+        style={{ backgroundImage: `url(./.${jeu?.picture || ""})` }}
+      >
         {/* Affiche le formulaire de modification du jeu */}
         {userData.id && ( // Vérification de l'utilisateur connecté
           <div className="nj_submit_btn">
@@ -98,38 +118,38 @@ const Jeu = () => {
           </div>
         )}
         {jeu && showCreateTournoi && (
-          
           <JeuForm
             isEditable={isEditable}
             title={isEditable ? "Edit jeu" : jeu.title}
             jeu={jeu}
-            onClickEdit={() => setIsEditable(!isEditable)}
-            
-            onClickTrash={() => deleteJeu_(jeu)}
+            onClickEdit={isAdmin ? () => setIsEditable(!isEditable) : null}
+            onClickTrash={isAdmin ? () => deleteJeu_(jeu) : null}
             onSubmit={isEditable && submit}
+            showAdminButtons={isAdmin}
           />
         )}
-             <select
-            value={selectedPlatform}
-            onChange={(e) => setSelectedPlatform(e.target.value)}
-          >
-            <option value="">Toutes les plateformes</option>
-            <option value="PlayStation">PlayStation</option>
-            <option value="Xbox">Xbox</option>
-            <option value="pc">pc</option>
-            {/* Ajoutez d'autres options de plateforme si nécessaire */}
-          </select>
+        <select
+          value={selectedPlatform}
+          onChange={(e) => setSelectedPlatform(e.target.value)}
+        >
+          <option value="">Toutes les plateformes</option>
+          <option value="PlayStation">PlayStation</option>
+          <option value="Xbox">Xbox</option>
+          <option value="pc">pc</option>
+          {/* Ajoutez d'autres options de plateforme si nécessaire */}
+        </select>
       </div>
-        {/* Ajout du filtre de sélection de plateforme */}
-    
+      {/* Ajout du filtre de sélection de plateforme */}
+
       {/* <div className="mb-5"> */}
-        {/* Afficher le formulaire pour créer un nouveau tournoi */}
-        {jeu && !isEditable && !showCreateTournoi && (
-          <TournoiNew onSubmit={createTournoi} />
-        )}
+      {/* Afficher le formulaire pour créer un nouveau tournoi */}
+      {jeu && !isEditable && !showCreateTournoi && (
+        <TournoiNew onSubmit={createTournoi} />
+      )}
       {/* </div> */}
-      <div className="mb-5 background-image" 
-      // style={{ backgroundImage: `url(./../img/homeImg/fond.jpeg)` }}
+      <div
+        className="mb-5 background-image"
+        // style={{ backgroundImage: `url(./../img/homeImg/fond.jpeg)` }}
       >
         {/* Afficher la liste des tournois associés au jeu */}
         {jeu && !isEditable && showCreateTournoi && (
@@ -138,6 +158,6 @@ const Jeu = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Jeu;

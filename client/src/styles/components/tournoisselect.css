@@ -1,178 +1,619 @@
-
-.tounois-selected-container{
-  display:flex;
-  height: 100vh;
-  flex-direction: column;
-
-}
-.tournois-selected-header{
-  flex: 1;
-  /* flex-direction: column; */
-  /* background-color: red; */
-}
-.img_tournoiselec{
-  flex: 1
- }
-.title_tournoiselec{
-  padding: 10px;
-  font-size: 25px;
-  font-weight: bold;
-  flex: 1 
- }
- .all_ts_submit_btn {
-  flex:1;
+.tounois-selected-container {
   display: flex;
-  flex-direction: column; 
+  min-height: 100vh;
+  flex-direction: column;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff4757 100%);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.tounois-selected-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+.tournois-selected-header {
+  flex: 0 0 auto;
+  display: flex;
   align-items: center;
+  padding: 1rem 1.5rem;
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 15px;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  min-height: 120px;
+}
+.img_tournoiselec {
+  flex: 0 0 150px;
+  margin-right: 1.5rem;
+}
+.title_tournoiselec {
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.title_tournoiselec pre {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 0;
+  line-height: 1.2;
+  background: linear-gradient(45deg, #fff, #f0f0f0, #fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.all_ts_submit_btn {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 .ts_submit_btn {
   margin-top: 5px;
-
 }
- 
-.tounois-selected-bas{
+
+.tounois-selected-bas {
   flex: 3;
-  background-color: rgba(255, 255, 255, 0.452);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  margin: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
-.All-button{
+.All-button {
   display: flex;
-/* background-color: #7b38d8; */
-/* background-color: rgb(252, 244, 244); */
-background-color: black;
-border: 4px double #9e9e9e;
-/* text-align: center; */
-font-size: 25px;
-cursor: pointer;
-/* margin: 5px; */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  margin: 15px;
+  padding: 0.3rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+  overflow-x: auto;
 }
 
-.space-all-button{
+.space-all-button {
   text-align: center;
-  width: 350px;
+  flex: 1;
+  min-width: 120px;
 }
 
+.space-all-button input,
+.space-all-button select {
+  width: 100%;
+  padding: 8px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.space-all-button input:hover,
+.space-all-button select:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.space-all-button input:focus,
+.space-all-button select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #ff4757;
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+}
+
+.space-all-button input[type="button"] {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.space-all-button select option {
+  background: #2c2c2c;
+  color: white;
+}
 
 .information-tournoi {
   display: flex;
-  text-align: center;
+  gap: 2rem;
+  color: white;
+}
 
-  h3 {
-    margin-bottom: 10px;
-  }
- 
+.info-label-ts {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.info-label-ts:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.info-label-ts p:first-child {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #ff4757;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.info-label-ts span {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.wrap-text-information {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .participants-tournoi {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-  
-  .participant-username {
-    font-size: 16px;
-    font-weight: bold;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
 
-  .regles-tournoi{
-    text-align: center;
-    width: auto;
-  }
-  .wrap-text-regles {
-    word-wrap: break-word;
-   
+.participant-item {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  }
-  .tounois-selected-header {
-    text-align: center; /* Centrer le contenu du header */
-    flex-direction: row;
-   
-  }
-  .info-label-ts{
-    margin-bottom: 30px;
-  }
-  .tournoi-pic-tournoi-selec {
-    max-width: 100%;
-    /* min-width: 70%; */
-    height: 305px;
-  }
- 
-  .error-message-addAdmin {
-    color: #ff0000; /* Couleur du texte rouge */
-    background-color: #ffe6e6; /* Arrière-plan rouge pâle */
-    padding: 10px; /* Espace autour du message */
-    border: 1px solid #ff0000; /* Bordure rouge */
-    margin-top: 10px; /* Marge supérieure pour l'espace */
-    border-radius: 5px; /* Coins arrondis */
-  }
-  
-  /* Styles pour les messages de succès */
-  .success-message-addAdmin {
-    color: #00aa00; /* Couleur du texte verte */
-    background-color: #e6ffe6; /* Arrière-plan vert pâle */
-    padding: 10px; /* Espace autour du message */
-    border: 1px solid #00aa00; /* Bordure verte */
-    margin-top: 10px; /* Marge supérieure pour l'espace */
-    border-radius: 5px; /* Coins arrondis */
-  }
+.participant-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+}
 
+.participant-username {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
 
+.participant-username:hover {
+  color: #ff4757;
+  text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+}
 
-  .participants-tournoi {
-    margin-top: 10px;
-  }
-  
+.regles-tournoi {
+  text-align: center;
+  width: auto;
+  color: white;
+}
 
-  
-  .participant-username {
-    font-weight: bold;
-    text-decoration: underline;
-    cursor: pointer;
-    margin-right: 10px;
+.regles-tournoi p:first-child {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #ff4757;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.wrap-text-regles {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  word-wrap: break-word;
+  line-height: 1.6;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: left;
+  white-space: pre-wrap;
+  transition: all 0.3s ease;
+}
+
+.wrap-text-regles:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+.tounois-selected-header {
+  text-align: center;
+  flex-direction: row;
+}
+.info-label-ts {
+  margin-bottom: 30px;
+}
+.tournoi-pic-tournoi-selec {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.tournoi-pic-tournoi-selec:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+.error-message-addAdmin {
+  color: #ff0000;
+  background-color: #ffe6e6;
+  padding: 10px;
+  border: 1px solid #ff0000;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+/* Styles pour les messages de succès */
+.success-message-addAdmin {
+  color: #00aa00;
+  background-color: #e6ffe6;
+  padding: 10px;
+  border: 1px solid #00aa00;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.participants-tournoi {
+  margin-top: 10px;
+}
+
+.participant-username {
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.remove-participant-btn {
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.remove-participant-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+  background: linear-gradient(135deg, #ff3838, #ff2f2f);
+}
+
+/* Styles pour les matchs */
+.match-details {
+  color: white;
+}
+
+.match-details h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #ff4757;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.match-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.match-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.match-card h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.match-card p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+/* Styles pour les boutons d'action */
+.ts_submit_btn button {
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 0.5rem;
+}
+
+.ts_submit_btn button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+  background: linear-gradient(135deg, #ff3838, #ff2f2f);
+}
+
+.ts_submit_btn button:nth-child(2) {
+  background: linear-gradient(135deg, #6c757d, #5a6268);
+}
+
+.ts_submit_btn button:nth-child(2):hover {
+  background: linear-gradient(135deg, #5a6268, #495057);
+}
+
+/* Style pour le statut du tournoi */
+.tStart {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 1rem 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.tStart p {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ff4757;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Styles pour les titres de sections */
+.button-participants-tournoi h3,
+.match-details h3,
+.regles-tournoi p:first-child {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #ff4757;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* Amélioration des inputs en mode édition */
+.info-label input,
+.info-label textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.info-label input:focus,
+.info-label textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ff4757;
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+}
+
+.info-label label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ff4757;
+  margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.info-label textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+/* Style pour les messages d'erreur */
+.error-message {
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 15px 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  font-weight: 500;
+}
+
+@media screen and (max-width: 768px) {
+  .tounois-selected-container {
+    padding-top: 80px;
   }
-  
-  .remove-participant-btn {
-    background-color: #ff4444;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-   
- 
-  @media screen and (max-width: 768px) {
 
   .tournois-selected-header {
-    text-align: center; /* Centrer le contenu du header */
     flex-direction: column;
-    /* background-color: red; */
-  }
-  .all_ts_submit_btn {
-    flex-direction: row; 
-   
+    text-align: center;
+    padding: 1rem;
+    margin: 15px;
+    min-height: 100px;
   }
 
-  
+  .img_tournoiselec {
+    flex: none;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+
   .tournoi-pic-tournoi-selec {
-    max-width: 100%;
-
-    height: 170px;
+    height: 80px;
+    max-width: 120px;
+    margin: 0 auto;
   }
 
+  .title_tournoiselec pre {
+    font-size: 1.5rem;
+  }
+
+  .all_ts_submit_btn {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 
   .All-button {
-    padding: 6px 16px; /* Réduisez la taille du bouton pour les écrans plus petits */
-    font-size: 14px;
+    flex-direction: column;
+    padding: 1rem;
+    margin: 15px;
   }
 
   .space-all-button {
-    margin-bottom: 10px; /* Ajouter de l'espace entre les boutons */
+    margin-bottom: 0.5rem;
+    min-width: 100%;
+  }
+
+  .space-all-button input,
+  .space-all-button select {
+    font-size: 0.9rem;
+    padding: 10px 15px;
   }
 
   .tounois-selected-bas {
-    text-align: center; /* Centrer le contenu de la section basse */
+    margin: 15px;
+    padding: 1.5rem;
   }
 
-  /* Ajoutez d'autres styles CSS selon les besoins de votre mise en page */
+  .information-tournoi {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .participants-tournoi {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .participant-item {
+    padding: 0.8rem;
+  }
+
+  .ts_submit_btn button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    margin: 0.3rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .tounois-selected-container {
+    padding-top: 70px;
+  }
+
+  .tournois-selected-header {
+    margin: 10px;
+    padding: 0.8rem;
+    min-height: 80px;
+  }
+
+  .tournoi-pic-tournoi-selec {
+    height: 60px;
+    max-width: 100px;
+  }
+
+  .title_tournoiselec pre {
+    font-size: 1.2rem;
+  }
+
+  .All-button {
+    margin: 10px;
+    padding: 0.8rem;
+  }
+
+  .tounois-selected-bas {
+    margin: 10px;
+    padding: 1rem;
+  }
+
+  .info-label-ts {
+    padding: 1rem;
+  }
+
+  .wrap-text-regles {
+    padding: 1.5rem;
+  }
+
+  .match-card {
+    padding: 1rem;
+  }
+
+  .ts_submit_btn button {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
 }

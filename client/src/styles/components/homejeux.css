@@ -1,48 +1,53 @@
-.jp_top{
-  align-items: center;
- }
-.jeux-container{
-    cursor: pointer;
-  
-    
+/* Container principal pour la page HomeListeJeux */
+.HomeListeJeux-container {
+  padding-top: 100px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff4757 100%);
 }
 
-.jeu_container{
-    width: 350px;
-    margin: 15px;
+.jp_top {
+  align-items: center;
+  padding: 2rem 0;
+}
+.jeux-container {
+  cursor: pointer;
+}
+
+.jeu_container {
+  width: 350px;
+  margin: 15px;
 }
 
 .title_row {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .text_content {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 6;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-  }
+  display: flex;
+  justify-content: space-between;
+}
 
-  .listejeu_img{
-    width: 350px;
-    height: 280px;
-    border-radius: 10px;
-  }
-  .listejeu_name{
-    color: azure;
-    position: absolute;
-    margin-top: -40px;
-    height: 40px;
-    width: 350px;
-    padding-left: 20px;
-    padding-top: 8px;
-    background-color: black;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
- 
+.text_content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.listejeu_img {
+  width: 350px;
+  height: 280px;
+  border-radius: 10px;
+}
+.listejeu_name {
+  color: azure;
+  position: absolute;
+  margin-top: -40px;
+  height: 40px;
+  width: 350px;
+  padding-left: 20px;
+  padding-top: 8px;
+  background-color: black;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

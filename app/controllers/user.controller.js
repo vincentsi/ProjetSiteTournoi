@@ -1,7 +1,8 @@
 const db = require("../models");
 const UserModel = db.user;
 const UserRankModel = db.user_rank;
-const RankModel = db.rank;
+const ListeRankModel = db.listerank;
+const JeuRankModel = db.jeu_rank;
 const JeuModel = db.listejeu;
 // const userModel = require("../models/user.model");
 // const config = require("../config/auth.config");
@@ -36,12 +37,31 @@ module.exports.userInfo = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+
+module.exports.getUserRoles = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await UserModel.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).send({ message: "Utilisateur non trouvé" });
+    }
+
+    const roles = await user.getRoles();
+    const roleNames = roles.map((role) => role.name);
+
+    res.status(200).send(roleNames);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des rôles:", error);
+    res.status(500).send({ message: error.message });
+  }
+};
 module.exports.userInfoByUsername = (req, res) => {
-  const username = req.body.username; 
+  const username = req.body.username;
 
   UserModel.findOne({
     where: {
-      username: username, 
+      username: username,
     },
   })
     .then((user) => {
@@ -94,103 +114,99 @@ module.exports.updateUser = async (req, res) => {
 };
 
 module.exports.updateRankUser = async (req, res) => {
-  const { rankId, userId } = req.body;
+  const { rankId, userId, jeuId } = req.body;
   try {
-    const rank = await RankModel.findOne({
-      where: { id: rankId },
+    // Récupérer le rang depuis listerank
+    const rank = await ListeRankModel.findByPk(rankId);
+
+    if (!rank) {
+      return res.status(404).send({ message: "Rank not found" });
+    }
+
+    // Vérifier que le jeu existe
+    const game = await JeuModel.findByPk(jeuId);
+    if (!game) {
+      return res.status(404).send({ message: "Game not found" });
+    }
+
+    // Vérifier que le rang est bien associé à ce jeu
+    const jeuRank = await JeuRankModel.findOne({
+      where: { rankId: rankId, jeuId: jeuId },
     });
 
-    if (rank) {
-      const gameId = rank.jeuId;
-
-      // Effectuez une autre requête pour obtenir le nom du rang à partir de rankId
-      const rankName = rank.name;
-
-      // Effectuez une autre requête pour obtenir le nom du jeu à partir de gameId
-      const game = await JeuModel.findOne({
-        where: { id: gameId },
-      });
-      const gameName = game.title;
-
-      const gameRanks = await RankModel.findAll({
-        attributes: ['id'],
-        where: { jeuId: gameId },
-      });
-
-      const rankIds = gameRanks.map((gameRank) => gameRank.id);
-
-      const existingRank = await UserRankModel.findOne({
-        where: { userId, rankId: rankIds },
-      });
-
-      if (existingRank) {
-        await existingRank.destroy();
-      }
-
-      const addRank = await UserRankModel.create({
-        rankId,
-        userId,
-      });
-
-      // Renvoyez les données mises à jour, y compris le nom du rang et le nom du jeu
-      res.send({ rankName: rankName, gameName: gameName });
-    } else {
-      res.status(404).send({ message: 'Rank not found' });
+    if (!jeuRank) {
+      return res
+        .status(404)
+        .send({ message: "This rank is not available for this game" });
     }
+
+    const gameId = jeuId;
+    const gameName = game.title;
+    const rankName = rank.name;
+
+    // Récupérer tous les rangs associés à ce jeu
+    const gameRanks = await JeuRankModel.findAll({
+      where: { jeuId: gameId },
+      attributes: ["rankId"],
+    });
+
+    const rankIds = gameRanks.map((gameRank) => gameRank.rankId);
+
+    // Supprimer les rangs existants de l'utilisateur pour ce jeu
+    const existingRanks = await UserRankModel.findAll({
+      where: {
+        userId,
+        jeuId: gameId,
+      },
+    });
+
+    for (const existingRank of existingRanks) {
+      await existingRank.destroy();
+    }
+
+    // Ajouter le nouveau rang de l'utilisateur
+    await UserRankModel.create({
+      rankId,
+      userId,
+      jeuId: gameId,
+    });
+
+    // Renvoyer les données mises à jour
+    res.send({ rankName: rankName, gameName: gameName });
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: err });
   }
 };
 
-
 module.exports.infoRankUser = async (req, res) => {
   const { userId } = req.body;
 
   try {
-    //les rangs de l'utilisateur à partir de la table user_ranks
+    // Récupérer les rangs de l'utilisateur avec les informations des jeux et rangs
     const userRanks = await UserRankModel.findAll({
-      where: {
-        userId,
-      },
+      where: { userId },
+      include: [
+        {
+          model: ListeRankModel,
+          as: "rank",
+        },
+        {
+          model: JeuModel,
+          as: "jeu",
+        },
+      ],
     });
 
     if (userRanks.length === 0) {
-      // Si aucun rang n'est trouvé une réponse vide 
       res.send([]);
       return;
     }
 
-    // IDs de rang de l'utilisateur
-    const rankIds = userRanks.map((rank) => rank.rankId);
-
-    // les rangs correspondant aux IDs dans la table ranks
-    const ranksData = await RankModel.findAll({
-      where: {
-        id: rankIds,
-      },
-    });
-
-    // IDs de jeu associés aux rangs
-    const gameIds = ranksData.map((rank) => rank.jeuId);
-
-    // noms de jeu correspondant aux IDs dans la table jeux
-    const gamesData = await JeuModel.findAll({
-      where: {
-        id: gameIds,
-      },
-    });
-
-    // noms de jeu à partir des données de jeu
-    const gameNames = gamesData.map((game) => game.title);
-
-    // noms de rangs à partir des données de rangs
-    const rankNames = ranksData.map((rank) => rank.name);
-
-    // Créez une structure de données qui associe les noms de rangs aux noms de jeu
-    const rankData = rankNames.map((rank, index) => ({
-      rank,
-      game: gameNames[index],
+    // Créer la structure de données
+    const rankData = userRanks.map((userRank) => ({
+      rank: userRank.rank.name,
+      game: userRank.jeu.title,
     }));
 
     res.send(rankData);

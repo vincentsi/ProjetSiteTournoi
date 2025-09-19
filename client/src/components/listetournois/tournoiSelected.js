@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { BracketAPI } from "../../actions/bracket.action";
-import { MatchList } from "../brackets/matchList";
 import { TournoiAPI } from "../../actions/tournoi.actions";
 import { updateTournoi } from "../../store/tournoi/tournois.reducer";
-import UploadImgTournois from "./UploadImgTournois";
-import MatchDetails from "../brackets/matchDetail";
 import ManageMatches from "../brackets/manageMatchAdmin";
+import MatchDetails from "../brackets/matchDetail";
+import { MatchList } from "../brackets/matchList";
+import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import AddAdmin from "./AddAdmin";
-import { Link } from 'react-router-dom';
+import UploadImgTournois from "./UploadImgTournois";
 
 // Composant TournoiSelec qui affiche les détails d'un tournoi et permet à l'utilisateur de s'inscrire ou de se désinscrire
 const TournoiSelec = ({ tournoi }) => {

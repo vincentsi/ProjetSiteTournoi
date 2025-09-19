@@ -1,30 +1,41 @@
 import React from "react";
 
-const HomeTournois = ({ title, description, subtitle, picture, onClick,horaire,nJoueur }) => {
+const HomeTournois = ({
+  title,
+  description,
+  subtitle,
+  picture,
+  onClick,
+  horaire,
+  nJoueur,
+}) => {
   // console.log(leJeu)
   // console.log(name)
   return (
     <div onClick={onClick}>
       <div className="tournois-container">
-        <div className="row">
-          <div className="col-4">
-          
-            <p>
-              <img
-                src={picture}
-                alt="tournoi-pic-tournoi"
-                className="tournoi-pic-tournoi"
-              />
-            </p>
+        <img
+          src={picture}
+          alt="tournoi-pic-tournoi"
+          className="tournoi-pic-tournoi"
+        />
+        <div className="tournois-content">
+          <div className="tournois-info">
+            <h3 className="tournois-title">{title}</h3>
+            <div className="tournois-details">
+              <div className="tournois-detail-item">
+                <span className="detail-icon">👥</span>
+                <span className="detail-text">{nJoueur} joueurs</span>
+              </div>
+              <div className="tournois-detail-item">
+                <span className="detail-icon">⏰</span>
+                <span className="detail-text">{horaire}</span>
+              </div>
+            </div>
           </div>
-          <div className="col-4">
-            <p>{title}</p>
+          <div className="tournois-overlay">
+            <div className="tournois-badge">Rejoindre</div>
           </div>
-          <div className="col-4">
-            <p>{nJoueur} joueur </p>
-            <p>{horaire}</p>
-          </div>
-          <br></br>
         </div>
       </div>
     </div>

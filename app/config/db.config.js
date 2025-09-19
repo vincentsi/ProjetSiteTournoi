@@ -1,7 +1,7 @@
 module.exports = {
   HOST: "localhost",
   USER: "root",
-  PASSWORD: "",
+  PASSWORD: "132025",
   DB: "projetfin",
   PORT: 3306,
   dialect: "mysql",
@@ -9,6 +9,6 @@ module.exports = {
     max: 5,
     min: 0,
     acquire: 30000,
-    idle: 10000
-  }
+    idle: 10000,
+  },
 };

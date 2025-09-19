@@ -1,61 +1,141 @@
 /* Style de base de la navbar */
 .navbar {
-    background-color: rgb(10, 9, 9);
-    padding: 20px; /* Réduit la taille de la barre de navigation pour les petits écrans */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    box-sizing: border-box;
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.1rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(255, 71, 87, 0.3);
+}
+
+.navbar:hover {
+  background: linear-gradient(135deg, #ff3838, #ff2f2f);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .navbar a {
-    color: rgb(9, 159, 218)
+  color: black;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 600;
 }
 
-.navbar .logo {
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    text-align: center;
-    align-items: center;
+.navbar a:hover {
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.navbar .logo h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: black;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.navbar .logo:hover h3 {
+  color: white;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
 }
 
 .navbar .menu {
-    display: none;
+  display: none;
 }
 
 .nav-container ul {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-container {
-    display: flex;
+  display: flex;
+  gap: 2rem;
 }
 
 .nav-container ul li {
-    margin: 0 15px; /* Réduit l'espace entre les éléments de la liste pour les petits écrans */
+  margin: 0 10px;
+  position: relative;
+}
+
+.nav-container ul li a {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-container ul li a:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-container ul li h5 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Styles pour les icônes */
+.navbar img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(0);
+  transition: all 0.3s ease;
+}
+
+.navbar img:hover {
+  filter: brightness(0) invert(1);
+  transform: scale(1.1);
+}
+
+/* Ajout de padding au body pour compenser la navbar fixe */
+body {
+  padding-top: 80px;
 }
 
 /* Media query pour les écrans plus petits */
 @media screen and (max-width: 768px) {
-    .navbar {
-        flex-direction: column; /* Change la direction de la navbar pour les petits écrans */
-        padding: 10px; /* Réduit davantage la taille de la barre de navigation */
-    }
+  body {
+    padding-top: 110px;
+  }
 
- 
-    .nav-container ul {
-        flex-direction: column; /* Change la direction de la liste pour les petits écrans */
-        text-align: center; /* Centre le texte pour les petits écrans */
-    }
+  .navbar {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
 
-    .nav-container ul li {
-        margin: 10px 0; /* Ajoute de l'espace entre les éléments de la liste pour les petits écrans */
-    }
+  .nav-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-container ul {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-container ul li {
+    margin: 5px;
+  }
+
+  .navbar .logo h3 {
+    font-size: 1.5rem;
+  }
 }
-
 
 /* @media screen and (max-width: 900px){
     .navbar{
@@ -88,3 +168,18 @@
         font-size: 1.2em;
     }
 }  */
+
+/* Media query pour les très petits écrans */
+@media screen and (max-width: 480px) {
+  body {
+    padding-top: 150px;
+  }
+
+  .navbar {
+    padding: 0.8rem;
+  }
+
+  .navbar .logo h3 {
+    font-size: 1.3rem;
+  }
+}

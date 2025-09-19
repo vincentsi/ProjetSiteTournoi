@@ -10,6 +10,7 @@ const bcrypt = require("bcryptjs");
 const maxAge = 3 * 60 * 24 * 60 * 1000;
 
 const createToken = (id) => {
+  // console.log("TOKEN_SECRET:", process.env.TOKEN_SECRET);
   return jwt.sign({ id }, process.env.TOKEN_SECRET, {
     expiresIn: maxAge,
   });

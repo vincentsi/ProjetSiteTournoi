@@ -1,14 +1,13 @@
 // import { useNavigate } from "react-router-dom";
 // import Hometournois from "./hometournois";
-import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { useState } from "react";
+import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 
 export function TournoiNew({ affTournois = true, onSubmit }) {
   const [button, setButton] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
 
-  
   const [formValuesTournois, setFormValuesTounois] = useState({
     title: "",
     information: "",
@@ -17,6 +16,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
     contact: "",
     regle: "",
     nJoueur: "",
+    platforme: "",
   });
 
   function updateFormValuesTournois(e) {
@@ -63,12 +63,20 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
 
   const numberPlayerInput = (
     <>
-      <label className="form-label">Nombre de joueur</label>
-      <select onChange={updateFormValuesTournois} name="nJoueur" id="nJoueur">
-        <option value="4">4</option>
-        <option value="8">8</option>
-        <option value="16">16</option>
-        <option value="32">32</option>
+      <label className="form-label">Nombre de joueurs *</label>
+      <select
+        onChange={updateFormValuesTournois}
+        name="nJoueur"
+        id="nJoueur"
+        className="form-control"
+        value={formValuesTournois.nJoueur}
+      >
+        <option value="">Sélectionner le nombre de joueurs</option>
+        <option value="4">4 joueurs</option>
+        <option value="8">8 joueurs</option>
+        <option value="16">16 joueurs</option>
+        <option value="32">32 joueurs</option>
+        <option value="64">64 joueurs</option>
       </select>
     </>
   );
@@ -121,17 +129,127 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
       />
     </>
   );
+
+  const platformeInput = (
+    <>
+      <label className="form-label">Plateforme</label>
+      <select
+        name="platforme"
+        className="form-control"
+        value={formValuesTournois.platforme}
+        onChange={updateFormValuesTournois}
+      >
+        <option value="">Sélectionner une plateforme</option>
+        <option value="pc">PC</option>
+        <option value="PlayStation">PlayStation</option>
+        <option value="Xbox">Xbox</option>
+        <option value="Nintendo Switch">Nintendo Switch</option>
+        <option value="Mobile">Mobile</option>
+      </select>
+    </>
+  );
+  const validateForm = () => {
+    const errors = [];
+
+    if (!formValuesTournois.title.trim()) {
+      errors.push("Le titre est requis");
+    }
+
+    if (!formValuesTournois.information.trim()) {
+      errors.push("L'information est requise");
+    }
+
+    if (!formValuesTournois.horaire.trim()) {
+      errors.push("L'horaire est requis");
+    }
+
+    if (!formValuesTournois.prix.trim()) {
+      errors.push("Le prix est requis");
+    }
+
+    if (!formValuesTournois.contact.trim()) {
+      errors.push("Le contact est requis");
+    }
+
+    if (!formValuesTournois.regle.trim()) {
+      errors.push("Les règles sont requises");
+    }
+
+    if (!formValuesTournois.nJoueur || formValuesTournois.nJoueur === "") {
+      errors.push("Veuillez sélectionner le nombre de joueurs");
+    } else if (
+      isNaN(formValuesTournois.nJoueur) ||
+      parseInt(formValuesTournois.nJoueur) <= 0
+    ) {
+      errors.push("Le nombre de joueurs doit être un nombre positif");
+    }
+
+    if (!formValuesTournois.platforme) {
+      errors.push("Veuillez sélectionner une plateforme");
+    }
+
+    return errors;
+  };
+
+  const handleSubmit = async () => {
+    const errors = validateForm();
+
+    if (errors.length > 0) {
+      setErrorMessage(errors.join(". "));
+      setSuccessMessage("");
+      return;
+    }
+
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      console.log("Tentative de création du tournoi...");
+      await onSubmit(formValuesTournois);
+      console.log("Tournoi créé avec succès !");
+      setSuccessMessage("✅ Tournoi créé avec succès !");
+    } catch (error) {
+      console.error("Erreur lors de la création du tournoi:", error);
+      console.error("Error response:", error.response);
+      console.error("Error response data:", error.response?.data);
+
+      let errorMessage =
+        "Une erreur est survenue lors de la création du tournoi.";
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      console.log("Message d'erreur à afficher:", errorMessage);
+      setErrorMessage(errorMessage);
+
+      // Forcer l'affichage du message d'erreur
+      setTimeout(() => {
+        console.log("État errorMessage après setErrorMessage:", errorMessage);
+      }, 100);
+    }
+  };
+
   const submitButton = (
     <div className="nj_submit_btn">
-      <ButtonPrimary
-        // isDisabled={hasError()}
-        onClick={() => onSubmit(formValuesTournois)}
-      >
-        Submit
-      </ButtonPrimary>
+      <ButtonPrimary onClick={handleSubmit}>Submit</ButtonPrimary>
     </div>
   );
   // console.log(affTournois);
+
+  console.log(
+    "État des messages - errorMessage:",
+    errorMessage,
+    "successMessage:",
+    successMessage
+  );
+
   return (
     <div className="tounois-selected-container">
       <div className="tounois-selected-header">
@@ -191,6 +309,7 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
                 {horaireInput}
                 {prixInput}
                 {contactInput}
+                {platformeInput}
               </div>
             </>
           )}
@@ -205,10 +324,45 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
           {button === "brackets" && <>Affiche le brackets </>}
         </div>
         {submitButton}
+
+        {errorMessage && (
+          <div
+            className="error-message"
+            style={{
+              backgroundColor: "#ff4757",
+              color: "white",
+              padding: "15px",
+              borderRadius: "8px",
+              margin: "20px 0",
+              border: "2px solid #ff3838",
+              boxShadow: "0 4px 15px rgba(255, 71, 87, 0.3)",
+              fontSize: "16px",
+              fontWeight: "500",
+            }}
+          >
+            ⚠️ {errorMessage}
+          </div>
+        )}
+
+        {successMessage && (
+          <div
+            className="success-message"
+            style={{
+              backgroundColor: "#2ed573",
+              color: "white",
+              padding: "15px",
+              borderRadius: "8px",
+              margin: "20px 0",
+              border: "2px solid #20bf6b",
+              boxShadow: "0 4px 15px rgba(46, 213, 115, 0.3)",
+              fontSize: "16px",
+              fontWeight: "500",
+            }}
+          >
+            ✅ {successMessage}
+          </div>
+        )}
       </div>
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-      {successMessage && (<div className="success-message">{successMessage}</div>
-      )}
     </div>
   );
 }

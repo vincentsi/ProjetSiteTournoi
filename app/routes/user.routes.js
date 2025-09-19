@@ -6,6 +6,7 @@ const upload = multer();
 
 module.exports = function (app) {
   app.get("/app/user/:id", controller.userInfo);
+  app.get("/app/user/:id/roles", controller.getUserRoles);
   app.get("/app/all", controller.getAllUsers);
   app.post("/app/user/info", controller.userInfoByUsername);
   app.post("/app/user/RankUser", controller.updateRankUser);
