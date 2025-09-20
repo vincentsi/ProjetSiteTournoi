@@ -104,6 +104,14 @@ exports.tournoiCrée = async (req, res) => {
         .json({ message: "Le nombre de joueurs doit être un nombre positif" });
     }
 
+    // Validation des nombres de joueurs autorisés (puissances de 2)
+    const validPlayerCounts = [4, 8, 16, 32, 64];
+    if (!validPlayerCounts.includes(nJoueur)) {
+      return res.status(400).json({
+        message: `Le nombre de joueurs doit être une puissance de 2 (4, 8, 16, 32, ou 64). Vous avez sélectionné ${nJoueur}.`,
+      });
+    }
+
     const existingAdminTournoi = await TournoiRolesModel.findOne({
       where: {
         userId: userId,
@@ -127,6 +135,7 @@ exports.tournoiCrée = async (req, res) => {
       contact: req.body.contact,
       platforme: req.body.platforme,
       regle: req.body.regle,
+      picture: "/img/imagetournois/default-tournament.png",
       listejeuId: req.body.listejeuId,
     });
 
@@ -145,12 +154,62 @@ exports.tournoiCrée = async (req, res) => {
       platforme: req.body.platforme,
       contact: req.body.contact,
       regle: req.body.regle,
+      picture: "/img/imagetournois/default-tournament.png",
       listejeuId: req.body.listejeuId,
     });
   } catch (err) {
     console.log(err);
     res.status(500).send({
       message: err.message || "Erreur lors de la création du tournoi",
+    });
+  }
+};
+
+module.exports.deleteTournament = async (req, res) => {
+  try {
+    const tournamentId = req.params.id;
+    const userId = req.body.userId;
+
+    const organizerRole = await TournoiRolesModel.findOne({
+      where: {
+        tournoiId: tournamentId,
+        userId: userId,
+        roleId: 3,
+      },
+    });
+
+    const userRole = await db.user.findByPk(userId);
+    const isAdmin = userRole && userRole.roleId === 2; // roleId 2 = admin
+
+    if (!organizerRole && !isAdmin) {
+      return res.status(403).json({
+        message: "Vous n'avez pas la permission de supprimer ce tournoi.",
+      });
+    }
+
+    // Supprimer tous les rôles associés au tournoi
+    await TournoiRolesModel.destroy({
+      where: { tournoiId: tournamentId },
+    });
+
+    // Supprimer le tournoi
+    const deletedTournament = await TournoiModel.destroy({
+      where: { id: tournamentId },
+    });
+
+    if (deletedTournament === 0) {
+      return res.status(404).json({
+        message: "Tournoi non trouvé.",
+      });
+    }
+
+    res.status(200).json({
+      message: "Tournoi supprimé avec succès.",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      message: err.message || "Erreur lors de la suppression du tournoi",
     });
   }
 };

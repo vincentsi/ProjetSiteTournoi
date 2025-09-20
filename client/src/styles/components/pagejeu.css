@@ -210,6 +210,11 @@
   font-weight: bold;
   width: 150px;
   height: 55px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 /* Styles pour le select de plateforme */

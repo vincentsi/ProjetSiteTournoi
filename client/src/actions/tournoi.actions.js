@@ -9,33 +9,66 @@ export class TournoiAPI {
     ).data.map(this.formatId);
   }
   static async create(tournoi) {
-    console.log(tournoi)
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/tournoicreation`, tournoi)).data;
-   
+    console.log(tournoi);
+    return (
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}app/tournoi/tournoicreation`,
+        tournoi
+      )
+    ).data;
   }
   static async updateTournoi(tournoi) {
-    return (await axios.put(`${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`, tournoi)).data;
-   
+    return (
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`,
+        tournoi
+      )
+    ).data;
   }
   static async updateImgTournoi(tournoi, data) {
     // console.log("Data to be uploaded:", data);
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`, data)).data;
+    return (
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}app/tournoi/${tournoi.id}`,
+        data
+      )
+    ).data;
   }
   static async addAdmin(adminData) {
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/newAdmin`, adminData)).data;
-   
+    return (
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}app/tournoi/newAdmin`,
+        adminData
+      )
+    ).data;
   }
   static async infoOrga(tournoi) {
-  
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/infoOrga/${tournoi.id}`)).data;
+    return (
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}app/tournoi/infoOrga/${tournoi.id}`
+      )
+    ).data;
   }
   static async getTournamentAdmins(tournoi) {
-  
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/infoAdmin/${tournoi.id}`)).data;
+    return (
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}app/tournoi/infoAdmin/${tournoi.id}`
+      )
+    ).data;
+  }
+  static async deleteTournament(tournamentId, userId) {
+    return (
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}app/tournoi/${tournamentId}`,
+        {
+          data: { userId: userId },
+        }
+      )
+    ).data;
   }
   // static async infoOrga(tournoi) {
   //   return (await axios.post(`${process.env.REACT_APP_API_URL}app/tournoi/infoOrga`, tournoi)).data;
-   
+
   // }
   static formatId(tournoi) {
     return {

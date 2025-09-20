@@ -38,6 +38,52 @@ exports.addInscritBracket = async (req, res) => {
     const userId = req.body.userId;
     const tournoiId = req.body.tournoiId;
 
+    // Vérifier si le tournoi existe
+    const tournoi = await TournoiModel.findByPk(tournoiId);
+    if (!tournoi) {
+      return res.status(404).json({
+        message: "Tournoi non trouvé.",
+      });
+    }
+
+    // Vérifier si le tournoi est déjà lancé
+    if (tournoi.status === "lancé") {
+      return res.status(400).json({
+        message:
+          "Ce tournoi a déjà été lancé, vous ne pouvez plus vous inscrire.",
+      });
+    }
+
+    // Vérifier si l'utilisateur est déjà inscrit
+    const existingInscription = await TournoiRolesModel.findOne({
+      where: {
+        userId: userId,
+        tournoiId: tournoiId,
+        roleId: 4, //joueur
+      },
+    });
+
+    if (existingInscription) {
+      return res.status(400).json({
+        message: "Vous êtes déjà inscrit à ce tournoi.",
+      });
+    }
+
+    // Compter le nombre de participants actuels
+    const currentParticipants = await TournoiRolesModel.count({
+      where: {
+        tournoiId: tournoiId,
+        roleId: 4, //joueur
+      },
+    });
+
+    // Vérifier si le tournoi est complet
+    if (currentParticipants >= tournoi.nJoueur) {
+      return res.status(400).json({
+        message: `Ce tournoi est complet ! (${currentParticipants}/${tournoi.nJoueur} participants)`,
+      });
+    }
+
     const roleJoueurId = await RoleModel.findOne({ where: { name: "joueur" } });
 
     if (roleJoueurId) {
@@ -47,13 +93,18 @@ exports.addInscritBracket = async (req, res) => {
         roleId: roleJoueurId.id,
       });
 
-      res.status(200).send({ message: "Rôle de joueur attribué avec succès." });
+      res.status(200).json({
+        message:
+          "Inscription réussie ! Vous êtes maintenant inscrit au tournoi.",
+      });
     } else {
-      res.status(404).send({ message: "Le rôle 'joueur' n'a pas été trouvé." });
+      res.status(404).json({ message: "Le rôle 'joueur' n'a pas été trouvé." });
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send({ message: err });
+    res.status(500).json({
+      message: err.message || "Une erreur est survenue lors de l'inscription.",
+    });
   }
 };
 

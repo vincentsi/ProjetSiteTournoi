@@ -5,16 +5,29 @@ const multer = require("multer");
 const upload = multer();
 
 module.exports = function (app) {
-    app.get("/app/tournoi/:id", controller.tournoiInfo);
-    app.get("/app/tournois/all", controller.getAlltournois);
-    app.put("/app/tournoi/:id", controller.updateTournament);
-    app.post("/app/tournoi/tournoicreation", controller.tournoiCrée);
-    app.post("/app/tournoi/infoOrga/:tournoiId", controllerRole.getOrganisateurTournoi);
-    app.post("/app/tournoi/infoAdmin/:tournoiId", controllerRole.getAdminsTournoi);
-    app.post("/app/tournoi/newAdmin", controllerRole.addAdminToTournament);    
+  app.get("/app/tournoi/:id", controller.tournoiInfo);
+  app.get("/app/tournois/all", controller.getAlltournois);
+  app.put("/app/tournoi/:id", controller.updateTournament);
+  app.post("/app/tournoi/tournoicreation", controller.tournoiCrée);
+  app.post(
+    "/app/tournoi/infoOrga/:tournoiId",
+    controllerRole.getOrganisateurTournoi
+  );
+  app.post(
+    "/app/tournoi/infoAdmin/:tournoiId",
+    controllerRole.getAdminsTournoi
+  );
+  app.post("/app/tournoi/newAdmin", controllerRole.addAdminToTournament);
 
-    
-    app.post("/app/tournoi", upload.single("file"), uploadController.uploadImgTournoi);
+  app.post(
+    "/app/tournoi",
+    upload.single("file"),
+    uploadController.uploadImgTournoi
+  );
 
-    app.post("/app/tournoi/assignRole", controllerRole.assignRoleTournoiAdminToUser);
-  };
+  app.post(
+    "/app/tournoi/assignRole",
+    controllerRole.assignRoleTournoiAdminToUser
+  );
+  app.delete("/app/tournoi/:id", controller.deleteTournament);
+};

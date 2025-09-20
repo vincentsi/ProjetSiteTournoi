@@ -140,11 +140,10 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
         onChange={updateFormValuesTournois}
       >
         <option value="">Sélectionner une plateforme</option>
-        <option value="pc">PC</option>
-        <option value="PlayStation">PlayStation</option>
-        <option value="Xbox">Xbox</option>
+        <option value="PC">PC</option>
+        <option value="PC/Console">PC/Console</option>
         <option value="Nintendo Switch">Nintendo Switch</option>
-        <option value="Mobile">Mobile</option>
+        <option value="Multi">Multi</option>
       </select>
     </>
   );
@@ -182,6 +181,15 @@ export function TournoiNew({ affTournois = true, onSubmit }) {
       parseInt(formValuesTournois.nJoueur) <= 0
     ) {
       errors.push("Le nombre de joueurs doit être un nombre positif");
+    } else {
+      // Validation des nombres de joueurs autorisés (puissances de 2)
+      const validPlayerCounts = [4, 8, 16, 32, 64];
+      const nJoueur = parseInt(formValuesTournois.nJoueur);
+      if (!validPlayerCounts.includes(nJoueur)) {
+        errors.push(
+          `Le nombre de joueurs doit être une puissance de 2 (4, 8, 16, 32, ou 64). Vous avez sélectionné ${nJoueur}.`
+        );
+      }
     }
 
     if (!formValuesTournois.platforme) {

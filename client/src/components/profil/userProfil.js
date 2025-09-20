@@ -56,16 +56,15 @@ function UserProfile() {
                   selectedUser.picture &&
                   selectedUser.picture.startsWith("http")
                     ? selectedUser.picture
-                    : `./.${
-                        selectedUser.picture ||
-                        "./uploads/profil/random-user.png"
-                      }`
+                    : selectedUser.picture
+                    ? selectedUser.picture
+                    : "/uploads/profil/random-user.png"
                 }
                 alt="user-pic"
                 className="profile-pic"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "./uploads/profil/random-user.png";
+                  e.target.src = "/uploads/profil/random-user.png";
                 }}
               />
             </div>

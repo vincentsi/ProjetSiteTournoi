@@ -1,81 +1,444 @@
-/* CSS pour la carte de match */*
+/* CSS pour les cartes de match et sélection des vainqueurs */
 
-.match-card {
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s, box-shadow 0.2s;
-  }
-  
-  .match-card:hover {
-    background-color: #f0f0f0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .match-card h4 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .match-card p {
-    margin: 8px 0;
-    font-size: 14px;
-    color: #666;
-  }
-  
-  /* Afficher les détails du match lorsqu'ils sont visibles */
-  .match-card > div {
-    display: none;
-    margin-top: 8px;
-  }
-  
-  .match-card.show-details > div {
-    display: block;
-  }
-
-  .selected-match-details {
-  border: 2px solid #333;
+/* Container principal pour la gestion des matchs */
+.manage-matches-container {
   padding: 20px;
-  margin: 10px;
-  background-color: #f5f5f5;
-  text-align: center;
-  border-radius: 5px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff4757 100%);
+  min-height: 100vh;
 }
 
-
-
-
-
-.selected-match-details p {
-  font-size: 16px;
-  color: #4CAF50; /* Couleur verte pour le gagnant */
+.matches-title {
+  color: white;
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   font-weight: bold;
 }
 
-.selected-match-details label {
-  display: block;
-  margin: 10px 0;
+.matches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.selected-match-details input[type="radio"] {
-
-  margin-right: 10px;
+/* Cartes de match pour admin */
+.match-card-admin {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.selected-match-details button {
-  background-color: #4CAF50; /* Couleur verte pour le bouton */
+.match-card-admin:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.match-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.round-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff4757, #ff3838);
   color: white;
-  padding: 10px 20px;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+}
+
+.vs-text {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Status du vainqueur */
+.winner-status {
+  text-align: center;
+  padding: 15px;
+  background: rgba(76, 175, 80, 0.2);
+  border-radius: 15px;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.winner-badge {
+  color: #4caf50;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles pour les vainqueurs signalés */
+.reported-winner {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: center;
+}
+
+.reported-badge {
+  color: #ff9800;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.validate-winner-button {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
   border: none;
-  border-radius: 5px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.validate-winner-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #45a049, #388e3c);
+}
+
+/* Styles pour les vainqueurs validés */
+.validated-winner {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: center;
+}
+
+.cancel-winner-button {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: center;
+  max-width: 200px;
+}
+
+.cancel-winner-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+  background: linear-gradient(135deg, #d32f2f, #b71c1c);
+}
+
+/* Section de sélection du vainqueur */
+.winner-selection {
+  padding: 20px 0;
+}
+
+/* Match incomplet */
+.incomplete-match {
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 152, 0, 0.2);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.incomplete-badge {
+  color: #ff9800;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.incomplete-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.selection-title {
+  color: white;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.player-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.player-option {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.player-option:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+
+.winner-radio {
+  width: 20px;
+  height: 20px;
+  margin-right: 15px;
+  accent-color: #ff4757;
   cursor: pointer;
 }
 
-.selected-match-details button:hover {
-  background-color: #45a049; /* Couleur verte légèrement plus sombre au survol */
+.player-name {
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* Bouton de validation */
+.validate-button {
+  width: 100%;
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.validate-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(255, 71, 87, 0.4);
+}
+
+.validate-button:disabled {
+  background: rgba(255, 255, 255, 0.2);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.button-icon {
+  font-size: 1.2rem;
+}
+
+/* Container pour les détails de match */
+.match-detail-container {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.match-detail-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.match-title {
+  color: white;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.match-participants {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.participant {
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.vs-separator {
+  color: #ff4757;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.winner-display {
+  text-align: center;
+  padding: 20px;
+  background: rgba(76, 175, 80, 0.2);
+  border-radius: 15px;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  margin-bottom: 20px;
+}
+
+.winner-selection-section {
+  padding: 20px 0;
+}
+
+.player-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.player-choice {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.player-choice:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+
+.report-winner-button {
+  width: 100%;
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.report-winner-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(76, 175, 80, 0.4);
+}
+
+.report-winner-button:disabled {
+  background: rgba(255, 255, 255, 0.2);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Cartes de match classiques */
+.match-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.match-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.match-card h4 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.match-card p {
+  margin: 8px 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .matches-grid {
+    grid-template-columns: 1fr;
+    padding: 0 10px;
+  }
+
+  .match-card-admin,
+  .match-detail-container {
+    padding: 20px;
+  }
+
+  .matches-title {
+    font-size: 2rem;
+  }
+
+  .match-participants {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

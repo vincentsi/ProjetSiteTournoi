@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { JeuList } from "../components/listejeux/JeuList";
 import { SearchBar } from "../components/SearchBar/searchBarJeux";
-import { useSelector } from "react-redux";
 
 export const HomeListeJeux = (props) => {
   const [selectedGenre, setSelectedGenre] = useState("");
@@ -24,11 +24,12 @@ export const HomeListeJeux = (props) => {
   });
   const genreOptions = [
     { value: "", label: "All Genres" },
-    { value: "Action", label: "Action" },
+    { value: "MOBA", label: "MOBA" },
+    { value: "FPS", label: "FPS" },
+    { value: "Sport", label: "Sport" },
+    { value: "Combat", label: "Combat" },
+    { value: "Auto-chess", label: "Auto-chess" },
     { value: "Aventure", label: "Aventure" },
-    { value: "rpg", label: "rpg" },
-    { value: "moba", label: "moba" },
-    { value: "combat", label: "combat" },
   ];
   console.log(filteredList);
   return (

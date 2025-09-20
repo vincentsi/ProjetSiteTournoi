@@ -60,39 +60,95 @@ module.exports.getAlljeux = async (req, res) => {
 
 // crée un jeu
 exports.jeuCrée = async (req, res) => {
-  const jeu = await JeuModel.create({
-    name: req.body.name,
-    title: req.body.title,
-    genres: req.body.genres,
-    description: req.body.description,
-    picture: req.body.picture,
-  });
-  if (JeuModel) {
+  try {
+    let picturePath = "/img/imagejeux/test.jpg"; // Image par défaut
+
+    // Si une image a été uploadée
+    if (req.file) {
+      picturePath = req.file.path; // Cloudinary retourne le path complet
+    }
+
+    const jeu = await JeuModel.create({
+      name: req.body.title.toLowerCase().replace(/\s+/g, "-"), // Générer le nom à partir du titre
+      title: req.body.title,
+      genres: req.body.genres,
+      description: req.body.description,
+      picture: picturePath,
+    });
+
     res.status(200).send(jeu);
-  } else {
-    res.send({ message: "error" });
+  } catch (error) {
+    console.error("Erreur lors de la création du jeu:", error);
+
+    // Gestion des erreurs spécifiques
+    if (error.name === "SequelizeValidationError") {
+      const validationErrors = error.errors
+        .map((err) => err.message)
+        .join(", ");
+      return res.status(400).send({
+        message: `Erreur de validation: ${validationErrors}`,
+        errors: error.errors,
+      });
+    }
+
+    if (error.name === "SequelizeUniqueConstraintError") {
+      return res.status(409).send({
+        message: "Un jeu avec ce nom existe déjà",
+        error: "DUPLICATE_NAME",
+      });
+    }
+
+    if (error.code === "LIMIT_FILE_SIZE") {
+      return res.status(413).send({
+        message: "Le fichier image est trop volumineux (max 5MB)",
+        error: "FILE_TOO_LARGE",
+      });
+    }
+
+    if (error.message === "Seules les images sont autorisées!") {
+      return res.status(400).send({
+        message: "Seules les images sont autorisées",
+        error: "INVALID_FILE_TYPE",
+      });
+    }
+
+    // Erreur générique
+    res.status(500).send({
+      message: "Erreur interne du serveur lors de la création du jeu",
+      error: "INTERNAL_ERROR",
+    });
   }
 };
 
 module.exports.updateJeu = async (req, res) => {
   try {
-    await JeuModel.findByPk(req.params.id);
+    const jeu = await JeuModel.findByPk(req.params.id);
 
-    if (JeuModel != null) {
-      JeuModel.update(
-        {
-          name: req.body.name,
-          title: req.body.title,
-          genres: req.body.genres,
-          description: req.body.description,
-        },
-        { where: { id: req.params.id } }
-      );
-      res.status(200).send("updated successfully");
+    if (!jeu) {
+      return res.status(404).send({ message: "Jeu non trouvé" });
     }
+
+    // Préparer les données à mettre à jour
+    const updateData = {
+      name: req.body.name,
+      title: req.body.title,
+      genres: req.body.genres,
+      description: req.body.description,
+    };
+
+    // Si une nouvelle image est uploadée, l'ajouter
+    if (req.file) {
+      updateData.picture = req.file.path; // Cloudinary retourne le path complet
+    }
+
+    await JeuModel.update(updateData, { where: { id: req.params.id } });
+
+    // Récupérer le jeu mis à jour pour le retourner
+    const updatedJeu = await JeuModel.findByPk(req.params.id);
+    res.status(200).send(updatedJeu);
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: err });
+    res.status(500).send({ message: err.message });
   }
 };
 

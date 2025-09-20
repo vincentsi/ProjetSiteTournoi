@@ -2,32 +2,87 @@ import axios from "axios";
 
 export class JeuAPI {
   static async create(jeu) {
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/jeucreation`, jeu)).data;
-   
+    const config = {
+      headers: {
+        "Content-Type":
+          jeu instanceof FormData ? "multipart/form-data" : "application/json",
+      },
+      withCredentials: true, // Important: pour envoyer les cookies
+    };
+    return (
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}app/jeu/jeucreation`,
+        jeu,
+        config
+      )
+    ).data;
   }
   static async fetchAll() {
-    return (await axios.get(`${process.env.REACT_APP_API_URL}app/jeux/all`)).data.map(this.formatId);
-   
+    return (
+      await axios.get(`${process.env.REACT_APP_API_URL}app/jeux/all`)
+    ).data.map(this.formatId);
+
     // .data.map(this.formatId);
   }
 
   static async fetchById(jeuId) {
-    return this.formatId((await axios.get(`${process.env.REACT_APP_API_URL}/${jeuId}`)).data);
+    return this.formatId(
+      (await axios.get(`${process.env.REACT_APP_API_URL}/${jeuId}`)).data
+    );
   }
   static async deleteById(jeuId) {
-    return (await axios.delete(`${process.env.REACT_APP_API_URL}app/jeu/${jeuId}`)).data;
+    const config = {
+      withCredentials: true,
+    };
+    return (
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}app/jeu/${jeuId}`,
+        config
+      )
+    ).data;
   }
-  static async update(jeu) {
-    return (await axios.put(`${process.env.REACT_APP_API_URL}app/jeu/${jeu.id}`, jeu)).data;
+  static async update(jeu, id = null) {
+    const config = {
+      withCredentials: true,
+    };
+
+    // Si jeu est une instance de FormData, c'est un upload d'image
+    if (jeu instanceof FormData) {
+      config.headers = {
+        "Content-Type": "multipart/form-data",
+      };
+      return (
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}app/jeu/${id}`,
+          jeu,
+          config
+        )
+      ).data;
+    } else {
+      // Sinon, c'est une mise à jour normale
+      return (
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}app/jeu/${jeu.id}`,
+          jeu,
+          config
+        )
+      ).data;
+    }
   }
   static async infoGameByName(jeu) {
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/info`, jeu)).data;
+    return (
+      await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/info`, jeu)
+    ).data;
   }
   static async infoRank(jeu) {
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/rank`, jeu)).data;
+    return (
+      await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/rank`, jeu)
+    ).data;
   }
   static async updateImgJeu(jeu) {
-    return (await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/upload`, jeu)).data;
+    return (
+      await axios.post(`${process.env.REACT_APP_API_URL}app/jeu/upload`, jeu)
+    ).data;
   }
   static formatId(jeu) {
     return {
@@ -75,4 +130,3 @@ export class JeuAPI {
 //       // .catch((err) => console.log(err));
 //   // };
 // };
-

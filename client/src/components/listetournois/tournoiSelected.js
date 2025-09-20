@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BracketAPI } from "../../actions/bracket.action";
 import { TournoiAPI } from "../../actions/tournoi.actions";
+import { UserAPI } from "../../actions/user.actions";
 import { updateTournoi } from "../../store/tournoi/tournois.reducer";
 import ManageMatches from "../brackets/manageMatchAdmin";
 import MatchDetails from "../brackets/matchDetail";
@@ -15,9 +16,12 @@ import UploadImgTournois from "./UploadImgTournois";
 const TournoiSelec = ({ tournoi }) => {
   // Utilisation de useSelector pour récupérer les données de l'utilisateur depuis le state Redux
   const userData = useSelector((state) => state.USER.user);
+  const navigate = useNavigate();
 
   // Utilisation de l'état local pour suivre le statut d'inscription de l'utilisateur
-  const [userInscrit, setUserInscrit] = useState(checkRegistrationStatus());
+  const [userInscrit, setUserInscrit] = useState(false);
+  // État pour vérifier si l'utilisateur est admin
+  const [isAdmin, setIsAdmin] = useState(false);
   // Utilisation de l'état local pour suivre le bouton actuellement sélectionné par l'utilisateur
   const [button, setButton] = useState("information");
   const [participants, setParticipants] = useState([]);
@@ -84,6 +88,8 @@ const TournoiSelec = ({ tournoi }) => {
       async function fetchData() {
         const isOrganizer = await checkUserRole(userData.id, tournoi.id);
         setIsOrganizer(isOrganizer);
+        // Vérifier le statut d'inscription
+        await checkRegistrationStatus();
       }
 
       fetchData();
@@ -93,7 +99,7 @@ const TournoiSelec = ({ tournoi }) => {
   const saveChanges = async () => {
     try {
       // Enregistrer les modifications dans la base de données (utilisez votre API appropriée)
-      const test = await TournoiAPI.updateTournoi(editedTournoi);
+      await TournoiAPI.updateTournoi(editedTournoi);
       // Appeler la fonction fournie par le composant parent pour mettre à jour le tournoi
       dispatch(updateTournoi(editedTournoi));
 
@@ -103,12 +109,11 @@ const TournoiSelec = ({ tournoi }) => {
       alert("Une erreur est survenue lors du lancement du tournoi.");
     }
   };
-  const toggleEditMode = () => {
-    setIsEditMode(!isEditMode);
-  };
 
   async function launchTournament() {
     try {
+      setErrorMessage(null); // Effacer les erreurs précédentes
+
       const updatedTournoi = await BracketAPI.genereBracket({
         tournoiId: tournoi.id,
       });
@@ -118,27 +123,30 @@ const TournoiSelec = ({ tournoi }) => {
       setEditedTournoi({ ...tournoi, status: "Lancé" });
 
       alert("Le tournoi a été lancé avec succès !");
+
+      window.location.reload();
     } catch (error) {
-      console.error(error);
+      console.error("Erreur lors du lancement du tournoi:", error);
+
+      let errorMessage =
+        "Une erreur est survenue lors du lancement du tournoi.";
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      setErrorMessage(errorMessage);
     }
   }
 
-  // Utiliser useEffect pour charger les participants lorsque le bouton "participants" est sélectionné
-  useEffect(() => {
-    if (button === "participants") {
-      affParticipant();
-    }
-  }, [button]);
-
-  // Utiliser useEffect pour charger les matchs de l'utilisateur lorsque le bouton "match" est sélectionné
-  useEffect(() => {
-    if (button === "match" && userData.username) {
-      loadUserMatches();
-    }
-  }, [button, userData]);
-
   // Fonction asynchrone pour charger les participants du tournoi
-  async function affParticipant() {
+  const affParticipant = useCallback(async () => {
     try {
       const response = await BracketAPI.affParticipant({
         tournoiId: tournoi.id,
@@ -147,10 +155,10 @@ const TournoiSelec = ({ tournoi }) => {
     } catch (error) {
       console.error(error);
     }
-  }
+  }, [tournoi.id]);
 
   // Fonction asynchrone pour charger les matchs de l'utilisateur connecté
-  async function loadUserMatches() {
+  const loadUserMatches = useCallback(async () => {
     try {
       const response = await BracketAPI.getUserMatches({
         tournoiId: tournoi.id,
@@ -160,7 +168,44 @@ const TournoiSelec = ({ tournoi }) => {
     } catch (error) {
       console.error(error);
     }
-  }
+  }, [tournoi.id, userData.username]);
+
+  // Charger automatiquement les participants au chargement du composant
+  useEffect(() => {
+    affParticipant();
+  }, [affParticipant]);
+
+  // Utiliser useEffect pour charger les participants lorsque le bouton "participants" est sélectionné
+  useEffect(() => {
+    if (button === "participants") {
+      affParticipant();
+    }
+  }, [button, affParticipant]);
+
+  // Utiliser useEffect pour charger les matchs de l'utilisateur lorsque le bouton "match" est sélectionné
+  useEffect(() => {
+    if (button === "match" && userData.username) {
+      loadUserMatches();
+    }
+  }, [button, userData, loadUserMatches]);
+
+  // Vérifier si l'utilisateur est admin
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      if (userData.id) {
+        try {
+          const roles = await UserAPI.getUserRoles(userData.id);
+          setIsAdmin(roles.includes("admin"));
+        } catch (error) {
+          console.error("Erreur lors de la vérification du rôle admin:", error);
+          setIsAdmin(false);
+        }
+      }
+    };
+
+    checkAdminRole();
+  }, [userData.id]);
+
   // Fonction asynchrone pour vérifier le statut d'inscription de l'utilisateur
   async function checkRegistrationStatus() {
     try {
@@ -184,7 +229,7 @@ const TournoiSelec = ({ tournoi }) => {
     }
   }
 
-  // Fonction asynchrone pour gérer l'inscription et la désinscription de l'utilisateur au tournoi
+  //gérer l'inscription et la désinscription de l'utilisateur au tournoi
   async function handleInscription() {
     try {
       if (userData.id != null) {
@@ -195,13 +240,27 @@ const TournoiSelec = ({ tournoi }) => {
         });
 
         if (userBracket) {
-          // Si l'utilisateur est déjà inscrit, le désinscrire en supprimant le bracket associé
-          await BracketAPI.DelOneUserBracket({
-            tournoiId: tournoi.id,
-            userId: userData.id,
-          });
-          setUserInscrit(false);
+          const confirmUnregister = window.confirm(
+            `Êtes-vous sûr de vouloir vous désinscrire du tournoi "${tournoi.title}" ?\n\nVous perdrez votre place dans le tournoi et devrez vous réinscrire si vous changez d'avis.`
+          );
+
+          if (confirmUnregister) {
+            await BracketAPI.DelOneUserBracket({
+              tournoiId: tournoi.id,
+              userId: userData.id,
+            });
+            setUserInscrit(false);
+            alert("Vous avez été désinscrit du tournoi avec succès.");
+          }
         } else {
+          // Vérifier si le tournoi est complet avant d'autoriser l'inscription
+          if (participants.length >= tournoi.nJoueur) {
+            alert(
+              `Ce tournoi est complet ! (${participants.length}/${tournoi.nJoueur} participants)\n\nVous ne pouvez plus vous inscrire à ce tournoi.`
+            );
+            return;
+          }
+
           // Sinon, inscrire l'utilisateur en créant un nouveau bracket associé
           await BracketAPI.UTCreate({
             tournoiId: tournoi.id,
@@ -209,8 +268,10 @@ const TournoiSelec = ({ tournoi }) => {
           });
           setUserInscrit(true);
         }
+
+        // Rafraîchir la liste
+        await affParticipant();
       } else {
-        // Si l'utilisateur n'est pas connecté, afficher une alerte pour l'inciter à se connecter ou à créer un compte
         alert("Connectez-vous à votre compte utilisateur ou créez-le.");
       }
     } catch (error) {
@@ -220,21 +281,56 @@ const TournoiSelec = ({ tournoi }) => {
   async function removeParticipant(participantId) {
     try {
       if (isOrganizer) {
-        await BracketAPI.DelOneUserBracket({
-          tournoiId: tournoi.id,
-          userId: participantId,
-        });
-        affParticipant();
+        // Trouver le nom du participant pour l'affichage dans la confirmation
+        const participant = participants.find((p) => p.id === participantId);
+        const participantName = participant
+          ? participant.username
+          : "ce joueur";
+
+        // Demande confirmation
+        const confirmMessage = `Êtes-vous sûr de vouloir supprimer ${participantName} du tournoi "${tournoi.title}" ?\n\nCette action est irréversible.`;
+
+        if (window.confirm(confirmMessage)) {
+          await BracketAPI.DelOneUserBracket({
+            tournoiId: tournoi.id,
+            userId: participantId,
+          });
+          affParticipant();
+
+          //confirmation de suppression
+          alert(`${participantName} a été supprimé du tournoi avec succès.`);
+        }
       } else {
         alert("Vous n'avez pas la permission de supprimer des participants.");
       }
     } catch (error) {
       console.error(error);
+      alert("Erreur lors de la suppression du participant.");
+    }
+  }
+
+  async function deleteTournament() {
+    try {
+      if (isOrganizer || isAdmin) {
+        const confirmDelete = window.confirm(
+          `Êtes-vous sûr de vouloir supprimer le tournoi "${tournoi.title}" ?\n\nCette action supprimera définitivement :\n• Le tournoi et toutes ses informations\n• Toutes les inscriptions des joueurs\n• Tous les matchs et résultats\n\nCette action est irréversible.`
+        );
+
+        if (confirmDelete) {
+          await TournoiAPI.deleteTournament(tournoi.id, userData.id);
+          alert("Tournoi supprimé avec succès !");
+          navigate("/homeListeTournois");
+        }
+      } else {
+        alert("Vous n'avez pas la permission de supprimer ce tournoi.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Erreur lors de la suppression du tournoi.");
     }
   }
   async function handleReportWinner(matchId, winnerId) {
     try {
-      console.log(matchId, winnerId);
       const updatedMatch = await BracketAPI.reportWinner(matchId, winnerId);
 
       // Mettez à jour l'état local pour refléter le vainqueur signalé
@@ -295,11 +391,45 @@ const TournoiSelec = ({ tournoi }) => {
                       Se désinscrire
                     </ButtonPrimary>
                   ) : (
-                    // Sinon, afficher le bouton "S'inscrire"
-                    <ButtonPrimary onClick={handleInscription}>
-                      S'inscrire
+                    // Sinon, afficher le bouton "S'inscrire" (désactivé si tournoi complet)
+                    <ButtonPrimary
+                      onClick={handleInscription}
+                      disabled={participants.length >= tournoi.nJoueur}
+                      style={{
+                        opacity:
+                          participants.length >= tournoi.nJoueur ? 0.5 : 1,
+                        cursor:
+                          participants.length >= tournoi.nJoueur
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      {participants.length >= tournoi.nJoueur
+                        ? "Tournoi complet"
+                        : "S'inscrire"}
                     </ButtonPrimary>
                   )}
+
+                  {/* Affichage du nombre d'inscrits en temps réel */}
+                  <div
+                    style={{
+                      marginTop: "10px",
+                      padding: "8px 12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                      borderRadius: "8px",
+                      textAlign: "center",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      color: "#fff",
+                    }}
+                  >
+                    👥 Participants: {participants.length} / {tournoi.nJoueur}
+                    {participants.length === tournoi.nJoueur && (
+                      <div style={{ color: "#ffd700", marginTop: "4px" }}>
+                        🎯 Tournoi complet !
+                      </div>
+                    )}
+                  </div>
                 </>
               )}
               {isEditMode ? (
@@ -312,27 +442,65 @@ const TournoiSelec = ({ tournoi }) => {
                       Annuler
                     </button>
                   </div>
-                  <div className="add-admin-section">
-                    <AddAdmin tournoiId={tournoi.id} />
-                  </div>
+                  {isOrganizer && (
+                    <div className="add-admin-section">
+                      <AddAdmin tournoiId={tournoi.id} />
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
-                  {isOrganizer && (
+                  {(isOrganizer || isAdmin) && (
                     <>
-                      <div className="ts_submit_btn">
-                        <ButtonPrimary onClick={() => launchTournament()}>
-                          Lancer le tournoi
-                        </ButtonPrimary>
-                      </div>
-                      <div className="ts_submit_btn">
-                        <ButtonPrimary
-                          onClick={() => setIsEditMode(!isEditMode)}
-                        >
-                          {"Modifier le tournoi"}
-                        </ButtonPrimary>
-                      </div>
+                      {isOrganizer && (
+                        <div className="ts_submit_btn">
+                          <ButtonPrimary onClick={() => launchTournament()}>
+                            Lancer le tournoi
+                          </ButtonPrimary>
+                        </div>
+                      )}
+                      {isOrganizer && (
+                        <div className="ts_submit_btn">
+                          <ButtonPrimary
+                            onClick={() => setIsEditMode(!isEditMode)}
+                          >
+                            {"Modifier le tournoi"}
+                          </ButtonPrimary>
+                        </div>
+                      )}
+                      {(isOrganizer || isAdmin) && (
+                        <div className="ts_submit_btn">
+                          <ButtonPrimary
+                            onClick={deleteTournament}
+                            style={{
+                              background:
+                                "linear-gradient(135deg, #dc3545, #c82333)",
+                            }}
+                          >
+                            {"Supprimer le tournoi"}
+                          </ButtonPrimary>
+                        </div>
+                      )}
                     </>
+                  )}
+
+                  {/* Affichage des messages d'erreur */}
+                  {errorMessage && (
+                    <div
+                      style={{
+                        backgroundColor: "#ff4757",
+                        color: "white",
+                        padding: "15px",
+                        borderRadius: "8px",
+                        margin: "20px 0",
+                        border: "2px solid #ff3838",
+                        boxShadow: "0 4px 15px rgba(255, 71, 87, 0.3)",
+                        fontSize: "16px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      ⚠️ {errorMessage}
+                    </div>
                   )}
                 </>
               )}{" "}
@@ -340,6 +508,19 @@ const TournoiSelec = ({ tournoi }) => {
           ) : (
             <div className="tStart">
               <p>tournois en cours </p>
+              {/* Bouton de suppression pour les admins même si le tournoi est lancé */}
+              {isAdmin && (
+                <div className="ts_submit_btn">
+                  <ButtonPrimary
+                    onClick={deleteTournament}
+                    style={{
+                      background: "linear-gradient(135deg, #dc3545, #c82333)",
+                    }}
+                  >
+                    {"Supprimer le tournoi"}
+                  </ButtonPrimary>
+                </div>
+              )}
             </div>
           )}
         </div>

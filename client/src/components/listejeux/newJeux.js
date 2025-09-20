@@ -1,18 +1,41 @@
 import { useState } from "react";
 import { PencilFill, TrashFill } from "react-bootstrap-icons";
-import { ValidatorService } from "../../services/form-validators";
 import { ButtonPrimary } from "../ButtonPrimary/ButtonPrimary";
 import { FieldError } from "../FieldError/FieldError";
 
 const VALIDATORS = {
   title: (value) => {
-    return ValidatorService.min(value, 3) || ValidatorService.max(value, 20);
+    if (!value || value.trim().length === 0) {
+      return "Le titre est requis";
+    }
+    if (value.length < 3) {
+      return "Le titre doit contenir au moins 3 caractères";
+    }
+    if (value.length > 20) {
+      return "Le titre ne peut pas dépasser 20 caractères";
+    }
+    return undefined;
   },
   description: (value) => {
-    return ValidatorService.min(value, 3);
+    if (!value || value.trim().length === 0) {
+      return "La description est requise";
+    }
+    if (value.length < 3) {
+      return "La description doit contenir au moins 3 caractères";
+    }
+    return undefined;
   },
   genres: (value) => {
-    return value ? undefined : "Genre is required";
+    return value ? undefined : "Le genre est requis";
+  },
+  picture: (file) => {
+    if (file && file.size > 5 * 1024 * 1024) {
+      return "Le fichier image ne peut pas dépasser 5MB";
+    }
+    if (file && !file.type.startsWith("image/")) {
+      return "Seules les images sont autorisées";
+    }
+    return undefined;
   },
 };
 export function JeuForm({
@@ -23,16 +46,19 @@ export function JeuForm({
   onClickTrash,
   onSubmit,
   showAdminButtons = false,
+  isSubmitting = false,
 }) {
   const [formValues, setFormValues] = useState({
     title: jeu?.title || "",
     description: jeu?.description || "",
     genres: jeu?.genres || "",
+    picture: null,
   });
   const [formErrors, setFormErrors] = useState({
     title: jeu?.title ? undefined : "",
     description: jeu?.description ? undefined : "",
     genres: jeu?.genres ? undefined : "",
+    picture: undefined,
   });
 
   function hasError() {
@@ -40,8 +66,14 @@ export function JeuForm({
   }
 
   function updateFormValues(e) {
-    setFormValues({ ...formValues, [e.target.title]: e.target.value });
-    validate(e.target.title, e.target.value);
+    if (e.target.type === "file") {
+      const file = e.target.files[0];
+      setFormValues({ ...formValues, [e.target.name]: file });
+      validate(e.target.name, file);
+    } else {
+      setFormValues({ ...formValues, [e.target.title]: e.target.value });
+      validate(e.target.title, e.target.value);
+    }
   }
   // console.log(formErrors);
   function validate(fieldName, fieldValue) {
@@ -75,9 +107,10 @@ export function JeuForm({
                   alignItems: "center",
                   gap: "6px",
                   backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
                 }}
-                title="Modifier le jeu"
+                title={
+                  isEditable ? "Annuler la modification" : "Modifier le jeu"
+                }
                 onMouseEnter={(e) => {
                   e.target.style.transform = "translateY(-2px) scale(1.05)";
                   e.target.style.boxShadow =
@@ -90,7 +123,7 @@ export function JeuForm({
                 }}
               >
                 <PencilFill />
-                Modifier
+                {isEditable ? "Annuler" : "Modifier"}
               </button>
             )}
           </div>
@@ -114,7 +147,6 @@ export function JeuForm({
                   alignItems: "center",
                   gap: "6px",
                   backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
                 }}
                 title="Supprimer le jeu"
                 onMouseEnter={(e) => {
@@ -170,20 +202,20 @@ export function JeuForm({
   const submitButton = (
     <div className="nj_submit_btn">
       <ButtonPrimary
-        isDisabled={hasError()}
+        isDisabled={hasError() || isSubmitting}
         onClick={() => onSubmit(formValues)}
       >
-        Submit
+        {isSubmitting ? "En cours..." : "Submit"}
       </ButtonPrimary>
     </div>
   );
   const genreOptions = [
-    "Action",
-    "Aventure",
-    "Stratégie",
-    "RPG",
+    "MOBA",
+    "FPS",
     "Sport",
-    "Simulation",
+    "Combat",
+    "Auto-chess",
+    "Aventure",
   ];
 
   const genreSelect = (
@@ -205,6 +237,28 @@ export function JeuForm({
       <FieldError msg={formErrors.genres} />
     </div>
   );
+
+  const imageUpload = (
+    <div className="mb-5">
+      <label className="form-label">Image du jeu</label>
+      <input
+        onChange={updateFormValues}
+        type="file"
+        name="picture"
+        className="form-control"
+        accept="image/*"
+      />
+      <FieldError msg={formErrors.picture} />
+      {formValues.picture && (
+        <div className="mt-2">
+          <small className="text-muted">
+            Fichier sélectionné: {formValues.picture.name} (
+            {(formValues.picture.size / 1024 / 1024).toFixed(2)} MB)
+          </small>
+        </div>
+      )}
+    </div>
+  );
   // console.log(formValues)
   return (
     <div className="nj_container">
@@ -221,6 +275,7 @@ export function JeuForm({
         {isEditable ? descriptionInput : <p>{jeu.description}</p>}
       </div>
       {isEditable && genreSelect}
+      {isEditable && imageUpload}
       {onSubmit && submitButton}
     </div>
   );

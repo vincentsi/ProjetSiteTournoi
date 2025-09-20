@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { JeuAPI } from "../../actions/pjeu.actions";
 import { UserAPI } from "../../actions/user.actions";
@@ -27,12 +27,8 @@ const UpdateProfil = () => {
   const dispatch = useDispatch();
 
   const jeuList = useSelector((store) => store.JEU.jeuList);
-  useEffect(() => {
-    setGameList(jeuList);
-    fetchUserRanks(userData.id);
-  }, [jeuList, userData]);
 
-  const fetchUserRanks = async () => {
+  const fetchUserRanks = useCallback(async () => {
     if (!userData.id) {
       // Vérifiez si userId est défini, sinon ne faites rien
       return;
@@ -51,7 +47,12 @@ const UpdateProfil = () => {
         "Une erreur s'est produite lors de la récupération des rangs de l'utilisateur."
       );
     }
-  };
+  }, [userData.id, dispatch]);
+
+  useEffect(() => {
+    setGameList(jeuList);
+    fetchUserRanks();
+  }, [jeuList, userData, fetchUserRanks]);
 
   const handleGameChange = async (selectedGameId) => {
     try {
@@ -186,21 +187,21 @@ const UpdateProfil = () => {
       <div className="update-container">
         <div className="left-part">
           <h3>Photo de profil</h3>
-          {userData.picture && (
-            <img
-              src={
-                userData.picture.startsWith("http")
-                  ? userData.picture
-                  : `./.${userData.picture}`
-              }
-              alt="user-pic"
-              className="profile-pic"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "./uploads/profil/random-user.png";
-              }}
-            />
-          )}
+          <img
+            src={
+              userData.picture && userData.picture.startsWith("http")
+                ? userData.picture
+                : userData.picture
+                ? userData.picture
+                : "/uploads/profil/random-user.png"
+            }
+            alt="user-pic"
+            className="profile-pic"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/uploads/profil/random-user.png";
+            }}
+          />
           <UploadImg />
         </div>
         <div className="right-part">

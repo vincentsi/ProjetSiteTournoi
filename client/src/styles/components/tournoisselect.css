@@ -36,10 +36,10 @@
   margin: 15px;
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  min-height: 120px;
+  min-height: 160px;
 }
 .img_tournoiselec {
-  flex: 0 0 150px;
+  flex: 0 0 200px;
   margin-right: 1.5rem;
 }
 .title_tournoiselec {
@@ -63,7 +63,7 @@
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 0.5rem;
 }
 .ts_submit_btn {
@@ -275,7 +275,7 @@
 }
 .tournoi-pic-tournoi-selec {
   width: 100%;
-  height: 100px;
+  height: 140px;
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -396,6 +396,38 @@
   box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.2);
   margin: 0.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Styles spécifiques pour les boutons ButtonPrimary */
+.all_ts_submit_btn .btn-primary {
+  background: linear-gradient(135deg, #ff4757, #ff3838) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 25px !important;
+  padding: 12px 24px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin: 0.5rem !important;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3) !important;
+  transition: all 0.3s ease !important;
+  min-height: 48px !important;
+  white-space: nowrap !important;
+}
+
+.all_ts_submit_btn .btn-primary:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4) !important;
+  background: linear-gradient(135deg, #ff3838, #ff2f2f) !important;
 }
 
 .ts_submit_btn button:hover {

@@ -16,6 +16,7 @@ const Jeu = () => {
   const [affTournois, setAffTournois] = useState(true);
   const [showCreateTournoi, setShowCreateTournoi] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Utilisation du hook useDispatch pour obtenir le dispatch de Redux
   const dispatch = useDispatch();
@@ -50,9 +51,35 @@ const Jeu = () => {
 
   // Fonction pour soumettre le formulaire de modification du jeu
   async function submit(formValues) {
-    const updatedJeu = await JeuAPI.update({ ...formValues, id: jeu.id });
-    dispatch(updateJeu(updatedJeu));
-    setIsEditable(false); // Désactiver le mode édition après soumission
+    try {
+      setIsSubmitting(true);
+
+      // Si une nouvelle image est sélectionnée, utiliser FormData
+      if (formValues.picture) {
+        const formData = new FormData();
+        formData.append("title", formValues.title);
+        formData.append("description", formValues.description);
+        formData.append("genres", formValues.genres);
+        formData.append("picture", formValues.picture);
+
+        const updatedJeu = await JeuAPI.update(formData, jeu.id);
+
+        const formattedJeu = { ...updatedJeu, id: updatedJeu.id.toString() };
+        dispatch(updateJeu(formattedJeu));
+      } else {
+        // Pas de nouvelle image, envoyer les données normalement
+        const updatedJeu = await JeuAPI.update({ ...formValues, id: jeu.id });
+
+        const formattedJeu = { ...updatedJeu, id: updatedJeu.id.toString() };
+        dispatch(updateJeu(formattedJeu));
+      }
+
+      setIsEditable(false);
+    } catch (error) {
+      console.error("Erreur lors de la modification du jeu:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   // Fonction pour créer un nouveau tournoi
@@ -72,15 +99,13 @@ const Jeu = () => {
         listejeuId: jeuIdAsInt,
         userId: userData.id,
       };
-      tournoiAcreer.picture = "./../uploads/profil/random-user.png";
       dispatch(addTournoi(tournoiAcreer));
       setAffTournois(!affTournois); // Changer l'affichage des tournois
-      // setSuccessMessage('Le tournoi a été créé avec succès!');
+
       window.location.href = `/jeu/${jeuId}`;
     } catch (error) {
       console.error("Erreur complète:", error);
 
-      // Relancer l'erreur pour que le composant newTournoi.js puisse la gérer
       throw error;
     }
   };
@@ -90,10 +115,10 @@ const Jeu = () => {
     if (window.confirm("Supprimer le jeu ?")) {
       JeuAPI.deleteById(jeu.id);
       dispatch(deleteJeu(jeu));
-      navigate("/homeListeJeux"); // Rediriger vers la liste des jeux après suppression
+      navigate("/homeListeJeux");
     }
   }
-  const [selectedPlatform, setSelectedPlatform] = useState(""); // Ajout de l'état pour la plateforme sélectionnée
+  const [selectedPlatform, setSelectedPlatform] = useState(""); //état pour la plateforme sélectionnée
   // Filtrer les tournois associés au jeu
   const tournoiList = useSelector((store) => store.TOURNOI.tournoiList);
   const filteredList = tournoiList.filter(
@@ -105,10 +130,12 @@ const Jeu = () => {
     <div className="main_container_jeu">
       <div
         className="mb-1"
-        style={{ backgroundImage: `url(./.${jeu?.picture || ""})` }}
+        style={{
+          backgroundImage: `url(${jeu?.picture})`,
+        }}
       >
         {/* Affiche le formulaire de modification du jeu */}
-        {userData.id && ( // Vérification de l'utilisateur connecté
+        {userData.id && !isEditable && (
           <div className="nj_submit_btn">
             <button onClick={() => setShowCreateTournoi(!showCreateTournoi)}>
               {showCreateTournoi
@@ -117,27 +144,39 @@ const Jeu = () => {
             </button>
           </div>
         )}
-        {jeu && showCreateTournoi && (
-          <JeuForm
-            isEditable={isEditable}
-            title={isEditable ? "Edit jeu" : jeu.title}
-            jeu={jeu}
-            onClickEdit={isAdmin ? () => setIsEditable(!isEditable) : null}
-            onClickTrash={isAdmin ? () => deleteJeu_(jeu) : null}
-            onSubmit={isEditable && submit}
-            showAdminButtons={isAdmin}
-          />
+        {jeu && (showCreateTournoi || isEditable) && (
+          <>
+            <JeuForm
+              isEditable={isEditable}
+              title={isEditable ? "Edit jeu" : jeu.title}
+              jeu={jeu}
+              onClickEdit={isAdmin ? () => setIsEditable(!isEditable) : null}
+              onClickTrash={isAdmin ? () => deleteJeu_(jeu) : null}
+              onSubmit={isEditable && submit}
+              showAdminButtons={isAdmin}
+              isSubmitting={isSubmitting}
+            />
+            {!showCreateTournoi && !isEditable && (
+              <div className="nj_submit_btn">
+                <button onClick={() => setShowCreateTournoi(true)}>
+                  Annuler
+                </button>
+              </div>
+            )}
+          </>
         )}
-        <select
-          value={selectedPlatform}
-          onChange={(e) => setSelectedPlatform(e.target.value)}
-        >
-          <option value="">Toutes les plateformes</option>
-          <option value="PlayStation">PlayStation</option>
-          <option value="Xbox">Xbox</option>
-          <option value="pc">pc</option>
-          {/* Ajoutez d'autres options de plateforme si nécessaire */}
-        </select>
+        {showCreateTournoi && !isEditable && (
+          <select
+            value={selectedPlatform}
+            onChange={(e) => setSelectedPlatform(e.target.value)}
+          >
+            <option value="">Toutes les plateformes</option>
+            <option value="PC">PC</option>
+            <option value="PC/Console">PC/Console</option>
+            <option value="Nintendo Switch">Nintendo Switch</option>
+            <option value="Multi">Multi</option>
+          </select>
+        )}
       </div>
       {/* Ajout du filtre de sélection de plateforme */}
 
