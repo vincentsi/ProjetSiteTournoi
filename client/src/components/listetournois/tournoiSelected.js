@@ -83,6 +83,29 @@ const TournoiSelec = ({ tournoi }) => {
     }
   }
 
+  // Fonction asynchrone pour vérifier le statut d'inscription de l'utilisateur
+  const checkRegistrationStatus = useCallback(async () => {
+    try {
+      if (userData.id != null) {
+        // Vérifier si l'utilisateur est inscrit au tournoi en vérifiant s'il existe un bracket associé à l'utilisateur et au tournoi
+        const userBracket = await BracketAPI.findOneUserBracket({
+          tournoiId: tournoi.id,
+          userId: userData.id,
+        });
+
+        if (userBracket) {
+          // L'utilisateur est inscrit au tournoi
+          setUserInscrit(true);
+        } else {
+          // Sinon, l'utilisateur n'est pas inscrit au tournoi
+          setUserInscrit(false);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [userData.id, tournoi.id]);
+
   useEffect(() => {
     if (userData.id) {
       async function fetchData() {
@@ -205,29 +228,6 @@ const TournoiSelec = ({ tournoi }) => {
 
     checkAdminRole();
   }, [userData.id]);
-
-  // Fonction asynchrone pour vérifier le statut d'inscription de l'utilisateur
-  const checkRegistrationStatus = useCallback(async () => {
-    try {
-      if (userData.id != null) {
-        // Vérifier si l'utilisateur est inscrit au tournoi en vérifiant s'il existe un bracket associé à l'utilisateur et au tournoi
-        const userBracket = await BracketAPI.findOneUserBracket({
-          tournoiId: tournoi.id,
-          userId: userData.id,
-        });
-
-        if (userBracket) {
-          // Si un bracket existe, cela signifie que l'utilisateur est inscrit au tournoi
-          setUserInscrit(true);
-        } else {
-          // Sinon, l'utilisateur n'est pas inscrit au tournoi
-          setUserInscrit(false);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [userData.id, tournoi.id]);
 
   //gérer l'inscription et la désinscription de l'utilisateur au tournoi
   async function handleInscription() {
