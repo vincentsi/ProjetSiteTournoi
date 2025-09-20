@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import Routes from "./components/routes";
-import { UidContext } from "./components/appContext";
-import { useDispatch } from "react-redux";
 import axios from "axios";
-import { UserAPI } from "./actions/user.actions";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { JeuAPI } from "./actions/pjeu.actions";
 import { TournoiAPI } from "./actions/tournoi.actions";
+import { UserAPI } from "./actions/user.actions";
+import { UidContext } from "./components/appContext";
+import Routes from "./components/routes";
 import { setJeuList } from "./store/jeu/jeu.reducer";
-import { setUser } from "./store/user/user.reducer";
 import { setTournoiList } from "./store/tournoi/tournois.reducer";
+import { setUser } from "./store/user/user.reducer";
 
 const App = () => {
   const [uid, setUid] = useState(null);
@@ -48,11 +48,12 @@ const App = () => {
     };
     fetchToken();
 
-    if (uid) {getUser(uid);
+    if (uid) {
+      getUser(uid);
       // console.log( uid)
     }
   }, [uid]);
-  
+
   // useEffect(() => {
   //   if (uid) {getUser();
   //     console.log( uid)}

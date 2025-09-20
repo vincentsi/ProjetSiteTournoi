@@ -9,7 +9,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["http://localhost:3000"],
   })
 );
 // parse requests of content-type - application/json
@@ -48,7 +48,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
