@@ -207,7 +207,7 @@ const TournoiSelec = ({ tournoi }) => {
   }, [userData.id]);
 
   // Fonction asynchrone pour vérifier le statut d'inscription de l'utilisateur
-  async function checkRegistrationStatus() {
+  const checkRegistrationStatus = useCallback(async () => {
     try {
       if (userData.id != null) {
         // Vérifier si l'utilisateur est inscrit au tournoi en vérifiant s'il existe un bracket associé à l'utilisateur et au tournoi
@@ -227,7 +227,7 @@ const TournoiSelec = ({ tournoi }) => {
     } catch (error) {
       console.error(error);
     }
-  }
+  }, [userData.id, tournoi.id]);
 
   //gérer l'inscription et la désinscription de l'utilisateur au tournoi
   async function handleInscription() {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { JeuAPI } from "./actions/pjeu.actions";
 import { TournoiAPI } from "./actions/tournoi.actions";
@@ -13,19 +13,24 @@ import { setUser } from "./store/user/user.reducer";
 const App = () => {
   const [uid, setUid] = useState(null);
   const dispatch = useDispatch();
-  async function getUser(uid) {
-    const user = await UserAPI.getUser(uid);
-    dispatch(setUser(user));
-  }
-  async function fetchAllJeux() {
+  const getUser = useCallback(
+    async (uid) => {
+      const user = await UserAPI.getUser(uid);
+      dispatch(setUser(user));
+    },
+    [dispatch]
+  );
+
+  const fetchAllJeux = useCallback(async () => {
     const jeuList = await JeuAPI.fetchAll();
     dispatch(setJeuList(jeuList));
-  }
-  async function fetchAllTounois() {
+  }, [dispatch]);
+
+  const fetchAllTounois = useCallback(async () => {
     const tournoiList = await TournoiAPI.fetchAll();
     // console.log(tournoiList);
     dispatch(setTournoiList(tournoiList));
-  }
+  }, [dispatch]);
 
   useEffect(() => {
     fetchAllJeux();
