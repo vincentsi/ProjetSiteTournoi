@@ -24,10 +24,11 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
 }
 
-app.get("*", checkUser);
 app.get("/jwtid", requireAuth, (req, res) => {
   res.status(200).send("" + res.locals.user.id);
 });
+
+app.get("*", checkUser);
 
 const db = require("./app/models");
 const Role = db.role;
