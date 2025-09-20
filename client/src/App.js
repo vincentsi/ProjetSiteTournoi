@@ -30,7 +30,7 @@ const App = () => {
   useEffect(() => {
     fetchAllJeux();
     fetchAllTounois();
-  }, []);
+  }, [fetchAllJeux, fetchAllTounois]);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -52,7 +52,7 @@ const App = () => {
       getUser(uid);
       // console.log( uid)
     }
-  }, [uid]);
+  }, [uid, getUser]);
 
   // useEffect(() => {
   //   if (uid) {getUser();

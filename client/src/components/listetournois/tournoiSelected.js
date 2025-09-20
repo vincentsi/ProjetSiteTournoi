@@ -94,7 +94,7 @@ const TournoiSelec = ({ tournoi }) => {
 
       fetchData();
     }
-  }, [userData.id, tournoi.id]);
+  }, [userData.id, tournoi.id, checkRegistrationStatus]);
 
   const saveChanges = async () => {
     try {

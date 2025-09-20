@@ -58,7 +58,6 @@ export function HomeJeux({
             style={{
               background: "linear-gradient(135deg, #ff4757, #ff3838)",
               color: "white",
-              border: "none",
               borderRadius: "12px",
               padding: "8px 12px",
               cursor: "pointer",

@@ -116,10 +116,7 @@ export const uploadPicture = (data, id) => {
   return async (dispatch) => {
     try {
       // Upload de l'image
-      const uploadResponse = await axios.post(
-        `${process.env.REACT_APP_API_URL}app/upload`,
-        data
-      );
+      await axios.post(`${process.env.REACT_APP_API_URL}app/upload`, data);
 
       // Récupération des données utilisateur mises à jour
       const userResponse = await axios.get(

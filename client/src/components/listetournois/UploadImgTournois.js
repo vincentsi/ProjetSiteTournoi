@@ -1,24 +1,20 @@
-
-
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { uploadPictureTournoi } from "../../actions/tournoi.actions";
 
-const UploadTournoiImg  = ({ tournoiId,tournoiTitle }) => {
+const UploadTournoiImg = ({ tournoiId, tournoiTitle }) => {
   const [file, setFile] = useState();
   const dispatch = useDispatch();
 
-
   const handlePicture = (e) => {
     e.preventDefault();
-    
+
     const data = new FormData();
     data.append("name", tournoiTitle);
     data.append("tournoiId", parseInt(tournoiId));
     data.append("file", file);
 
-    dispatch(uploadPictureTournoi(data,parseInt(tournoiId)));
-    
+    dispatch(uploadPictureTournoi(data, parseInt(tournoiId)));
   };
 
   return (
@@ -31,12 +27,10 @@ const UploadTournoiImg  = ({ tournoiId,tournoiTitle }) => {
         accept=".jpg, .jpeg, .png"
         onChange={(e) => setFile(e.target.files[0])}
       />
-      <br/>
+      <br />
       <input type="submit" value="Envoyer" />
     </form>
   );
 };
 
 export default UploadTournoiImg;
-
-
