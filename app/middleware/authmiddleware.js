@@ -34,14 +34,12 @@ module.exports.requireAuth = (req, res, next) => {
         res.status(401).json("invalid token");
       } else {
         console.log(decodedToken.id);
-        const user = await UserModel.findByPk(decodedToken.id);
-        res.locals.user = user.dataValues;
+
         next();
       }
     });
   } else {
     console.log("no token");
-    res.status(401).json("no token");
   }
 };
 module.exports.tokenAdmin = async (req, res, next) => {
