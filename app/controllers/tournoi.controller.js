@@ -178,8 +178,18 @@ module.exports.deleteTournament = async (req, res) => {
       },
     });
 
-    const userRole = await db.user.findByPk(userId);
-    const isAdmin = userRole && userRole.roleId === 2; // roleId 2 = admin
+    const userRole = await db.user.findByPk(userId, {
+      include: [
+        {
+          model: db.role,
+          through: "user_roles",
+        },
+      ],
+    });
+    const isAdmin =
+      userRole &&
+      userRole.roles &&
+      userRole.roles.some((role) => role.id === 2); // roleId 2 = admin
 
     if (!organizerRole && !isAdmin) {
       return res.status(403).json({

@@ -4,7 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { BracketAPI } from "../../actions/bracket.action";
 import { TournoiAPI } from "../../actions/tournoi.actions";
 import { UserAPI } from "../../actions/user.actions";
-import { updateTournoi } from "../../store/tournoi/tournois.reducer";
+import {
+  setTournoiList,
+  updateTournoi,
+} from "../../store/tournoi/tournois.reducer";
 import ManageMatches from "../brackets/manageMatchAdmin";
 import MatchDetails from "../brackets/matchDetail";
 import { MatchList } from "../brackets/matchList";
@@ -318,8 +321,13 @@ const TournoiSelec = ({ tournoi }) => {
 
         if (confirmDelete) {
           await TournoiAPI.deleteTournament(tournoi.id, userData.id);
+
+          // Rafraîchir la liste des tournois
+          const updatedTournoiList = await TournoiAPI.fetchAll();
+          dispatch(setTournoiList(updatedTournoiList));
+
           alert("Tournoi supprimé avec succès !");
-          navigate("/homeListeTournois");
+          navigate("/");
         }
       } else {
         alert("Vous n'avez pas la permission de supprimer ce tournoi.");
