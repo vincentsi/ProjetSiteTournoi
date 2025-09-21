@@ -13,7 +13,10 @@ app.use(
     credentials: true,
     origin:
       process.env.NODE_ENV === "production"
-        ? ["https://projet-site-tournoi.vercel.app"]
+        ? [
+            "https://projet-site-tournoi.vercel.app",
+            "https://projetsitetournoi-production-d35d.up.railway.app",
+          ]
         : ["http://localhost:3000", "http://localhost:3001"],
   })
 );
