@@ -18,7 +18,10 @@ const Logout = () => {
       .then(() => removeCookie("jwt"))
       .catch((err) => console.log(err));
     
-    window.location = "/";
+    // Forcer le rechargement pour mettre à jour l'état d'auth
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
 
   return (
