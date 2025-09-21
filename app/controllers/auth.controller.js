@@ -72,7 +72,12 @@ exports.signin = (req, res) => {
       }
 
       const token = createToken(user.id);
-      res.cookie("jwt", token, { httpOnly: true, maxAge });
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        maxAge,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      });
       res.status(200).send({ user: user.id });
 
       var authorities = [];

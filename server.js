@@ -11,7 +11,10 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "https://projet-site-tournoi.vercel.app"],
+    origin:
+      process.env.NODE_ENV === "production"
+        ? ["https://projet-site-tournoi.vercel.app"]
+        : ["http://localhost:3000", "http://localhost:3001"],
   })
 );
 // parse requests of content-type - application/json
