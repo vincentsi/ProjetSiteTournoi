@@ -7,7 +7,7 @@ const SignInForm = () => {
   const [password, setPassword] = useState("");
 
   // Fonction pour gérer la soumission du formulaire de connexion
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     // Sélection des éléments d'erreur par classe
@@ -15,32 +15,32 @@ const SignInForm = () => {
     const passwordError = document.querySelector(".password.error");
 
     // Requête POST pour la connexion
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_URL}api/auth/signin`,
-      withCredentials: true,
-      data: {
-        username,
-        password,
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        // Gestion des erreurs côté serveur
-        if (res.data.errorsusername) {
-          usernameError.innerHTML = res.data.errorsusername;
-          passwordError.innerHTML = "";
-        } else if (res.data.errorspassword) {
-          passwordError.innerHTML = res.data.errorspassword;
-          usernameError.innerHTML = "";
-        } else {
-          // Si la connexion est réussie, rediriger l'utilisateur vers la page d'accueil
-          window.location = "/";
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const res = await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_API_URL}api/auth/signin`,
+        withCredentials: true,
+        data: {
+          username,
+          password,
+        },
       });
+
+      console.log(res);
+      // Gestion des erreurs côté serveur
+      if (res.data.errorsusername) {
+        usernameError.innerHTML = res.data.errorsusername;
+        passwordError.innerHTML = "";
+      } else if (res.data.errorspassword) {
+        passwordError.innerHTML = res.data.errorspassword;
+        usernameError.innerHTML = "";
+      } else {
+        // Si la connexion est réussie, rediriger l'utilisateur vers la page d'accueil
+        window.location = "/";
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

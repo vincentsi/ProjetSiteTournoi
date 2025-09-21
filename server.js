@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 // require("dotenv").config({ path: "./app/config/.env" });
 require("dotenv").config();
+
 const { checkUser, requireAuth } = require("./app/middleware/authmiddleware");
 const app = express();
 
@@ -51,7 +52,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || process.env.DB_PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
