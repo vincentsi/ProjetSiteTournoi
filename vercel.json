@@ -7,27 +7,12 @@
       "config": {
         "distDir": "build"
       }
-    },
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/app/(.*)",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/$1"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
