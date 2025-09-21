@@ -99,6 +99,11 @@ exports.signin = (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 });
-  res.redirect("/");
+  res.cookie("jwt", "", { 
+    httpOnly: true,
+    maxAge: 1,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none"
+  });
+  res.status(200).send({ message: "Logged out successfully" });
 };

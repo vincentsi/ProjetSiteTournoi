@@ -8,14 +8,16 @@ module.exports.checkUser = (req, res, next) => {
     jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
       if (err) {
         res.locals.user = null;
-        // res.cookies('jwt', '', { maxAge: 1});
+        res.cookie("jwt", "", { 
+          httpOnly: true,
+          maxAge: 1,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "none"
+        });
         next();
       } else {
         const user = await UserModel.findByPk(decodedToken.id);
         res.locals.user = user.dataValues;
-
-        console.log(res.locals.user);
-        // console.log(res.locals.user);
         next();
       }
     });
