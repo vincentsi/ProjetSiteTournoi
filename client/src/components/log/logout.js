@@ -1,6 +1,6 @@
-import React from "react";
 import axios from "axios";
 import cookie from "js-cookie";
+import React from "react";
 
 const Logout = () => {
   const removeCookie = (key) => {
@@ -17,11 +17,8 @@ const Logout = () => {
     })
       .then(() => removeCookie("jwt"))
       .catch((err) => console.log(err));
-    
-    // Forcer le rechargement pour mettre à jour l'état d'auth
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
+
+    window.location = "/";
   };
 
   return (
