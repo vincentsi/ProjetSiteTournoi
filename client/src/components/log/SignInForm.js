@@ -35,12 +35,8 @@ const SignInForm = () => {
         passwordError.innerHTML = res.data.errorspassword;
         usernameError.innerHTML = "";
       } else {
-        // Si la connexion est réussie, forcer la détection immédiate
-        console.log("Connexion réussie, rechargement...");
-        // Attendre que le cookie soit bien créé
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 500);
+        // Si la connexion est réussie, rediriger l'utilisateur vers la page d'accueil
+        window.location = "/";
       }
     } catch (err) {
       console.log(err);
