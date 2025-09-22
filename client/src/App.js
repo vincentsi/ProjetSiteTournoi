@@ -53,6 +53,9 @@ const App = () => {
     };
     fetchToken();
 
+    // Vérifier la connexion immédiatement et après 1 seconde
+    setTimeout(fetchToken, 1000);
+
     if (uid) {
       getUser(uid);
       // console.log( uid)
