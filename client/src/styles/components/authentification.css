@@ -1,76 +1,375 @@
+/* Page de profil/authentification avec design humain */
 .profil-page {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f0f0f0;
+  padding: var(--space-xl);
+  background: var(--gradient-sunset);
+  position: relative;
+  overflow: hidden;
 }
 
+.profil-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+    repeat;
+  pointer-events: none;
+}
+
+/* Container principal du formulaire */
 .log-container {
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  width: 400px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl), 0 0 50px rgba(212, 151, 108, 0.1);
+  padding: var(--space-3xl);
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid rgba(212, 151, 108, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.6s ease-out;
 }
 
+.log-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-warm);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+}
+
+/* Conteneur du formulaire de connexion */
 .connection-form {
   text-align: center;
+  position: relative;
 }
 
+/* Navigation par onglets */
 .ul_profil {
   list-style-type: none;
   display: flex;
   justify-content: center;
+  margin-bottom: var(--space-xl);
+  background: var(--neutral-cream);
+  border-radius: var(--radius-full);
+  padding: var(--space-xs);
 }
 
-li {
+.ul_profil li {
   cursor: pointer;
-  padding: 10px 20px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  transition: var(--transition-bounce);
+  font-weight: 500;
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  color: var(--neutral-charcoal);
+  position: relative;
 }
 
-li.active-btn {
-  color: #fff;
-  background-color: #333;
-  border-radius: 5px 5px 0 0;
+.ul_profil li:hover {
+  color: var(--primary-warm);
+  transform: translateY(-1px);
 }
 
+.ul_profil li.active-btn {
+  background: var(--gradient-warm);
+  color: white;
+  box-shadow: var(--shadow-warm);
+  transform: translateY(-2px);
+}
+
+/* Styles de formulaire humanisés */
 form {
   display: flex;
   flex-direction: column;
+  gap: var(--space-lg);
 }
 
-label {
-  font-weight: bold;
+/* Groupes de champs */
+.form-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-lg);
 }
 
+.checkbox-group {
+  margin-bottom: var(--space-xl);
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+/* Règle spécifique pour les labels dans les formulaires */
+.log-container label,
+form label {
+  color: #000000 !important;
+  font-weight: 600;
+}
+
+/* Champs de saisie améliorés */
 input[type="text"],
 input[type="password"],
+input[type="email"] {
+  padding: var(--space-md) var(--space-lg);
+  border: 2px solid var(--neutral-sand);
+  border-radius: var(--radius-xl);
+  font-size: var(--text-base);
+  font-family: var(--font-secondary);
+  background: white;
+  transition: var(--transition-bounce);
+  outline: none;
+  position: relative;
+  color: var(--neutral-charcoal);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+  border-color: var(--primary-warm);
+  background: var(--neutral-cream);
+  box-shadow: var(--shadow-warm);
+  transform: translateY(-2px);
+}
+
+input[type="text"]:focus + label,
+input[type="password"]:focus + label,
+input[type="email"]:focus + label {
+  color: var(--primary-warm);
+  transform: translateY(-2px);
+}
+
+/* Placeholder avec style */
+input::placeholder {
+  color: var(--neutral-stone);
+  font-style: italic;
+}
+
+/* Checkbox personnalisée */
 input[type="checkbox"] {
-  margin-bottom: 10px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-input[type="submit"] {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--primary-warm);
   cursor: pointer;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
 }
 
-/* Styles pour les messages d'erreur */
-.error {
-  color: red;
-  font-size: 14px;
-  margin-top: 5px;
+.checkbox-wrapper label {
+  margin-bottom: 0;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  line-height: 1.4;
 }
 
-/* Styles pour les liens */
-/* a {
-  color: #333;
+.checkbox-wrapper label a {
+  color: var(--primary-warm);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition-base);
+}
+
+.checkbox-wrapper label a:hover {
+  color: var(--primary-deep);
   text-decoration: underline;
-} */
+}
+
+/* Bouton de soumission humanisé */
+input[type="submit"] {
+  background: var(--gradient-warm);
+  color: white;
+  padding: var(--space-md) var(--space-xl);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: var(--transition-bounce);
+  box-shadow: var(--shadow-warm);
+  position: relative;
+  overflow: hidden;
+  margin-top: var(--space-md);
+}
+
+input[type="submit"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+input[type="submit"]:hover::before {
+  left: 100%;
+}
+
+input[type="submit"]:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-xl), 0 15px 30px rgba(212, 151, 108, 0.4);
+  background: var(--gradient-sunset);
+}
+
+input[type="submit"]:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* Messages d'erreur humanisés - Ne s'affichent que s'il y a du contenu */
+.error {
+  color: var(--error-clay);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  margin-top: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: var(--radius-md);
+  border-left: none;
+  min-height: 0;
+  transition: var(--transition-base);
+}
+
+/* Style appliqué uniquement quand il y a du contenu */
+.error:not(:empty) {
+  margin-top: var(--space-xs);
+  padding: var(--space-sm);
+  background: rgba(231, 111, 81, 0.1);
+  border-left: 3px solid var(--error-clay);
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Message de succès */
+.success {
+  color: var(--success-forest);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  text-align: center;
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: rgba(127, 176, 105, 0.1);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--success-forest);
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Section des comptes de test avec style amélioré */
+.test-accounts {
+  margin-top: var(--space-xl);
+  padding: var(--space-lg);
+  background: rgba(90, 159, 212, 0.08);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(90, 159, 212, 0.2);
+  animation: fadeIn 0.6s ease-out 0.3s both;
+}
+
+.test-accounts h4 {
+  color: var(--secondary-ocean);
+  margin: 0 0 var(--space-md) 0;
+  font-size: var(--text-lg);
+  font-family: var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.test-accounts p {
+  color: var(--neutral-charcoal);
+  margin: var(--space-sm) 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.test-accounts strong {
+  color: var(--primary-warm);
+  font-weight: 600;
+}
+
+/* Animations d'entrée */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* États de focus pour l'accessibilité */
+*:focus-visible {
+  outline: 2px solid var(--primary-warm);
+  outline-offset: 2px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .profil-page {
+    padding: var(--space-md);
+  }
+
+  .log-container {
+    padding: var(--space-xl);
+    max-width: 100%;
+  }
+
+  .ul_profil {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .ul_profil li {
+    padding: var(--space-md);
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .log-container {
+    padding: var(--space-lg);
+    border-radius: var(--radius-xl);
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  input[type="submit"] {
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--text-base);
+  }
+}

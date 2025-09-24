@@ -57,16 +57,19 @@ const HomeListeJeux = (props) => {
 
   return (
     <div className="HomeListeJeux-container">
-      <div className="row justify-content-center mb-5 jp_top">
-        <div className="col-sm-12 col-md-4">
-          <SearchBar
-            placeholder="Search your game..."
-            onTextChange={setSearchText}
-          />
-        </div>
-        <div className="col-sm-12 col-md-1">
-          <div className="mb-3">
-            <label htmlFor="genreSelect">Select Genre:</label>
+      <div className="jp_top">
+        <div className="controls-grid">
+          <div className="search-container">
+            <SearchBar
+              placeholder="Rechercher votre jeu favori..."
+              onTextChange={setSearchText}
+            />
+          </div>
+
+          <div className="genre-select-container">
+            <label htmlFor="genreSelect" className="genre-label">
+              Genre
+            </label>
             <select
               id="genreSelect"
               className="form-select"
@@ -80,37 +83,16 @@ const HomeListeJeux = (props) => {
               ))}
             </select>
           </div>
-        </div>
-        {isAdmin && (
-          <div className="col-sm-12 col-md-3 d-flex align-items-end">
-            <ButtonPrimary
+
+          {isAdmin && (
+            <button
+              className="create-game-btn"
               onClick={() => navigate("/jeu/new")}
-              style={{
-                background: "linear-gradient(135deg, #ff4757, #ff3838)",
-                width: "50%",
-                fontSize: "14px",
-                fontWeight: "500",
-                padding: "10px 20px",
-                color: "white",
-                border: "none",
-                borderRadius: "10px",
-                boxShadow: "0 4px 15px rgba(255, 71, 87, 0.3)",
-                transition: "all 0.3s ease",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = "translateY(-2px) scale(1.05)";
-                e.target.style.boxShadow = "0 6px 20px rgba(255, 71, 87, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = "translateY(0) scale(1)";
-                e.target.style.boxShadow = "0 4px 15px rgba(255, 71, 87, 0.3)";
-              }}
             >
-              Créer un jeu
-            </ButtonPrimary>
-          </div>
-        )}
+              ✨ Créer un jeu
+            </button>
+          )}
+        </div>
       </div>
       <JeuList jeuList={filteredList} />
     </div>

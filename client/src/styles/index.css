@@ -1,11 +1,15 @@
+/* Import du nouveau système de design */
+@import './globals.css';
+
+/* Import des composants - ordre d'importance */
 @import './components/navbar.css';
+@import './components/authentification.css';
+@import './components/home.css';
 @import './components/profil.css';
 @import './components/homejeux.css';
 @import './components/searchbarjeux.css';
 @import './components/pagejeu.css';
-@import './components/authentification.css';
 @import './components/error.css';
 @import './components/bracket.css';
 @import './components/tournoisselect.css';
 @import './components/matchcard.css';
-@import './components/home.css';

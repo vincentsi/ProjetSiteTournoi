@@ -45,53 +45,44 @@ const SignInForm = () => {
 
   return (
     <>
-      <form action="" onSubmit={handleLogin} id="sign-up-form">
-        <label htmlFor="username">username</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-        />
-        <div className="username error"></div>
-        <br />
-        <label htmlFor="password">mot de passe</label>
-        <br />
-        <input
-          type="password"
-          name="password"
-          id="password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />
-        <div className="password error"></div>
-        <br />
-        <input type="submit" value="se connecter" />
+      <form action="" onSubmit={handleLogin} id="sign-in-form">
+        <div className="form-group">
+          <label htmlFor="username">Nom d'utilisateur</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Votre nom d'utilisateur"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />
+          <div className="username error"></div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="password">Mot de passe</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Votre mot de passe"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+          <div className="password error"></div>
+        </div>
+
+        <input type="submit" value="Se connecter" />
       </form>
 
       {/* Comptes de test */}
-      <div
-        style={{
-          marginTop: "20px",
-          padding: "15px",
-          background: "rgba(0, 0, 0, 0.7)",
-          borderRadius: "8px",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-        }}
-      >
-        <h4
-          style={{ color: "#ffeb3b", margin: "0 0 10px 0", fontSize: "1rem" }}
-        >
-          🔑 Comptes de test
-        </h4>
-        <p style={{ color: "#ffffff", margin: "5px 0", fontSize: "0.9rem" }}>
-          <strong style={{ color: "#ff6b6b" }}>Admin:</strong> username: admin,
-          mdp: test
+      <div className="test-accounts">
+        <h4>🔑 Comptes de test</h4>
+        <p>
+          <strong>Admin:</strong> username: admin, mdp: test
         </p>
-        <p style={{ color: "#ffffff", margin: "5px 0", fontSize: "0.9rem" }}>
-          <strong style={{ color: "#4caf50" }}>Utilisateur:</strong> username:
-          organisateur1, mdp: test
+        <p>
+          <strong>Utilisateur:</strong> username: organisateur1, mdp: test
         </p>
       </div>
     </>

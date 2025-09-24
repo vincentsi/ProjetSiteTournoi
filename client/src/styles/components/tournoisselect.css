@@ -2,8 +2,8 @@
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff4757 100%);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--gradient-cosmic);
+  font-family: var(--font-primary);
   position: relative;
   overflow-x: hidden;
 }
@@ -15,11 +15,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
+  background:
+    radial-gradient(circle at 20% 80%, rgba(212, 151, 108, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(90, 159, 212, 0.1) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
 }
@@ -27,16 +25,18 @@
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  padding: 1rem 1.5rem;
+  padding: var(--space-xl) var(--space-2xl);
   position: relative;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  margin: 15px;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  min-height: 160px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin: var(--space-lg);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  min-height: 180px;
+  transition: var(--transition-smooth);
 }
 .img_tournoiselec {
   flex: 0 0 200px;
@@ -48,16 +48,18 @@
 }
 
 .title_tournoiselec pre {
-  font-size: 1.8rem;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
   font-weight: 800;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 4px 20px rgba(212, 151, 108, 0.3);
   margin: 0;
   line-height: 1.2;
-  background: linear-gradient(45deg, #fff, #f0f0f0, #fff);
+  background: var(--gradient-warm);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-family: var(--font-primary);
+  letter-spacing: -0.01em;
 }
 .all_ts_submit_btn {
   flex: 0 0 auto;
@@ -72,29 +74,33 @@
 
 .tounois-selected-bas {
   flex: 3;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  margin: 20px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  margin: var(--space-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-xl);
   position: relative;
   z-index: 1;
+  transition: var(--transition-smooth);
 }
 
 .All-button {
   display: flex;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  margin: 15px;
-  padding: 0.3rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  margin: var(--space-lg);
+  padding: var(--space-sm);
+  box-shadow: var(--shadow-lg);
   position: relative;
   z-index: 1;
   overflow-x: auto;
+  transition: var(--transition-smooth);
 }
 
 .space-all-button {
@@ -106,32 +112,36 @@
 .space-all-button input,
 .space-all-button select {
   width: 100%;
-  padding: 8px 15px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
   color: white;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   font-weight: 600;
+  font-family: var(--font-secondary);
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: var(--transition-bounce);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  outline: none;
 }
 
 .space-all-button input:hover,
 .space-all-button select:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(212, 151, 108, 0.4);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 25px rgba(212, 151, 108, 0.2);
 }
 
 .space-all-button input:focus,
 .space-all-button select:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.2);
-  border-color: #ff4757;
-  box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--primary-warm);
+  box-shadow: var(--shadow-warm);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .space-all-button input[type="button"] {
@@ -151,35 +161,40 @@
 }
 
 .info-label-ts {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition-bounce);
 }
 
 .info-label-ts:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(212, 151, 108, 0.3);
 }
 
 .info-label-ts p:first-child {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #ff4757;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  margin-bottom: var(--space-lg);
+  color: #ff4757 !important;
+  text-shadow: 0 2px 10px rgba(255, 71, 87, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: var(--font-primary);
 }
 
 .info-label-ts span {
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-size: var(--text-lg);
+  font-weight: 600;
   color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-family: var(--font-secondary);
 }
 
 .wrap-text-information {
@@ -199,22 +214,23 @@
 }
 
 .participant-item {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  padding: 1rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition-bounce);
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .participant-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(212, 151, 108, 0.3);
 }
 
 .participant-username {
@@ -227,8 +243,8 @@
 }
 
 .participant-username:hover {
-  color: #ff4757;
-  text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+  color: var(--accent-gold);
+  text-shadow: 0 0 15px rgba(212, 151, 108, 0.5);
 }
 
 .regles-tournoi {
@@ -238,33 +254,38 @@
 }
 
 .regles-tournoi p:first-child {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: #ff4757;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  margin-bottom: var(--space-xl);
+  color: #ff4757 !important;
+  text-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-family: var(--font-primary);
 }
 
 .wrap-text-regles {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  padding: 2rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
   word-wrap: break-word;
-  line-height: 1.6;
-  font-size: 1rem;
+  line-height: 1.7;
+  font-size: var(--text-base);
   color: rgba(255, 255, 255, 0.9);
   text-align: left;
   white-space: pre-wrap;
-  transition: all 0.3s ease;
+  transition: var(--transition-bounce);
+  font-family: var(--font-secondary);
 }
 
 .wrap-text-regles:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(212, 151, 108, 0.3);
 }
 .tounois-selected-header {
   text-align: center;
@@ -288,22 +309,30 @@
 }
 
 .error-message-addAdmin {
-  color: #ff0000;
-  background-color: #ffe6e6;
-  padding: 10px;
-  border: 1px solid #ff0000;
-  margin-top: 10px;
-  border-radius: 5px;
+  color: white;
+  background: var(--gradient-sunset);
+  padding: var(--space-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: var(--space-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sunset);
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* Styles pour les messages de succès */
 .success-message-addAdmin {
-  color: #00aa00;
-  background-color: #e6ffe6;
-  padding: 10px;
-  border: 1px solid #00aa00;
-  margin-top: 10px;
-  border-radius: 5px;
+  color: white;
+  background: var(--gradient-sage);
+  padding: var(--space-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: var(--space-md);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 6px 25px rgba(148, 187, 144, 0.3);
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .participants-tournoi {
@@ -318,23 +347,28 @@
 }
 
 .remove-participant-btn {
-  background: linear-gradient(135deg, #ff4757, #ff3838);
+  background: var(--gradient-sunset);
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: var(--space-sm) var(--space-lg);
   cursor: pointer;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  font-family: var(--font-primary);
+  transition: var(--transition-bounce);
+  box-shadow: var(--shadow-sunset);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 }
 
 .remove-participant-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
-  background: linear-gradient(135deg, #ff3838, #ff2f2f);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-2xl);
+  background: var(--gradient-warm);
 }
 
 /* Styles pour les matchs */
@@ -343,29 +377,35 @@
 }
 
 .match-details h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: #ff4757;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  margin-bottom: var(--space-xl);
+  color: var(--accent-gold);
+  text-shadow: 0 4px 15px rgba(212, 151, 108, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-family: var(--font-primary);
 }
 
 .match-card {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-bounce);
+  position: relative;
+  overflow: hidden;
 }
 
 .match-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--shadow-2xl);
+  border-color: rgba(212, 151, 108, 0.4);
 }
 
 .match-card h4 {
@@ -382,128 +422,155 @@
   margin: 0;
 }
 
-/* Styles pour les boutons d'action */
+/* Styles pour les boutons d'action modernisés */
 .ts_submit_btn button {
-  background: linear-gradient(135deg, #ff4757, #ff3838);
+  background: var(--gradient-warm);
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);
+  font-weight: 700;
+  font-family: var(--font-primary);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  transition: var(--transition-bounce);
+  box-shadow: var(--shadow-warm);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  margin: 0.5rem;
+  margin: var(--space-sm);
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Styles spécifiques pour les boutons ButtonPrimary */
+/* Styles spécifiques pour les boutons ButtonPrimary modernisés */
 .all_ts_submit_btn .btn-primary {
-  background: linear-gradient(135deg, #ff4757, #ff3838) !important;
+  background: var(--gradient-warm) !important;
   color: white !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 25px !important;
-  padding: 12px 24px !important;
-  font-size: 1rem !important;
-  font-weight: 600 !important;
+  border-radius: var(--radius-full) !important;
+  padding: var(--space-md) var(--space-xl) !important;
+  font-size: var(--text-base) !important;
+  font-weight: 700 !important;
+  font-family: var(--font-primary) !important;
   text-align: center !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
-  margin: 0.5rem !important;
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3) !important;
-  transition: all 0.3s ease !important;
-  min-height: 48px !important;
+  margin: var(--space-sm) !important;
+  box-shadow: var(--shadow-warm) !important;
+  transition: var(--transition-bounce) !important;
+  min-height: 56px !important;
   white-space: nowrap !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
 .all_ts_submit_btn .btn-primary:hover {
-  transform: translateY(-3px) !important;
-  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4) !important;
-  background: linear-gradient(135deg, #ff3838, #ff2f2f) !important;
+  transform: translateY(-4px) scale(1.05) !important;
+  box-shadow: var(--shadow-2xl) !important;
+  background: var(--gradient-sunset) !important;
 }
 
 .ts_submit_btn button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
-  background: linear-gradient(135deg, #ff3838, #ff2f2f);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: var(--shadow-2xl);
+  background: var(--gradient-sunset);
 }
 
 .ts_submit_btn button:nth-child(2) {
-  background: linear-gradient(135deg, #6c757d, #5a6268);
+  background: var(--gradient-ocean);
+  box-shadow: var(--shadow-ocean);
 }
 
 .ts_submit_btn button:nth-child(2):hover {
-  background: linear-gradient(135deg, #5a6268, #495057);
+  background: var(--gradient-sage);
+  box-shadow: var(--shadow-2xl);
 }
 
 /* Style pour le statut du tournoi */
 .tStart {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  padding: 1rem 2rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg) var(--space-2xl);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
   text-align: center;
+  transition: var(--transition-bounce);
 }
 
 .tStart p {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #ff4757;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--accent-gold);
   margin: 0;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 10px rgba(212, 151, 108, 0.3);
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Styles pour les titres de sections */
 .button-participants-tournoi h3,
 .match-details h3,
 .regles-tournoi p:first-child {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: #ff4757;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  margin-bottom: var(--space-xl);
+  color: #ff4757 !important;
+  text-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-family: var(--font-primary);
 }
 
 /* Amélioration des inputs en mode édition */
 .info-label input,
 .info-label textarea {
   width: 100%;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
   color: white;
-  font-size: 1rem;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  font-size: var(--text-base);
+  font-family: var(--font-secondary);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  transition: var(--transition-bounce);
+  outline: none;
 }
 
 .info-label input:focus,
 .info-label textarea:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.15);
-  border-color: #ff4757;
-  box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--primary-warm);
+  box-shadow: var(--shadow-warm);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .info-label label {
   display: block;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #ff4757;
-  margin-bottom: 0.5rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: #ff4757 !important;
+  margin-bottom: var(--space-sm);
+  text-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: var(--font-primary);
 }
 
 .info-label textarea {
@@ -514,17 +581,20 @@
 
 /* Style pour les messages d'erreur */
 .error-message {
-  background: linear-gradient(135deg, #ff4757, #ff3838);
+  background: var(--gradient-sunset);
   color: white;
-  padding: 15px;
-  border-radius: 10px;
-  margin: 15px 0;
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  margin: var(--space-lg) 0;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
-  font-weight: 500;
+  box-shadow: var(--shadow-sunset);
+  font-weight: 600;
+  font-family: var(--font-secondary);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 968px) {
   .tounois-selected-container {
     padding-top: 80px;
   }
@@ -532,120 +602,121 @@
   .tournois-selected-header {
     flex-direction: column;
     text-align: center;
-    padding: 1rem;
-    margin: 15px;
-    min-height: 100px;
+    padding: var(--space-lg);
+    margin: var(--space-lg);
+    min-height: 120px;
   }
 
   .img_tournoiselec {
     flex: none;
     margin-right: 0;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-lg);
   }
 
   .tournoi-pic-tournoi-selec {
-    height: 80px;
-    max-width: 120px;
+    height: 90px;
+    max-width: 140px;
     margin: 0 auto;
   }
 
   .title_tournoiselec pre {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
   }
 
   .all_ts_submit_btn {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    gap: var(--space-sm);
   }
 
   .All-button {
     flex-direction: column;
-    padding: 1rem;
-    margin: 15px;
+    padding: var(--space-lg);
+    margin: var(--space-lg);
   }
 
   .space-all-button {
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--space-sm);
     min-width: 100%;
   }
 
   .space-all-button input,
   .space-all-button select {
-    font-size: 0.9rem;
-    padding: 10px 15px;
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-lg);
   }
 
   .tounois-selected-bas {
-    margin: 15px;
-    padding: 1.5rem;
+    margin: var(--space-lg);
+    padding: var(--space-xl);
   }
 
   .information-tournoi {
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-lg);
   }
 
   .participants-tournoi {
     grid-template-columns: 1fr;
-    gap: 0.8rem;
+    gap: var(--space-md);
   }
 
   .participant-item {
-    padding: 0.8rem;
+    padding: var(--space-md);
   }
 
   .ts_submit_btn button {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    margin: 0.3rem;
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--text-sm);
+    margin: var(--space-xs);
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
   .tounois-selected-container {
     padding-top: 70px;
   }
 
   .tournois-selected-header {
-    margin: 10px;
-    padding: 0.8rem;
-    min-height: 80px;
+    margin: var(--space-sm);
+    padding: var(--space-md);
+    min-height: 100px;
   }
 
   .tournoi-pic-tournoi-selec {
-    height: 60px;
-    max-width: 100px;
+    height: 70px;
+    max-width: 120px;
   }
 
   .title_tournoiselec pre {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2vw, 1.4rem);
   }
 
   .All-button {
-    margin: 10px;
-    padding: 0.8rem;
+    margin: var(--space-sm);
+    padding: var(--space-md);
   }
 
   .tounois-selected-bas {
-    margin: 10px;
-    padding: 1rem;
+    margin: var(--space-sm);
+    padding: var(--space-lg);
   }
 
   .info-label-ts {
-    padding: 1rem;
+    padding: var(--space-lg);
   }
 
   .wrap-text-regles {
-    padding: 1.5rem;
+    padding: var(--space-xl);
   }
 
   .match-card {
-    padding: 1rem;
+    padding: var(--space-lg);
   }
 
   .ts_submit_btn button {
-    padding: 8px 16px;
-    font-size: 0.8rem;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
   }
 }

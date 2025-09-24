@@ -81,60 +81,72 @@ const SignUpForm = () => {
       ) : (
         // Afficher le formulaire d'inscription par défaut
         <form action="" onSubmit={handleRegister} id="sign-up-form">
-          <label htmlFor="username">username</label>
-          <br />
-          <input
-            type="text"
-            name="username"
-            id="username"
-            onChange={(e) => setusername(e.target.value)}
-            value={username}
-          />
-          <div className="username error"></div>
-          <br />
-          <label htmlFor="email">Email</label>
-          <br />
-          <input
-            type="text"
-            name="email"
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-          <div className="email error"></div>
-          <br />
-          <label htmlFor="password">Mot de passe</label>
-          <br />
-          <input
-            type="password"
-            name="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-          <div className="password error"></div>
-          <br />
-          <label htmlFor="password-conf">Confirmer mot de passe</label>
-          <br />
-          <input
-            type="password"
-            name="password"
-            id="password-conf"
-            onChange={(e) => setControlPassword(e.target.value)}
-            value={controlPassword}
-          />
-          <div className="password-confirm error"></div>
-          <br />
-          <input type="checkbox" id="terms" />
-          <label htmlFor="terms">
-            J'accepte les{" "}
-            <a href="/" target="_blank" rel="noopener noreferrer">
-              conditions générales
-            </a>
-          </label>
-          <div className="terms error"></div>
-          <br />
-          <input type="submit" value="Valider inscription" />
+          <div className="form-group">
+            <label htmlFor="username">Nom d'utilisateur</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Votre nom d'utilisateur"
+              onChange={(e) => setusername(e.target.value)}
+              value={username}
+            />
+            <div className="username error"></div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email">Adresse email</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="votre@email.com"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+            />
+            <div className="email error"></div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Mot de passe</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Choisissez un mot de passe sécurisé"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
+            <div className="password error"></div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password-conf">Confirmer le mot de passe</label>
+            <input
+              type="password"
+              name="password-confirm"
+              id="password-conf"
+              placeholder="Répétez votre mot de passe"
+              onChange={(e) => setControlPassword(e.target.value)}
+              value={controlPassword}
+            />
+            <div className="password-confirm error"></div>
+          </div>
+
+          <div className="form-group checkbox-group">
+            <div className="checkbox-wrapper">
+              <input type="checkbox" id="terms" />
+              <label htmlFor="terms">
+                J'accepte les{" "}
+                <a href="/" target="_blank" rel="noopener noreferrer">
+                  conditions générales
+                </a>
+              </label>
+            </div>
+            <div className="terms error"></div>
+          </div>
+
+          <input type="submit" value="Créer mon compte" />
         </form>
       )}
     </>

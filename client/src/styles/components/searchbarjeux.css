@@ -1,66 +1,224 @@
+/* Barre de recherche moderne et élégante */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .iconSearchBar {
   position: absolute;
-  margin-top: 40px;
-  margin-left: 10px;
-  color: rgba(255, 255, 255, 0.7);
-  z-index: 1;
+  left: var(--space-lg);
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 2;
+  transition: var(--transition-base);
+  font-size: 20px;
 }
 
 .inputSearchBar {
-  margin-top: 25px;
-  border-radius: 30px;
-  height: 50px;
-  padding-left: 70px;
   width: 100%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
+  height: 56px;
+  border-radius: var(--radius-full);
+  padding: 0 var(--space-lg) 0 60px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   color: white;
-  font-size: 1rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  font-size: var(--text-base);
+  font-family: var(--font-secondary);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-bounce);
+  outline: none;
 }
 
 .inputSearchBar::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  font-weight: 400;
 }
 
 .inputSearchBar:focus {
-  outline: none;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
-  transform: translateY(-2px);
+  border-color: var(--primary-warm);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-warm);
+  transform: translateY(-2px) scale(1.02);
 }
 
-/* Style pour le select de genre */
+.inputSearchBar:focus + .iconSearchBar,
+.inputSearchBar:focus ~ .iconSearchBar {
+  color: var(--accent-gold);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Style pour le select de genre modernisé */
+.genre-select-container {
+  position: relative;
+  width: 100%;
+}
+
 .form-select {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.15);
   color: white;
-  border-radius: 15px;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
+  border-radius: var(--radius-full);
+  padding: 0 var(--space-xl) 0 var(--space-lg);
+  font-size: var(--text-base);
+  font-family: var(--font-secondary);
+  transition: var(--transition-bounce);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right var(--space-lg) center;
+  background-repeat: no-repeat;
+  background-size: 16px 12px;
 }
 
 .form-select:focus {
-  outline: none;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-color: var(--primary-warm);
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-warm);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .form-select option {
-  background: #333;
+  background: var(--neutral-midnight);
+  color: white;
+  padding: var(--space-sm);
+  border: none;
+}
+
+.form-select option:hover,
+.form-select option:checked {
+  background: var(--primary-warm);
   color: white;
 }
 
-/* Label pour le select */
-label {
-  color: white;
-  font-weight: 600;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-  margin-bottom: 0.5rem;
-  display: block;
+/* Label pour le select modernisé */
+.genre-label {
+  color: white !important;
+  font-weight: 600 !important;
+  font-family: var(--font-primary) !important;
+  font-size: var(--text-sm) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+  margin-bottom: var(--space-sm) !important;
+  display: block !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Bouton "Créer un jeu" modernisé */
+.create-game-btn {
+  background: var(--gradient-warm) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: var(--radius-full) !important;
+  padding: var(--space-md) var(--space-xl) !important;
+  font-size: var(--text-base) !important;
+  font-weight: 600 !important;
+  font-family: var(--font-primary) !important;
+  cursor: pointer !important;
+  transition: var(--transition-bounce) !important;
+  box-shadow: var(--shadow-warm) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  min-width: 160px !important;
+}
+
+.create-game-btn::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+  transition: left 0.5s ease !important;
+}
+
+.create-game-btn:hover::before {
+  left: 100% !important;
+}
+
+.create-game-btn:hover {
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: var(--shadow-xl), 0 12px 30px rgba(212, 151, 108, 0.4) !important;
+  background: var(--gradient-sunset) !important;
+}
+
+.create-game-btn:active {
+  transform: translateY(-1px) scale(1.02) !important;
+}
+
+/* Layout responsive pour les contrôles */
+.controls-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: var(--space-lg);
+  align-items: end;
+  width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .controls-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .create-game-btn {
+    justify-self: center !important;
+    width: 200px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .inputSearchBar,
+  .form-select {
+    height: 50px;
+    font-size: var(--text-sm);
+  }
+
+  .iconSearchBar {
+    left: var(--space-md);
+    font-size: 18px;
+  }
+
+  .inputSearchBar {
+    padding-left: 50px;
+  }
+
+  .create-game-btn {
+    min-width: 140px !important;
+    padding: var(--space-sm) var(--space-lg) !important;
+    font-size: var(--text-sm) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .controls-grid {
+    gap: var(--space-sm);
+  }
+
+  .inputSearchBar,
+  .form-select {
+    height: 46px;
+  }
+
+  .create-game-btn {
+    width: 100% !important;
+    min-width: unset !important;
+  }
 }

@@ -1,10 +1,11 @@
-/* Container principal */
+/* Container principal modernisé */
 .profil-container {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff4757 100%);
-  padding: 20px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--gradient-cosmic);
+  padding: var(--space-xl);
+  font-family: var(--font-primary);
   position: relative;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .profil-container::before {
@@ -14,45 +15,55 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
+  background:
+    radial-gradient(circle at 20% 80%, rgba(212, 151, 108, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(90, 159, 212, 0.1) 0%, transparent 50%);
   pointer-events: none;
+  z-index: 0;
 }
 
-/* Header du profil */
+/* Header du profil modernisé */
 .profil-container h1 {
   text-align: center;
   color: white;
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  font-weight: 300;
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: var(--space-2xl);
+  text-shadow: 0 4px 20px rgba(212, 151, 108, 0.3);
+  font-weight: 800;
+  background: var(--gradient-warm);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
 }
 
-/* Container principal du profil */
+/* Container principal du profil modernisé */
 .update-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 30px;
+  gap: var(--space-2xl);
   align-items: start;
+  position: relative;
+  z-index: 1;
 }
 
-/* Partie gauche - Photo et infos de base */
+/* Partie gauche modernisée - Photo et infos de base */
 .left-part {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-xl);
   text-align: center;
   position: relative;
   overflow: hidden;
+  transition: var(--transition-smooth);
 }
 
 .left-part::before {
@@ -62,31 +73,37 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #667eea, #ff4757);
+  background: var(--gradient-warm);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 .left-part h3 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 1.4rem;
-  font-weight: 600;
+  color: white;
+  margin-bottom: var(--space-xl);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Photo de profil */
+/* Photo de profil modernisée */
 .profile-pic {
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 20px;
-  border: 5px solid #f0f0f0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: var(--space-xl);
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  transition: var(--transition-bounce);
   cursor: pointer;
+  box-shadow: var(--shadow-lg);
 }
 
 .profile-pic:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: scale(1.08) rotate(5deg);
+  box-shadow: var(--shadow-2xl);
+  border-color: var(--accent-gold);
 }
 
 /* Partie droite - Bio et infos */
@@ -96,14 +113,18 @@
   gap: 20px;
 }
 
-/* Section bio */
+/* Section bio modernisée */
 .bio-update {
-  background: white;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-xl);
   position: relative;
   overflow: hidden;
+  transition: var(--transition-smooth);
 }
 
 .bio-update::before {
@@ -113,64 +134,83 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #667eea, #ff4757);
+  background: var(--gradient-warm);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 .bio-update h3 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 1.4rem;
-  font-weight: 600;
+  color: white;
+  margin-bottom: var(--space-xl);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .bio-text {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  color: #555;
-  min-height: 60px;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: 10px;
-  border-left: 4px solid #667eea;
+  font-size: var(--text-base);
+  line-height: 1.7;
+  margin-bottom: var(--space-xl);
+  color: rgba(255, 255, 255, 0.9);
+  min-height: 80px;
+  padding: var(--space-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--accent-gold);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-bounce);
+  font-family: var(--font-secondary);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .bio-text:hover {
-  background: #e9ecef;
-  transform: translateX(5px);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(8px) scale(1.02);
+  border-left-color: var(--primary-warm);
+  box-shadow: 0 4px 20px rgba(212, 151, 108, 0.2);
 }
 
 .bio-textarea {
   width: 100%;
-  height: 120px;
+  height: 140px;
   resize: none;
-  margin-bottom: 15px;
-  font-size: 16px;
-  line-height: 1.5;
-  padding: 15px;
-  border: 2px solid #e9ecef;
-  border-radius: 10px;
-  font-family: inherit;
-  transition: border-color 0.3s ease;
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  padding: var(--space-lg);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-secondary);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: var(--transition-bounce);
+  outline: none;
 }
 
 .bio-textarea:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--primary-warm);
+  box-shadow: var(--shadow-warm);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px) scale(1.02);
 }
 
-/* Date container */
+/* Date container modernisé */
 .date-container {
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-xl);
   text-align: center;
   position: relative;
   overflow: hidden;
+  transition: var(--transition-smooth);
 }
 
 .date-container::before {
@@ -180,25 +220,31 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #667eea, #ff4757);
+  background: var(--gradient-warm);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 .date-container h4 {
-  color: #666;
-  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--text-lg);
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: var(--font-secondary);
 }
 
-/* Section jeux et rangs */
+/* Section jeux et rangs modernisée */
 .game-rank-update {
-  background: white;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-xl);
   position: relative;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-xl);
+  transition: var(--transition-smooth);
 }
 
 .game-rank-update::before {
@@ -208,50 +254,63 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #667eea, #ff4757);
+  background: var(--gradient-warm);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 .game-rank-update h3 {
-  color: #333;
-  margin-bottom: 25px;
-  font-size: 1.4rem;
-  font-weight: 600;
+  color: white;
+  margin-bottom: var(--space-2xl);
+  font-size: var(--text-xl);
+  font-weight: 700;
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .game-selector,
 .rank-selector {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-xl);
 }
 
 .game-selector select,
 .rank-selector select {
   width: 100%;
-  padding: 15px;
-  font-size: 16px;
-  border: 2px solid #e9ecef;
-  border-radius: 10px;
-  background: white;
+  padding: var(--space-lg);
+  font-size: var(--text-base);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-family: var(--font-secondary);
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
+  transition: var(--transition-bounce);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  outline: none;
 }
 
 .game-selector select:focus,
 .rank-selector select:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--primary-warm);
+  box-shadow: var(--shadow-warm);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px) scale(1.02);
 }
 
-/* Section rangs utilisateur */
+/* Section rangs utilisateur modernisée */
 .user-ranks {
-  background: white;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-xl);
   position: relative;
   overflow: hidden;
+  transition: var(--transition-smooth);
 }
 
 .user-ranks::before {
@@ -261,15 +320,19 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #667eea, #ff4757);
+  background: var(--gradient-warm);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 .user-ranks h3 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 1.4rem;
-  font-weight: 600;
+  color: white;
+  margin-bottom: var(--space-xl);
+  font-size: var(--text-xl);
+  font-weight: 700;
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .user-ranks ul {
@@ -279,45 +342,55 @@
 }
 
 .user-ranks li {
-  background: linear-gradient(135deg, #667eea, #ff4757);
+  background: var(--gradient-warm);
   color: white;
-  padding: 15px 20px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  font-weight: 500;
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: var(--space-lg) var(--space-xl);
+  margin-bottom: var(--space-md);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-family: var(--font-secondary);
+  box-shadow: var(--shadow-warm);
+  transition: var(--transition-bounce);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
 .user-ranks li:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-2xl);
+  background: var(--gradient-sunset);
 }
 
 .user-ranks li:last-child {
   margin-bottom: 0;
 }
 
-/* Boutons */
+/* Boutons modernisés */
 .update-profil-btn {
-  padding: 12px 25px;
+  padding: var(--space-md) var(--space-xl);
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  background: linear-gradient(135deg, #667eea, #ff4757);
+  background: var(--gradient-warm);
   color: white;
-  font-size: 14px;
-  font-weight: 600;
-  margin: 5px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-family: var(--font-primary);
+  margin: var(--space-sm);
+  transition: var(--transition-bounce);
+  box-shadow: var(--shadow-warm);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .update-profil-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-2xl);
+  background: var(--gradient-sunset);
 }
 
 .update-profil-btn:active {
@@ -325,13 +398,17 @@
 }
 
 .error-message {
-  color: #e74c3c;
-  background: #fdf2f2;
-  padding: 10px 15px;
-  border-radius: 8px;
-  border-left: 4px solid #e74c3c;
-  margin-top: 10px;
-  font-size: 14px;
+  color: white;
+  background: var(--gradient-sunset);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sunset);
 }
 
 @keyframes fadeInUp {
@@ -376,18 +453,29 @@
 .game-selector select,
 .rank-selector select {
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 15px center;
+  background-position: right var(--space-lg) center;
   background-size: 20px;
   padding-right: 50px;
 }
 
+.game-selector select option,
+.rank-selector select option {
+  background: var(--neutral-midnight);
+  color: white;
+  padding: var(--space-sm);
+  border: none;
+}
+
 .user-ranks p {
-  background: #f8f9fa;
-  border: 2px dashed #dee2e6;
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-lg);
   margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .left-part:hover,
@@ -395,24 +483,25 @@
 .date-container:hover,
 .game-rank-update:hover,
 .user-ranks:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--shadow-2xl);
+  border-color: rgba(212, 151, 108, 0.3);
 }
 
-/* Responsive Design */
-@media screen and (max-width: 768px) {
+/* Responsive Design modernisé */
+@media screen and (max-width: 968px) {
   .profil-container {
-    padding: 10px;
+    padding: var(--space-lg);
   }
 
   .profil-container h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    margin-bottom: var(--space-xl);
   }
 
   .update-container {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: var(--space-xl);
   }
 
   .left-part,
@@ -420,7 +509,40 @@
   .date-container,
   .game-rank-update,
   .user-ranks {
-    padding: 20px;
+    padding: var(--space-xl);
+  }
+
+  .profile-pic {
+    width: 180px;
+    height: 180px;
+  }
+
+  /* Améliorer les animations sur tablette */
+  .left-part:hover,
+  .bio-update:hover,
+  .date-container:hover,
+  .game-rank-update:hover,
+  .user-ranks:hover {
+    transform: translateY(-3px) scale(1.01);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .profil-container {
+    padding: var(--space-md);
+  }
+
+  .profil-container h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .left-part,
+  .bio-update,
+  .date-container,
+  .game-rank-update,
+  .user-ranks {
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
   }
 
   .profile-pic {
@@ -428,38 +550,17 @@
     height: 150px;
   }
 
-  /* Désactiver les animations sur mobile pour de meilleures performances */
-  .left-part,
-  .bio-update,
-  .date-container,
-  .game-rank-update,
-  .user-ranks {
-    animation: none;
-    transform: none !important;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .profil-container h1 {
-    font-size: 1.8rem;
-  }
-
-  .left-part,
-  .bio-update,
-  .date-container,
-  .game-rank-update,
-  .user-ranks {
-    padding: 15px;
-    border-radius: 15px;
-  }
-
-  .profile-pic {
-    width: 120px;
-    height: 120px;
-  }
-
   .update-profil-btn {
     width: 100%;
-    margin: 5px 0;
+    margin: var(--space-sm) 0;
+  }
+
+  /* Désactiver les animations complexes sur mobile */
+  .left-part:hover,
+  .bio-update:hover,
+  .date-container:hover,
+  .game-rank-update:hover,
+  .user-ranks:hover {
+    transform: none;
   }
 }

@@ -1,53 +1,271 @@
-/* Container principal pour la page HomeListeJeux */
+/* Page HomeListeJeux avec design moderne et humain */
 .HomeListeJeux-container {
-  padding-top: 100px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff4757 100%);
+  background: var(--gradient-sunset);
+  padding: 100px var(--space-lg) var(--space-xl);
+  position: relative;
 }
 
-.jp_top {
-  align-items: center;
-  padding: 2rem 0;
+.HomeListeJeux-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  pointer-events: none;
 }
+
+/* Section des filtres et contrôles */
+.jp_top {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-3xl);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.jp_top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-warm);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+}
+
+/* Container des jeux en grille moderne */
 .jeux-container {
   cursor: pointer;
+  transition: var(--transition-bounce);
+  position: relative;
+  overflow: hidden;
 }
 
+.jeux-container:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Cards des jeux modernisées */
 .jeu_container {
-  width: 350px;
-  margin: 15px;
+  width: 100%;
+  max-width: 380px;
+  margin: var(--space-lg);
+  position: relative;
+  animation: fadeIn 0.6s ease-out;
 }
 
+.jeu_container:nth-child(even) {
+  animation-delay: 0.1s;
+}
+
+.jeu_container:nth-child(3n) {
+  animation-delay: 0.2s;
+}
+
+/* Image des jeux avec style moderne */
+.listejeu_img {
+  width: 100%;
+  height: 280px;
+  border-radius: var(--radius-xl);
+  object-fit: cover;
+  transition: var(--transition-slow);
+  box-shadow: var(--shadow-lg);
+  border: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+.jeux-container:hover .listejeu_img {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-xl), 0 20px 40px rgba(0, 0, 0, 0.2);
+  border-color: rgba(212, 151, 108, 0.3);
+}
+
+/* Nom du jeu avec overlay moderne */
+.listejeu_name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.95));
+  color: white;
+  padding: var(--space-xl) var(--space-lg) var(--space-lg);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  font-family: var(--font-primary);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: var(--transition-base);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.jeux-container:hover .listejeu_name {
+  background: linear-gradient(transparent, rgba(212, 151, 108, 0.8), rgba(166, 115, 86, 0.95));
+  transform: translateY(-2px);
+}
+
+/* Boutons admin modernisés */
+.admin-buttons {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  display: flex;
+  gap: var(--space-sm);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: var(--transition-bounce);
+  z-index: 2;
+}
+
+.jeux-container:hover .admin-buttons {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.admin-delete-btn {
+  background: var(--gradient-warm) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: var(--radius-full) !important;
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  box-shadow: var(--shadow-warm) !important;
+  transition: var(--transition-bounce) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.admin-delete-btn:hover {
+  transform: translateY(-2px) scale(1.1) !important;
+  box-shadow: var(--shadow-xl), 0 8px 25px rgba(212, 151, 108, 0.4) !important;
+  background: var(--gradient-sunset) !important;
+}
+
+/* Grille responsive moderne */
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--space-lg);
+  justify-items: center;
+  margin: 0;
+  padding: 0 var(--space-md);
+}
+
+/* États de hover pour les cards */
+.jeux-container {
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
+  transition: var(--transition-bounce);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.jeux-container:hover {
+  border-color: var(--primary-warm);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-warm);
+}
+
+/* Row du nom avec positionnement relatif */
+.name_row {
+  position: relative;
+  display: block;
+}
+
+/* Classes utilitaires pour le texte */
 .title_row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
 }
 
 .text_content {
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-line-clamp: 6;
   display: -webkit-box;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.5;
 }
 
-.listejeu_img {
-  width: 350px;
-  height: 280px;
-  border-radius: 10px;
+/* Animations d'entrée */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.listejeu_name {
-  color: azure;
-  position: absolute;
-  margin-top: -40px;
-  height: 40px;
-  width: 350px;
-  padding-left: 20px;
-  padding-top: 8px;
-  background-color: black;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .HomeListeJeux-container {
+    padding: 100px var(--space-md) var(--space-lg);
+  }
+
+  .jp_top {
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .row {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-md);
+    padding: 0;
+  }
+
+  .jeu_container {
+    max-width: 100%;
+    margin: var(--space-md) 0;
+  }
+
+  .listejeu_img {
+    height: 220px;
+  }
+
+  .listejeu_name {
+    font-size: var(--text-base);
+    padding: var(--space-lg) var(--space-md) var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .HomeListeJeux-container {
+    padding: 100px var(--space-sm) var(--space-md);
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .listejeu_img {
+    height: 200px;
+  }
+}
+
+/* Amélioration pour les très grands écrans */
+@media (min-width: 1400px) {
+  .row {
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  }
 }
